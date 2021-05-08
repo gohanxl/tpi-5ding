@@ -1,15 +1,15 @@
-import { configureStore } from "@reduxjs/toolkit";
 import logger from "redux-logger";
 import thunk from "redux-thunk";
+import { createRootReducer } from './App.reducers'
+import { configureStore } from "@reduxjs/toolkit";
+import { createBrowserHistory } from "history";
+import { routerMiddleware } from "connected-react-router";
 
-import { homeReducer } from "./modules/home/store/home.reducer";
-
-export function configureAppStore(preloadedState) {
+export function configureAppStore(preloadedState = {}) {
+  const browserHistory = createBrowserHistory();
   const store = configureStore({
-    reducer: {
-      home: homeReducer,
-    },
-    middleware: [thunk, logger],
+    reducer: createRootReducer(browserHistory),
+    middleware: [thunk, logger, routerMiddleware(browserHistory)],
     preloadedState,
   });
 
