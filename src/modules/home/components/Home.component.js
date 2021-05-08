@@ -1,7 +1,7 @@
 import React from "react";
 import "./Home.styles.scss"
 
-export const Home = ({ count, addToCounter }) => {
+export const Home = ({ count, addToCounter, history }) => {
   return (
     <>
       <div>
@@ -36,7 +36,7 @@ export const Home = ({ count, addToCounter }) => {
 
       <div className="buttons">
         <a className="button is-primary">Primary</a>
-        <a className="button is-link">Link</a>
+        <a className="button is-link" onClick={() => history.push('/home')}>Link</a>
       </div>
     </>
   );
