@@ -1,14 +1,43 @@
-import "./App.css";
-import { HomeContainer } from "./modules/home/components/Home.container";
+import React from "react";
+import { Routes } from "./App.routes";
+import { Sidebar } from "../src/modules/shared-components/Sidebar/Sidebar.component";
 
-function App() {
+export const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <HomeContainer />
+    <div>
+      <header>
+        <nav className="navbar is-info" role="navigation" aria-label="main navigation">
+          <div className="navbar-brand">
+            <a className="navbar-item" href="https://bulma.io">
+              <img
+                src="https://bulma.io/images/bulma-logo.png"
+                alt="Bulma: Free, open source, and modern CSS framework based on Flexbox"
+                width="112"
+                height="28"
+              />
+            </a>
+
+            <a
+              role="button"
+              className="navbar-burger"
+              aria-label="menu"
+              aria-expanded="false"
+            >
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+            </a>
+          </div>
+        </nav>
       </header>
+      <div className="App is-flex">
+        <div>
+          <Sidebar />
+        </div>
+        <div className="">
+          <Routes />
+        </div>
+      </div>
     </div>
   );
-}
-
-export default App;
+};
