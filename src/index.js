@@ -1,17 +1,23 @@
 import React from "react";
-import App from "./App";
 import "./index.css";
 import { render } from "react-dom";
 import { Provider } from "react-redux";
+import { createBrowserHistory } from "history";
 import { configureAppStore } from "./App.store";
+import { ConnectedRouter } from "connected-react-router";
 import reportWebVitals from "./reportWebVitals";
 
+import { App } from "./App";
+
 const store = configureAppStore();
+const browserHistory = createBrowserHistory();
 
 const renderApp = () =>
   render(
     <Provider store={store}>
-      <App />
+      <ConnectedRouter history={browserHistory}>
+        <App />
+      </ConnectedRouter>
     </Provider>,
     document.getElementById("root")
   );
