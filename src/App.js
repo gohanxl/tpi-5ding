@@ -1,6 +1,7 @@
 import React from "react";
 import { Routes } from "./App.routes";
-import { Sidebar } from "../src/modules/shared-components/Sidebar/Sidebar.component";
+import { Sidebar } from "./modules/shared-components/Sidebar/Sidebar.component";
+import './App.styles.scss'
 
 export const App = () => {
   return (
