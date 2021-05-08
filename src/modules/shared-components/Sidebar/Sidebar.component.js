@@ -2,9 +2,9 @@ import React from "react";
 
 export const Sidebar = () => {
   return (
-    <aside class="menu">
-      <p class="menu-label">General</p>
-      <ul class="menu-list">
+    <aside className="menu">
+      <p className="menu-label">General</p>
+      <ul className="menu-list">
         <li>
           <a>Dashboard</a>
         </li>
@@ -12,13 +12,13 @@ export const Sidebar = () => {
           <a>Customers</a>
         </li>
       </ul>
-      <p class="menu-label">Administration</p>
-      <ul class="menu-list">
+      <p className="menu-label">Administration</p>
+      <ul className="menu-list">
         <li>
           <a>Team Settings</a>
         </li>
         <li>
-          <a class="is-active">Manage Your Team</a>
+          <a className="is-active">Manage Your Team</a>
           <ul>
             <li>
               <a>Members</a>
@@ -41,8 +41,8 @@ export const Sidebar = () => {
           <a>Authentication</a>
         </li>
       </ul>
-      <p class="menu-label">Transactions</p>
-      <ul class="menu-list">
+      <p className="menu-label">Transactions</p>
+      <ul className="menu-list">
         <li>
           <a>Payments</a>
         </li>
