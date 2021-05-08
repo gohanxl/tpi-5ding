@@ -12,4 +12,4 @@ const mapDispatchToProps = {
   addToCounter,
 };
 
-export const HomeContainer = connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
