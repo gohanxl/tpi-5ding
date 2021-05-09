@@ -32,6 +32,7 @@ export const App = () => {
                         audience: window._env_.AUTH0_AUDIENCE,
                         scope: role,
                     })
+                    /*Dispatch de redux */
                         .then(token => console.log(role + ': ' + token))
                         .catch(err => console.log(err))
                 });
