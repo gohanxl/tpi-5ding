@@ -35,8 +35,13 @@ export const App = () => {
         <div>
           <Sidebar />
         </div>
-        <div className="">
-          <Routes />
+        <div className="app-content">
+          <div>
+            <Routes />
+          </div>
+          <footer className="footer">
+            <p className="has-text-centered">Created by <b>5ding</b></p>
+          </footer>
         </div>
       </div>
     </div>
