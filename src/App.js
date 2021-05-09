@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Routes } from "./App.routes";
 import { Sidebar } from "./modules/shared-components/Sidebar/Sidebar.component";
 import './App.styles.scss'
@@ -20,15 +20,32 @@ export const App = () => {
       logout,
       error,
       isLoading,
+      getAccessTokenSilently
   } = useAuth0();
 
-  if (error) {
-    return <div>Oops... {error.message}</div>;
-  }
+    useEffect(() => {
+        if (isAuthenticated) {
+            const roles = user['https://5ding/roles'];
+            if (roles && Array.isArray(roles)) {
+                roles.forEach(role => {
+                    getAccessTokenSilently({
+                        audience: window._env_.AUTH0_AUDIENCE,
+                        scope: role,
+                    })
+                        .then(token => console.log(role + ': ' + token))
+                        .catch(err => console.log(err))
+                });
+            }
+        }
+    }, [isAuthenticated]);
 
-  if (isLoading) {
-    return <Loading />;
-  }
+    if (error) {
+        return <div>Oops... {error.message}</div>;
+    }
+
+    if (isLoading) {
+        return <Loading />;
+    }
 
   return (
     <div>
