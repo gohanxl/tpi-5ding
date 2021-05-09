@@ -14,12 +14,12 @@ const Loading = () => (
 export const App = () => {
 
   const {
-    user,
-    isAuthenticated,
-    loginWithRedirect,
-    logout,
-    error,
-    isLoading
+      user,
+      isAuthenticated,
+      loginWithRedirect,
+      logout,
+      error,
+      isLoading,
   } = useAuth0();
 
   if (error) {

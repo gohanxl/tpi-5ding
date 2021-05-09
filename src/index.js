@@ -23,6 +23,8 @@ const providerConfig = {
     domain: window._env_.AUTH0_DOMAIN,
     clientId: window._env_.AUTH0_CLIENT_ID,
     redirectUri: window.location.origin,
+    audience: window._env_.AUTH0_AUDIENCE,
+    scope: "ADMIN",
     onRedirectCallback,
 };
 
