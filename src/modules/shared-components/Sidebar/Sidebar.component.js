@@ -1,15 +1,16 @@
 import React from "react";
+import './Sidebar.styles.scss'
 
 export const Sidebar = () => {
   return (
-    <aside className="menu">
+    <aside className="sidebar-menu menu">
       <p className="menu-label">General</p>
       <ul className="menu-list">
         <li>
-          <a>Dashboard</a>
+          <a href="/home">Dashboard</a>
         </li>
         <li>
-          <a>Customers</a>
+          <a href="/student">Student</a>
         </li>
       </ul>
       <p className="menu-label">Administration</p>
