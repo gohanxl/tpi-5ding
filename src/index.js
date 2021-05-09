@@ -6,19 +6,35 @@ import { createBrowserHistory } from "history";
 import { configureAppStore } from "./App.store";
 import { ConnectedRouter } from "connected-react-router";
 import reportWebVitals from "./reportWebVitals";
+import { Auth0Provider } from "@auth0/auth0-react";
 
 import { App } from "./App";
 
 const store = configureAppStore();
 const browserHistory = createBrowserHistory();
 
+const onRedirectCallback = (appState) => {
+    browserHistory.push(
+        appState && appState.returnTo ? appState.returnTo : window.location.pathname
+    );
+};
+
+const providerConfig = {
+    domain: window._env_.AUTH0_DOMAIN,
+    clientId: window._env_.AUTH0_CLIENT_ID,
+    redirectUri: window.location.origin,
+    onRedirectCallback,
+};
+
 const renderApp = () =>
   render(
-    <Provider store={store}>
-      <ConnectedRouter history={browserHistory}>
-        <App />
-      </ConnectedRouter>
-    </Provider>,
+      <Auth0Provider {...providerConfig}>
+        <Provider store={store}>
+          <ConnectedRouter history={browserHistory}>
+            <App />
+          </ConnectedRouter>
+        </Provider>
+      </Auth0Provider>,
     document.getElementById("root")
   );
 

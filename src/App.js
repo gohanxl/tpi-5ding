@@ -2,8 +2,34 @@ import React from "react";
 import { Routes } from "./App.routes";
 import { Sidebar } from "./modules/shared-components/Sidebar/Sidebar.component";
 import './App.styles.scss'
+import { useAuth0 } from "@auth0/auth0-react";
+import loading from "./loading.svg";
+
+const Loading = () => (
+    <div className="spinner">
+      <img src={loading} alt="Loading" />
+    </div>
+);
 
 export const App = () => {
+
+  const {
+    user,
+    isAuthenticated,
+    loginWithRedirect,
+    logout,
+    error,
+    isLoading
+  } = useAuth0();
+
+  if (error) {
+    return <div>Oops... {error.message}</div>;
+  }
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <div>
       <header>
@@ -28,6 +54,12 @@ export const App = () => {
               <span aria-hidden="true"></span>
               <span aria-hidden="true"></span>
             </a>
+            {isAuthenticated &&
+            <button onClick={() => logout({ returnTo: window.location.origin })}>
+              Log Out
+            </button>
+            }
+
           </div>
         </nav>
       </header>
@@ -36,7 +68,8 @@ export const App = () => {
           <Sidebar />
         </div>
         <div className="">
-          <Routes />
+          {isAuthenticated && <Routes />}
+          {!isAuthenticated && loginWithRedirect()}
         </div>
       </div>
     </div>
