@@ -1,5 +1,5 @@
-import { AxiosProvider, Request, Get, Delete, Head, Post, Put, Patch, withAxios } from 'react-axios'
+import axios from 'axios';
 
 export const institutosService = {
-  getInstitutos: (auth_token) => axios.get(`${url}/Institutos`, {Headers: {'Authorization': auth_token}}),
+  getInstitutos: (auth_token) => axios.get(`${window._env_.API_URL}/Institutos`, {Headers: {'Authorization': auth_token}}),
 }
