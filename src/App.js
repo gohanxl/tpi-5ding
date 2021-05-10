@@ -47,7 +47,7 @@ export const App = () => {
     if (isLoading) {
         return <Loading />;
     }
-
+//TODO remove href must work as SPA
   return (
     <div>
       <header>
