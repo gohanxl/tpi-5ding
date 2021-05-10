@@ -3,7 +3,7 @@ import {
 } from '../user.types';
 
 const initialState = {
-    user: null
+    user: {}
 }
 
 export const userReducer = (state = initialState, action) => {
@@ -11,7 +11,7 @@ export const userReducer = (state = initialState, action) => {
         case SET_USER:
             return {
                 ...state,
-                app: action.payload
+                user: action.payload
             }
         default:
             return state;
