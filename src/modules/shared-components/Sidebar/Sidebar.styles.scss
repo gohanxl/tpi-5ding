@@ -1,4 +1,19 @@
 .sidebar-menu{
   height: 100%;
+  width: 12vw;
+  padding: 10px;
   background-color: #272727;
+
+  ul{
+    li{
+      p{
+        color: #828282;
+        padding: 0.5em 0.75em;
+        cursor: default;
+      }
+    }
+    a{
+      color: #b9b9b9;
+    }
+  }
 }
