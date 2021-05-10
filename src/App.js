@@ -4,6 +4,9 @@ import { Sidebar } from "./modules/shared-components/Sidebar/Sidebar.component";
 import './App.styles.scss'
 import { useAuth0 } from "@auth0/auth0-react";
 import loading from "./loading.svg";
+import { useDispatch } from 'react-redux';
+import { setUser } from "./redux/actions/user.actions";
+
 
 const Loading = () => (
     <div className="spinner">
@@ -11,8 +14,9 @@ const Loading = () => (
     </div>
 );
 
-export const App = () => {
 
+export const App = () => {
+  const dispatch = useDispatch();
   const {
       user,
       isAuthenticated,
@@ -25,18 +29,14 @@ export const App = () => {
 
     useEffect(() => {
         if (isAuthenticated) {
-            const roles = user['https://5ding/roles'];
-            if (roles && Array.isArray(roles)) {
-                roles.forEach(role => {
-                    getAccessTokenSilently({
-                        audience: window._env_.AUTH0_AUDIENCE,
-                        scope: role,
-                    })
-                    /*Dispatch de redux */
-                        .then(token => console.log(role + ': ' + token))
-                        .catch(err => console.log(err))
-                });
-            }
+          getAccessTokenSilently()
+          .then(token => 
+              dispatch(setUser({
+                ['token']: token,
+                ['metadata']: user
+               }))
+            )
+          .catch(err => console.log(err))
         }
     }, [isAuthenticated]);
 
