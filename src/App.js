@@ -30,7 +30,7 @@ export const App = () => {
     useEffect(() => {
         if (isAuthenticated) {
           getAccessTokenSilently()
-          .then(token => 
+          .then(token =>
               dispatch(setUser({
                 ['token']: token,
                 ['metadata']: user
@@ -53,7 +53,7 @@ export const App = () => {
       <header>
         <nav className="navbar is-info" role="navigation" aria-label="main navigation">
           <div className="navbar-brand">
-            <a className="navbar-item" href="https://bulma.io">
+            <a className="navbar-item" href="/home">
               <img
                 src="https://bulma.io/images/bulma-logo.png"
                 alt="Bulma: Free, open source, and modern CSS framework based on Flexbox"
@@ -61,23 +61,11 @@ export const App = () => {
                 height="28"
               />
             </a>
-
-            <a
-              role="button"
-              className="navbar-burger"
-              aria-label="menu"
-              aria-expanded="false"
-            >
-              <span aria-hidden="true"></span>
-              <span aria-hidden="true"></span>
-              <span aria-hidden="true"></span>
-            </a>
             {isAuthenticated &&
             <button onClick={() => logout({ returnTo: window.location.origin })}>
               Log Out
             </button>
             }
-
           </div>
         </nav>
       </header>
@@ -85,9 +73,14 @@ export const App = () => {
         <div>
           <Sidebar />
         </div>
-        <div className="">
-          {isAuthenticated && <Routes />}
-          {!isAuthenticated && loginWithRedirect()}
+        <div className="app-container">
+          <div className="app-content">
+            {isAuthenticated && <Routes />}
+            {!isAuthenticated && loginWithRedirect()}
+          </div>
+          <footer className="footer">
+            <p className="has-text-centered">Created by <b>5ding</b></p>
+          </footer>
         </div>
       </div>
     </div>
