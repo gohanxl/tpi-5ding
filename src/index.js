@@ -9,6 +9,7 @@ import reportWebVitals from "./reportWebVitals";
 import { Auth0Provider } from "@auth0/auth0-react";
 
 import { App } from "./App";
+import {HashRouter} from "react-router-dom";
 
 const store = configureAppStore();
 const browserHistory = createBrowserHistory();
@@ -32,9 +33,9 @@ const renderApp = () =>
   render(
       <Auth0Provider {...providerConfig}>
         <Provider store={store}>
-          <ConnectedRouter history={browserHistory}>
+          <HashRouter history={browserHistory}>
             <App />
-          </ConnectedRouter>
+          </HashRouter>
         </Provider>
       </Auth0Provider>,
     document.getElementById("root")
