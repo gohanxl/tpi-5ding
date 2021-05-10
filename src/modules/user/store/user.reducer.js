@@ -1,6 +1,6 @@
 import {
     SET_USER
-} from '../user.types';
+} from './user.types';
 
 const initialState = {
     user: {}

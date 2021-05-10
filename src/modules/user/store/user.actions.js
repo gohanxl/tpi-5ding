@@ -1,4 +1,4 @@
-import * as types from '../user.types';
+import * as types from './user.types';
 
 export const setUser = user => {
     return {

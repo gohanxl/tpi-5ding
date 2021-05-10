@@ -5,7 +5,7 @@ import './App.styles.scss'
 import { useAuth0 } from "@auth0/auth0-react";
 import loading from "./loading.svg";
 import { useDispatch } from 'react-redux';
-import { setUser } from "./redux/actions/user.actions";
+import { setUser } from "./modules/user/store/user.actions";
 
 
 const Loading = () => (

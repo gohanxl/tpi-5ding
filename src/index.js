@@ -4,7 +4,7 @@ import { render } from "react-dom";
 import { Provider } from "react-redux";
 import { createBrowserHistory } from "history";
 import { configureAppStore } from "./App.store";
-import { ConnectedRouter } from "connected-react-router";
+//import { ConnectedRouter } from "connected-react-router";
 import reportWebVitals from "./reportWebVitals";
 import { Auth0Provider } from "@auth0/auth0-react";
 
