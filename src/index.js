@@ -4,21 +4,40 @@ import { render } from "react-dom";
 import { Provider } from "react-redux";
 import { createBrowserHistory } from "history";
 import { configureAppStore } from "./App.store";
-import { ConnectedRouter } from "connected-react-router";
+//import { ConnectedRouter } from "connected-react-router";
 import reportWebVitals from "./reportWebVitals";
+import { Auth0Provider } from "@auth0/auth0-react";
 
 import { App } from "./App";
+import {HashRouter} from "react-router-dom";
 
 const store = configureAppStore();
 const browserHistory = createBrowserHistory();
 
+const onRedirectCallback = (appState) => {
+    browserHistory.push(
+        appState && appState.returnTo ? appState.returnTo : window.location.pathname
+    );
+};
+
+const providerConfig = {
+    domain: window._env_.AUTH0_DOMAIN,
+    clientId: window._env_.AUTH0_CLIENT_ID,
+    redirectUri: window.location.origin,
+    audience: window._env_.AUTH0_AUDIENCE,
+    scope: "ADMIN Director Student Teacher",
+    onRedirectCallback,
+};
+
 const renderApp = () =>
   render(
-    <Provider store={store}>
-      <ConnectedRouter history={browserHistory}>
-        <App />
-      </ConnectedRouter>
-    </Provider>,
+      <Auth0Provider {...providerConfig}>
+        <Provider store={store}>
+          <HashRouter history={browserHistory}>
+            <App />
+          </HashRouter>
+        </Provider>
+      </Auth0Provider>,
     document.getElementById("root")
   );
 
