@@ -26,7 +26,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "pretty-quick": "pretty-quick --staged"
   },
   "eslintConfig": {
     "extends": [
@@ -63,10 +64,5 @@
     "style-loader": "^2.0.0",
     "webpack": "4.44.2",
     "webpack-cli": "^4.6.0"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
   }
 }
