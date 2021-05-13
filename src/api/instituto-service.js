@@ -6,5 +6,3 @@ export const institutosService = {
       Headers: { Authorization: auth_token },
     }),
 };
-
-console.log("huskyTEtestest");
