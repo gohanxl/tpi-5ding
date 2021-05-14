@@ -9,35 +9,33 @@ import reportWebVitals from "./reportWebVitals";
 import { Auth0Provider } from "@auth0/auth0-react";
 
 import { App } from "./App";
-import {HashRouter} from "react-router-dom";
+import { HashRouter } from "react-router-dom";
+import { env_config } from "./config/env-config";
 
 const store = configureAppStore();
 const browserHistory = createBrowserHistory();
 
 const onRedirectCallback = (appState) => {
-    browserHistory.push(
-        appState && appState.returnTo ? appState.returnTo : window.location.pathname
-    );
+  browserHistory.push(
+    appState && appState.returnTo ? appState.returnTo : window.location.pathname
+  );
 };
 
 const providerConfig = {
-    domain: window._env_.AUTH0_DOMAIN,
-    clientId: window._env_.AUTH0_CLIENT_ID,
-    redirectUri: window.location.origin,
-    audience: window._env_.AUTH0_AUDIENCE,
-    scope: "ADMIN Director Student Teacher",
-    onRedirectCallback,
+  ...env_config,
+  scope: "ADMIN Director Student Teacher",
+  onRedirectCallback,
 };
 
 const renderApp = () =>
   render(
-      <Auth0Provider {...providerConfig}>
-        <Provider store={store}>
-          <HashRouter history={browserHistory}>
-            <App />
-          </HashRouter>
-        </Provider>
-      </Auth0Provider>,
+    <Auth0Provider {...providerConfig}>
+      <Provider store={store}>
+        <HashRouter history={browserHistory}>
+          <App />
+        </HashRouter>
+      </Provider>
+    </Auth0Provider>,
     document.getElementById("root")
   );
 
