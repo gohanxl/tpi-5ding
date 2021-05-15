@@ -1,6 +1,6 @@
 import React from "react";
 import "./Home.styles.scss";
-import Chat from "./Chat";
+import { Chat } from "../../shared-components/Chat/Chat.component";
 
 export const Home = ({ count, addToCounter, history }) => {
   return (
