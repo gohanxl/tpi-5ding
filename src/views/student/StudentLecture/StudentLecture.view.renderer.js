@@ -1,7 +1,8 @@
 import React from "react";
-import { useAuth0 } from "@auth0/auth0-react";
-import { institutosService } from "../../../api/instituto-service.js";
+// import { useAuth0 } from "@auth0/auth0-react";
+// import { institutosService } from "../../../api/instituto-service.js";
 import { useSelector } from "react-redux";
+import { Class } from "../../../modules/shared-components/Class/components/Class.component.js";
 
 export const StudentLectureViewRenderer = () => {
   //TODO Remove this later, this comment explains how to call backend api
@@ -31,9 +32,5 @@ export const StudentLectureViewRenderer = () => {
   });
   */
 
-  return (
-    <div>
-      <h1>MESSIRVE EL ESTUDEN</h1>
-    </div>
-  );
+  return <Class />;
 };
