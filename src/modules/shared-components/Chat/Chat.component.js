@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { HubConnectionBuilder } from "@microsoft/signalr";
 
 import Peer from "simple-peer";
-import { ChatWindow } from "./components/ChatWindows.component";
-import { ChatInput } from "./components/ChatInput.component";
+import { ChatWindow } from "./components/ChatWindow/ChatWindows.component";
+import { ChatInput } from "./components/ChatInput/ChatInput.component";
 
 export const Chat = () => {
   const [connection, setConnection] = useState(null);
