@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const ChatInput = (props) => {
+export const ChatInput = (props) => {
   const [user, setUser] = useState("");
   const [message, setMessage] = useState("");
 
@@ -47,5 +47,3 @@ const ChatInput = (props) => {
     </form>
   );
 };
-
-export default ChatInput;
