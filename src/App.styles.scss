@@ -1,2 +1,20 @@
 @charset "utf-8";
 @import "~bulma/bulma";
+
+$app-container-height: calc(100vh - #{$navbar-height});
+$app-content-height: calc(#{$app-container-height} - 168px);
+
+html {
+  overflow: visible !important;
+}
+
+.app-container {
+  width: 100%;
+  height: $app-container-height;
+  overflow-y: auto;
+}
+
+.app-content {
+  min-height: $app-content-height;
+  padding: 10px;
+}
