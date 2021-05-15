@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { HubConnectionBuilder } from "@microsoft/signalr";
 
 import Peer from "simple-peer";
-import ChatWindow from "./ChatWindows";
-import ChatInput from "./ChatInput";
+import { ChatWindow } from "./components/ChatWindows.component";
+import { ChatInput } from "./components/ChatInput.component";
 
-const Chat = () => {
+export const Chat = () => {
   const [connection, setConnection] = useState(null);
   const [chat, setChat] = useState([]);
 
@@ -176,5 +176,3 @@ const Chat = () => {
     </div>
   );
 };
-
-export default Chat;
