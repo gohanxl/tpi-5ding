@@ -22,17 +22,38 @@ module.exports = {
         },
       },
       {
-        test: /\.scss$/,
+        test: /\.css$/,
         use: [
-          MiniCssExtractPlugin.loader,
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
           {
             loader: "css-loader",
           },
+        ],
+      },
+      {
+        test: /\.scss$/,
+        use: [
           {
-            loader: "sass-loader",
+            loader: MiniCssExtractPlugin.loader,
+          },
+          {
+            loader: "css-loader",
             options: {
               sourceMap: true,
+              importLoaders: 1,
+              localsConvention: "camelCase",
+              modules: {
+                mode: "local",
+                exportGlobals: true,
+                localIdentRegExp: /(.*)\.scss/i,
+                localIdentName: "[hash:base64:5]",
+              },
             },
+          },
+          {
+            loader: "sass-loader",
           },
         ],
       },
@@ -41,6 +62,8 @@ module.exports = {
   plugins: [
     new MiniCssExtractPlugin({
       filename: "[name].css",
+      chunkFilename: "[id].css",
+      ignoreOrder: true,
     }),
   ],
 };
