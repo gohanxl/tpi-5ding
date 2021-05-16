@@ -23,7 +23,7 @@ const onRedirectCallback = (appState) => {
 
 const providerConfig = {
   ...env_config,
-  scope: "ADMIN Director Student Teacher",
+  scope: "ADMIN Director Student Teacher Parent",
   onRedirectCallback,
 };
 
