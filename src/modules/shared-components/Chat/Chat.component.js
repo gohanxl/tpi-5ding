@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { HubConnectionBuilder } from "@microsoft/signalr";
+import { HubConnectionBuilder, HttpTransportType } from "@microsoft/signalr";
 
 import Peer from "simple-peer";
 import { ChatWindow } from "./components/ChatWindow/ChatWindows.component";
@@ -28,7 +28,10 @@ export const Chat = () => {
 
   useEffect(() => {
     const newConnection = new HubConnectionBuilder()
-      .withUrl("https://localhost:5001/hubs/test")
+      .withUrl("https://localhost:5001/hubs/chat", {
+        skipNegotiation: true,
+        transport: HttpTransportType.WebSockets,
+      })
       .withAutomaticReconnect()
       .build();
 
@@ -51,9 +54,9 @@ export const Chat = () => {
               }
             });
 
-          connection.on("ReceiveMessage", (message) => {
+          connection.on("RecibeMensaje", (message, user, messageDate, id) => {
             const updatedChat = [...latestChat.current];
-            updatedChat.push(message);
+            updatedChat.push({ id, user, message, messageDate });
 
             setChat(updatedChat);
           });
@@ -71,15 +74,15 @@ export const Chat = () => {
     }
   }, [connection]);
 
-  const sendMessage = async (user, message) => {
-    const chatMessage = {
-      user: user,
-      message: message,
-    };
+  const sendMessage = (user, message) => {
+    // const chatMessage = {
+    //   user: user,
+    //   message: message,
+    // };
 
     if (connection.connectionStarted) {
       try {
-        await connection.send("SendMessage", chatMessage);
+        connection.invoke("EnviarMensaje", message, user);
       } catch (e) {
         console.log(e);
       }
@@ -91,7 +94,7 @@ export const Chat = () => {
   const saveUsername = async (user) => {
     if (connection.connectionStarted) {
       try {
-        await connection.send("NewUser", user);
+        await connection.invoke("NewUser", user);
       } catch (e) {
         console.log(e);
       }
@@ -109,7 +112,7 @@ export const Chat = () => {
       if (connection.connectionStarted) {
         try {
           const stringData = JSON.stringify(data);
-          connection.send("CallUser", id, stringData);
+          connection.invoke("CallUser", id, stringData);
         } catch (e) {
           console.log(e);
         }
@@ -138,7 +141,7 @@ export const Chat = () => {
     peer.on("signal", (data) => {
       console.log(call);
       const stringData = JSON.stringify(data);
-      connection.send("AnswerCall", stringData, call.from);
+      connection.invoke("AnswerCall", stringData, call.from);
     });
 
     peer.on("stream", (currentStream) => {
