@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { HubConnectionBuilder, HttpTransportType } from "@microsoft/signalr";
 
 import Peer from "simple-peer";
-import { ChatWindow } from "./components/ChatWindow/ChatWindows.component";
+import { ChatWindow } from "./components/ChatWindow/ChatWindow.component";
 import { ChatInput } from "./components/ChatInput/ChatInput.component";
 
 export const Chat = () => {
