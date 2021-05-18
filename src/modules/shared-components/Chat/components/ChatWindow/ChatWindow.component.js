@@ -1,5 +1,5 @@
 import React from "react";
-import { chat_wrapper } from "./ChatWindows.module.scss";
+import { chat_wrapper } from "./ChatWindow.module.scss";
 import { Message } from "../ChatMessage/ChatMessage.component";
 
 export const ChatWindow = ({ chat, deleteMessage }) => {
