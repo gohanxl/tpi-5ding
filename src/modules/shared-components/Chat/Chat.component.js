@@ -61,6 +61,16 @@ export const Chat = () => {
             setChat(updatedChat);
           });
 
+          connection.on("BorraMensaje", (userId) => {
+            const updatedChat = [...latestChat.current];
+
+            const chatAfterDelete = updatedChat.filter(
+              ({ id }) => id !== userId
+            );
+
+            setChat(chatAfterDelete);
+          });
+
           connection.on("NewUserArrived", (data) => {
             users.push(JSON.parse(data));
           });
@@ -75,14 +85,21 @@ export const Chat = () => {
   }, [connection]);
 
   const sendMessage = (user, message) => {
-    // const chatMessage = {
-    //   user: user,
-    //   message: message,
-    // };
-
     if (connection.connectionStarted) {
       try {
         connection.invoke("EnviarMensaje", message, user);
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      alert("No connection to server yet.");
+    }
+  };
+
+  const deleteMessage = (id, user) => {
+    if (connection.connectionStarted) {
+      try {
+        connection.invoke("BorrarMensaje", id, user);
       } catch (e) {
         console.log(e);
       }
@@ -161,7 +178,7 @@ export const Chat = () => {
     <div>
       <ChatInput sendMessage={sendMessage} saveUsername={saveUsername} />
       <hr />
-      <ChatWindow chat={chat} />
+      <ChatWindow chat={chat} deleteMessage={deleteMessage} />
       <button onClick={answerCall}>Atender!</button>
       <h2>Me</h2>
       <video width="500" height="500" autoPlay ref={myVideo}></video>

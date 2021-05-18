@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export const ChatInput = (props) => {
+export const ChatInput = ({ sendMessage, saveUsername, deleteMessage }) => {
   const [user, setUser] = useState("");
   const [message, setMessage] = useState("");
 
@@ -11,8 +11,8 @@ export const ChatInput = (props) => {
     const isMessageProvided = message && message !== "";
 
     if (isUserProvided && isMessageProvided) {
-      props.sendMessage(user, message);
-      props.saveUsername(user);
+      sendMessage(user, message);
+      saveUsername(user);
     } else {
       alert("Please insert an user and a message.");
     }
