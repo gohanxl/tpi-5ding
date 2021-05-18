@@ -40,17 +40,6 @@ module.exports = {
           },
           {
             loader: "css-loader",
-            options: {
-              sourceMap: true,
-              importLoaders: 1,
-              localsConvention: "camelCase",
-              modules: {
-                mode: "local",
-                exportGlobals: true,
-                localIdentRegExp: /(.*)\.scss/i,
-                localIdentName: "[hash:base64:5]",
-              },
-            },
           },
           {
             loader: "sass-loader",
