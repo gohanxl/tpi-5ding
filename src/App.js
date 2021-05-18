@@ -6,6 +6,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import loading from "./loading.svg";
 import { useDispatch } from "react-redux";
 import { setCurrentUser } from "./modules/user/store/user.actions";
+import { userService } from "./modules/user/api/usuario-service";
 
 const Loading = () => (
   <div className="spinner">
@@ -28,14 +29,28 @@ export const App = () => {
   useEffect(() => {
     if (isAuthenticated) {
       getAccessTokenSilently()
-        .then((token) =>
-          dispatch(
-            setCurrentUser({
-              token,
-              metadata: user,
+        .then((token) => {
+          userService
+            .getUserByEmail(token, user.email)
+            .then((res) => {
+              dispatch(
+                setCurrentUser({
+                  token,
+                  metadata: user,
+                  dbUser: res.data.Usuario,
+                })
+              );
             })
-          )
-        )
+            .catch((err) => {
+              console.log(err);
+              dispatch(
+                setCurrentUser({
+                  token,
+                  metadata: user,
+                })
+              );
+            });
+        })
         .catch((err) => console.log(err));
     }
   }, [isAuthenticated]);
