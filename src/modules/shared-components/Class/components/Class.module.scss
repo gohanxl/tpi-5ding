@@ -1,0 +1,9 @@
+.lecture {
+  display: flex;
+  .cameras {
+    flex-basis: 80%;
+  }
+  .chat {
+    flex-basis: 20%;
+  }
+}

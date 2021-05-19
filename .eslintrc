@@ -1,0 +1,72 @@
+{
+  "parser": "babel-eslint",
+  "plugins": ["react", "react-hooks"],
+  "rules": {
+    "react/prop-types": "off",
+    "jsx-quotes": ["error", "prefer-double"],
+    "object-curly-spacing": ["error", "always"],
+    "no-console": [
+      "warn",
+      {
+        "allow": ["warn", "error", "info"]
+      }
+    ],
+    "class-methods-use-this": [
+      "error",
+      {
+        "exceptMethods": [
+          "render",
+          "getInitialState",
+          "getDefaultProps",
+          "getChildContext",
+          "componentWillMount",
+          "UNSAFE_componentWillMount",
+          "componentDidMount",
+          "componentWillReceiveProps",
+          "UNSAFE_componentWillReceiveProps",
+          "shouldComponentUpdate",
+          "componentWillUpdate",
+          "UNSAFE_componentWillUpdate",
+          "componentDidUpdate",
+          "componentWillUnmount",
+          "componentDidCatch",
+          "getSnapshotBeforeUpdate"
+        ]
+      }
+    ],
+    "react/jsx-indent-props": ["error", 2],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
+  },
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "globals": {
+    "localStorage": true,
+    "fetch": true,
+    "window": true,
+    "location": true,
+    "navigator": true,
+    "document": true,
+    "process": true,
+    "module": true,
+    "console": true,
+    "required": true,
+    "setTimeout": true,
+    "clearTimeout": true,
+    "UA": true
+  },
+  "extends": ["prettier", "eslint:recommended", "plugin:react/recommended"],
+  "settings": {
+    "react": {
+      "version": "latest"
+    }
+  },
+  "env": {
+    "amd": true,
+    "node": true,
+    "browser": true,
+    "es6": true,
+    "jest": true
+  }
+}

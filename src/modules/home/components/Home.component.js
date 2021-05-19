@@ -1,9 +1,13 @@
 import React from "react";
 import "./Home.styles.scss";
+import { Chat } from "../../shared-components/Chat/Chat.component";
 
 export const Home = ({ count, addToCounter, history }) => {
   return (
     <>
+      <div style={{ margin: "0 30%" }}>
+        <Chat />
+      </div>
       <div>
         <div>{count}</div>
         <div onClick={() => addToCounter()}>Increase</div>

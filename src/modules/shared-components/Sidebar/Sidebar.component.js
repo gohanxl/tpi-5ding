@@ -1,12 +1,14 @@
 import React from "react";
-import './Sidebar.styles.scss'
+import "./Sidebar.styles.scss";
 
 export const Sidebar = () => {
   return (
     <aside className="sidebar-menu menu">
       <ul className="menu-list">
         <li>
-          <a className="is-active" href="/home">Dashboard</a>
+          <a className="is-active" href="/home">
+            Dashboard
+          </a>
         </li>
         <li>
           <a href="/student">Student</a>

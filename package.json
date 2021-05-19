@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@microsoft/signalr": "^5.0.5",
     "@auth0/auth0-react": "^1.5.0",
     "@reduxjs/toolkit": "^1.5.1",
     "@testing-library/jest-dom": "^5.11.4",
@@ -19,6 +20,7 @@
     "react-scripts": "4.0.3",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
+    "simple-peer": "^9.11.0",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
@@ -27,7 +29,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prepare": "husky install",
-    "pretty-quick": "pretty-quick --staged"
+    "pretty-quick": "pretty-quick --staged",
+    "lint": "eslint"
   },
   "eslintConfig": {
     "extends": [
@@ -54,6 +57,7 @@
     "bulma": "^0.9.2",
     "css-loader": "^5.2.4",
     "eslint": "^7.26.0",
+    "eslint-config-prettier": "^8.3.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "husky": "^6.0.0",
     "mini-css-extract-plugin": "^1.6.0",

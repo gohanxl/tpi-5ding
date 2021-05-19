@@ -22,17 +22,27 @@ module.exports = {
         },
       },
       {
+        test: /\.css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
+          {
+            loader: "css-loader",
+          },
+        ],
+      },
+      {
         test: /\.scss$/,
         use: [
-          MiniCssExtractPlugin.loader,
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
           {
             loader: "css-loader",
           },
           {
             loader: "sass-loader",
-            options: {
-              sourceMap: true,
-            },
           },
         ],
       },
@@ -41,6 +51,8 @@ module.exports = {
   plugins: [
     new MiniCssExtractPlugin({
       filename: "[name].css",
-    })
+      chunkFilename: "[id].css",
+      ignoreOrder: true,
+    }),
   ],
 };
