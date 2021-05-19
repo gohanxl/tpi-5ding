@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { HubConnectionBuilder, HttpTransportType } from "@microsoft/signalr";
 
 import Peer from "simple-peer";
 import { ChatWindow } from "./components/ChatWindow/ChatWindow.component";
 import { ChatInput } from "./components/ChatInput/ChatInput.component";
 
-export const Chat = () => {
+export const Chat = ({ currentUser }) => {
   const [connection, setConnection] = useState(null);
   const [chat, setChat] = useState([]);
 
@@ -23,6 +24,23 @@ export const Chat = () => {
   const [caller, setCaller] = useState("");
   const [callerSignal, setCallerSignal] = useState();
   const [callAccepted, setCallAccepted] = useState(false);
+
+  const { metadata: userMetadata } = currentUser || {};
+
+  const saveUsername = useCallback(
+    (user) => {
+      if (connection.connectionStarted) {
+        try {
+          connection.invoke("NewUser", user);
+        } catch (e) {
+          console.log(e);
+        }
+      } else {
+        alert("No connection to server yet.");
+      }
+    },
+    [connection]
+  );
 
   latestChat.current = chat;
 
@@ -72,6 +90,7 @@ export const Chat = () => {
           });
 
           connection.on("NewUserArrived", (data) => {
+            saveUsername(userMetadata?.nickname);
             users.push(JSON.parse(data));
           });
 
@@ -82,12 +101,12 @@ export const Chat = () => {
         })
         .catch((e) => console.log("Connection failed: ", e));
     }
-  }, [connection]);
+  }, [connection, saveUsername, userMetadata?.nickname, users]);
 
-  const sendMessage = (user, message) => {
+  const sendMessage = (message) => {
     if (connection.connectionStarted) {
       try {
-        connection.invoke("EnviarMensaje", message, user);
+        connection.invoke("EnviarMensaje", message, userMetadata?.nickname);
       } catch (e) {
         console.log(e);
       }
@@ -100,18 +119,6 @@ export const Chat = () => {
     if (connection.connectionStarted) {
       try {
         connection.invoke("BorrarMensaje", id, user);
-      } catch (e) {
-        console.log(e);
-      }
-    } else {
-      alert("No connection to server yet.");
-    }
-  };
-
-  const saveUsername = async (user) => {
-    if (connection.connectionStarted) {
-      try {
-        await connection.invoke("NewUser", user);
       } catch (e) {
         console.log(e);
       }
@@ -176,7 +183,11 @@ export const Chat = () => {
 
   return (
     <div>
-      <ChatInput sendMessage={sendMessage} saveUsername={saveUsername} />
+      <ChatInput
+        sendMessage={sendMessage}
+        currentUser={userMetadata}
+        // saveUsername={saveUsername}
+      />
       <hr />
       <ChatWindow chat={chat} deleteMessage={deleteMessage} />
       <button onClick={answerCall}>Atender!</button>
