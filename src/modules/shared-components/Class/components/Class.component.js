@@ -1,5 +1,5 @@
 import React from "react";
-import { Chat } from "../../Chat/Chat.component";
+import { ChatContainer } from "../../Chat/Chat.container";
 import { lecture, cameras, chat } from "./Class.module.scss";
 
 export const Class = () => {
@@ -20,7 +20,7 @@ export const Class = () => {
         })}
       </section>
       <aside className={chat}>
-        <Chat />
+        <ChatContainer />
       </aside>
     </div>
   );
