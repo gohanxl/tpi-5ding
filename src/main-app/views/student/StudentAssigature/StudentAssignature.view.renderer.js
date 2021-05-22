@@ -1,9 +1,10 @@
 import React from "react";
+import { Attendance } from "../../../modules/shared-components/Attendance/components/Attendance.component";
 
 export const StudentAssignatureViewRenderer = () => {
   return (
     <div>
-      <h1>MESSIRVE EL ESTUDEN ASSIGNATURATION</h1>
+        <Attendance classId={1} />
     </div>
   );
 };
