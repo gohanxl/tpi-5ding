@@ -34,6 +34,7 @@ export const Attendance = (props) => {
             // if (!isTeacher()) {
             setCronogramaId(cronogramaId);
             setModalOpened(true);
+            setTimeout(() => setModalOpened(false), 5000); //TODO get this timeout from config when implemented
             // }
           });
         })
@@ -45,7 +46,7 @@ export const Attendance = (props) => {
     if (connection.connectionStarted) {
       try {
         console.log(user);
-        connection.invoke("TomarLista", classId);
+        connection.invoke("TomarLista", classId, user.dbUser.Id);
       } catch (e) {
         console.log(e);
       }
