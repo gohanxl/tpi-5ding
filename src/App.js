@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
 import { Routes } from "./App.routes";
-import { Sidebar } from "./modules/shared-components/Sidebar/Sidebar.component";
 import "./App.styles.scss";
 import { useAuth0 } from "@auth0/auth0-react";
 import loading from "./loading.svg";
 import { useDispatch } from "react-redux";
-import { setCurrentUser } from "./modules/user/store/user.actions";
-import { userService } from "./modules/user/api/usuario-service";
+import { setCurrentUser } from "./main-app/modules/user/store/user.actions";
+import { userService } from "./main-app/modules/user/api/usuario-service";
 
 const Loading = () => (
   <div className="spinner">
@@ -53,7 +52,7 @@ export const App = () => {
         })
         .catch((err) => console.log(err));
     }
-  }, [isAuthenticated]);
+  }, [dispatch, getAccessTokenSilently, isAuthenticated, user]);
 
   if (error) {
     return <div>Oops... {error.message}</div>;
@@ -62,48 +61,51 @@ export const App = () => {
   if (isLoading) {
     return <Loading />;
   }
+
+  const isLandingPage = window.location.hash.includes("educapp");
   //TODO remove href must work as SPA
   return (
     <div>
-      <header>
-        <nav
-          className="navbar is-info"
-          role="navigation"
-          aria-label="main navigation"
-        >
-          <div className="navbar-brand">
-            <a className="navbar-item" href="/home">
-              <img
-                src="https://bulma.io/images/bulma-logo.png"
-                alt="Bulma: Free, open source, and modern CSS framework based on Flexbox"
-                width="112"
-                height="28"
-              />
-            </a>
-            {isAuthenticated && (
-              <button
-                onClick={() => logout({ returnTo: window.location.origin })}
-              >
-                Log Out
-              </button>
-            )}
-          </div>
-        </nav>
-      </header>
-      <div className="App is-flex">
-        <div>
-          <Sidebar />
-        </div>
+      {!isLandingPage && (
+        <header>
+          <nav
+            className="navbar is-info"
+            role="navigation"
+            aria-label="main navigation"
+          >
+            <div className="navbar-brand">
+              <a className="navbar-item" href="/home">
+                <img
+                  src="https://bulma.io/images/bulma-logo.png"
+                  alt="Bulma: Free, open source, and modern CSS framework based on Flexbox"
+                  width="112"
+                  height="28"
+                />
+              </a>
+              {isAuthenticated && (
+                <button
+                  onClick={() => logout({ returnTo: window.location.origin })}
+                >
+                  Log Out
+                </button>
+              )}
+            </div>
+          </nav>
+        </header>
+      )}
+      <div className="App">
         <div className="app-container">
-          <div className="app-content">
+          <div className="app-content is-flex">
             {isAuthenticated && <Routes />}
             {!isAuthenticated && loginWithRedirect()}
           </div>
-          <footer className="footer">
-            <p className="has-text-centered">
-              Created by <b>5ding</b>
-            </p>
-          </footer>
+          {!isLandingPage && (
+            <footer className="footer">
+              <p className="has-text-centered">
+                Created by <b>5ding</b>
+              </p>
+            </footer>
+          )}
         </div>
       </div>
     </div>
