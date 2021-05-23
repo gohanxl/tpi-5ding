@@ -4,12 +4,12 @@ import { StudentAssignatureViewRenderer } from "./StudentAssigature/StudentAssig
 export const studentRoutes = [
   {
     exact: true,
-    path: "/student",
+    path: "/educapp/student",
     component: StudentLectureViewRenderer,
   },
   {
     exact: true,
-    path: "/student/assignature",
+    path: "/educapps/student/assignature",
     component: StudentAssignatureViewRenderer,
   },
 ];
