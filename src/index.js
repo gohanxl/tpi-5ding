@@ -8,7 +8,7 @@ import { configureAppStore } from "./App.store";
 import reportWebVitals from "./reportWebVitals";
 import { Auth0Provider } from "@auth0/auth0-react";
 
-import { App } from "./App";
+import { App } from "./App.component";
 import { HashRouter } from "react-router-dom";
 import { env_config } from "./config/env-config";
 
