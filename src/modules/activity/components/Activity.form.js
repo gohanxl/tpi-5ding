@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { activityService } from "../api/activity-service";
 
@@ -6,6 +6,15 @@ export const ActivityForm = (props) => {
   const { claseId } = props;
 
   const user = useSelector((state) => state.user.currentUser);
+
+  const [activityType, setActivityType] = useState([]);
+
+  useEffect(() => {
+    activityService
+      .getActivityType()
+      .then((res) => setActivityType(res.data))
+      .catch((err) => console.error(err));
+  }, []);
 
   const buildRequest = (event) => {
     let reqBody = {};
@@ -57,11 +66,12 @@ export const ActivityForm = (props) => {
           <label className="label">Tipo Actividad</label>
           <div className="select">
             <select name="TipoActividad">
-              {/*TODO bring this from backend*/}
-              <option value={1}>Evaluacion</option>
-              <option value={2}>Tp</option>
-              <option value={3}>Tarea</option>
-              <option value={4}>Recuperatorio</option>
+              {activityType &&
+                activityType.map((type) => (
+                  <option key={type.Id} value={type.Id}>
+                    {type.Nombre}
+                  </option>
+                ))}
             </select>
           </div>
         </div>
