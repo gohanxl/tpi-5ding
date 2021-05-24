@@ -99,6 +99,22 @@ export const ActivityForm = (props) => {
           </div>
         </div>
 
+        <div className="file is-primary has-name">
+          <label className="file-label">
+            <input className="file-input" type="file" name="Archivo" />
+            <span className="file-cta">
+              <span className="file-icon">
+                {/*TODO Ask Lucas why this does not working*/}
+                <i className="fas fa-upload" />
+              </span>
+              <span className="file-label">Elija un archivo…</span>
+            </span>
+            <span className="file-name">Adjunte la consgina en pdf... </span>
+          </label>
+        </div>
+
+        <br />
+
         <input className="input" type="hidden" name="ClaseId" value={claseId} />
         {user && user.dbUser && (
           <input
