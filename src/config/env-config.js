@@ -10,3 +10,9 @@ export const env_config = {
   redirectUri: window.location.origin,
   audience: REACT_APP_AUTH0_AUDIENCE,
 };
+
+export const emailJsCredentials = {
+  serviceId: "service_l2j7cb7",
+  templateId: "template_qp62dbf",
+  userId: "user_Vp1RXPv2G1KOb7O4XJsI4",
+};

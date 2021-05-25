@@ -9,7 +9,7 @@ section {
   width: 100%;
   height: calc(100vh - #{$header-height});
 
-  div {
+  .section-content {
     height: 100%;
     padding: 50px;
     display: flex;
@@ -35,7 +35,7 @@ h3 {
   left: 0;
   background-color: transparent;
   width: 100%;
-  padding: 20px;
+  padding: 15px;
 
   .navbar-item {
     padding: 0.5rem 3rem;
@@ -48,7 +48,7 @@ h3 {
 
 .white-navbar {
   background-color: white;
-  border-bottom: solid 2px #f5dc17;
+  border-bottom: solid 2px white;
   box-shadow: 0px 2px 9px 0px #b77b0066;
   animation: to-white-navbar 0.5s;
 }
@@ -72,18 +72,91 @@ h3 {
       margin-top: 20px;
     }
 
-    .start-button {
+    .roughNotation {
       width: 25%;
       margin-top: 20px;
+      display: flex;
+      justify-content: center;
       align-self: flex-end;
+    }
+
+    .start-button {
+      width: 90%;
       background-color: $edu-dark-primary;
     }
   }
 }
 
-#quienes-somos {
+#servicios {
   background-image: $mancha-2;
   background-position-x: -150px;
+
+  .section-content {
+    div {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      .card {
+        width: 20%;
+
+        .content {
+          display: flex;
+          flex-direction: column;
+        }
+      }
+    }
+  }
+}
+
+#quienes-somos {
+  .team-images-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+
+    .team-image {
+      width: 15%;
+
+      img {
+        border-radius: 100%;
+      }
+
+      p {
+        text-align: center;
+      }
+    }
+  }
+}
+
+#contacto {
+  .section-content {
+    align-items: center;
+
+    h3,
+    p {
+      margin-bottom: 20px;
+    }
+
+    form {
+      width: 25%;
+      display: flex;
+      flex-direction: column;
+
+      input,
+      textarea {
+        margin-bottom: 20px;
+      }
+
+      button {
+        background-color: $edu-secondary;
+        width: 30%;
+        align-self: flex-end;
+      }
+    }
+  }
 }
 
 //---------- ANIMATIONS ----------
@@ -96,7 +169,7 @@ h3 {
   }
   to {
     background-color: white;
-    border-bottom: solid 2px #f5dc17;
+    border-bottom: solid 2px white;
     box-shadow: 0px 2px 9px 0px #b77b0066;
   }
 }
@@ -104,7 +177,7 @@ h3 {
 @keyframes to-transparent-navbar {
   from {
     background-color: white;
-    border-bottom: solid 2px #f5dc17;
+    border-bottom: solid 2px white;
     box-shadow: 0px 2px 9px 0px #b77b0066;
   }
   to {
