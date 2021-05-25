@@ -62,7 +62,7 @@ export const App = () => {
     return <Loading />;
   }
 
-  const isLandingPage = window.location.hash.includes("educapp");
+  const isLandingPage = !window.location.hash.includes("educapp");
   //TODO remove href must work as SPA
   return (
     <div>
@@ -94,18 +94,9 @@ export const App = () => {
         </header>
       )}
       <div className="App">
-        <div className="app-container">
-          <div className="app-content is-flex">
-            {isAuthenticated && <Routes />}
-            {!isAuthenticated && loginWithRedirect()}
-          </div>
-          {!isLandingPage && (
-            <footer className="footer">
-              <p className="has-text-centered">
-                Created by <b>5ding</b>
-              </p>
-            </footer>
-          )}
+        <div>
+          {isAuthenticated && <Routes />}
+          {!isAuthenticated && loginWithRedirect()}
         </div>
       </div>
     </div>
