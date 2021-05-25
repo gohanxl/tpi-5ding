@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { activityService } from "../api/activity-service";
+import { fileService } from "../../file/api/file-service";
 
 export const ActivityForm = (props) => {
   const { claseId } = props;
@@ -50,7 +51,20 @@ export const ActivityForm = (props) => {
       const reqBody = buildRequest(event);
       activityService
         .createActivity(user.token, reqBody)
-        .then((res) => console.log(res.data))
+        .then((res) => {
+          console.log(res.data);
+          const actividadId = res.data.Actividad.Id;
+          let formData = new FormData();
+          let file = document.querySelector("#activityFile");
+          formData.append("file", file.files[0]);
+          fileService
+            .uploadTareaConsigna(user.token, formData, actividadId)
+            .then((res) => {
+              console.log("Uploaded file successfully.");
+              console.log(res.data);
+            })
+            .catch((err) => console.error(err));
+        })
         .catch((err) => console.error(err));
     } else {
       document.getElementById("activity_error").innerText =
@@ -101,10 +115,14 @@ export const ActivityForm = (props) => {
 
         <div className="file is-primary has-name">
           <label className="file-label">
-            <input className="file-input" type="file" name="Archivo" />
+            <input
+              className="file-input"
+              type="file"
+              name="file"
+              id="activityFile"
+            />
             <span className="file-cta">
               <span className="file-icon">
-                {/*TODO Ask Lucas why this does not working*/}
                 <i className="fas fa-upload" />
               </span>
               <span className="file-label">Elija un archivo…</span>
