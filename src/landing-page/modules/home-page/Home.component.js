@@ -21,7 +21,7 @@ export const Home = () => {
 
   return (
     <div>
-      <nav className="navbar is-transparent" id="navbar">
+      <nav className="landing-nav navbar is-transparent" id="navbar">
         <div id="navbarExampleTransparentExample" className="navbar-menu">
           <div className="navbar-start">
             <a className="navbar-item" onClick={() => scrollTo("inicio")}>
