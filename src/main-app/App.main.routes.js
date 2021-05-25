@@ -16,7 +16,7 @@ export const MainAppRoutes = () => {
       {routes.map((routeProps) => (
         <Route key={routeProps.path} {...routeProps} />
       ))}
-      <Route key="pepe" path="/home" component={HomeContainer} />
+      <Route key="pepe" path="/educapp/home" component={HomeContainer} />
       {/* <Route component={NotFound} /> */}
     </Switch>
   );

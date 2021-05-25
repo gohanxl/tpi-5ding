@@ -1,35 +1,48 @@
 import React from "react";
+import { useHistory } from "react-router";
 import "./Sidebar.styles.scss";
 
 export const Sidebar = () => {
+  const history = useHistory();
+  const subjects = [
+    { id: 1, name: "Lengua" },
+    { id: 2, name: "Matemática" },
+    { id: 3, name: "Ciencias Naturales" },
+  ];
+
   return (
     <aside className="sidebar-menu menu">
       <ul className="menu-list">
         <li>
-          <a className="is-active" href="/home">
+          <a
+            className="is-active"
+            onClick={() => history.push("/educapp/home")}
+          >
             Dashboard
           </a>
         </li>
         <li>
-          <a href="/student">Student</a>
+          <a onClick={() => history.push("/educapp/student")}>Student</a>
+        </li>
+        <li>
+          <a onClick={() => history.push("/educapp/teacher")}>Profesor</a>
         </li>
       </ul>
       <ul className="menu-list">
         <li>
-          <a>Team Settings</a>
-        </li>
-        <li>
-          <p>Manage Your Team</p>
+          <p>Materias</p>
           <ul>
-            <li>
-              <a>Members</a>
-            </li>
-            <li>
-              <a>Plugins</a>
-            </li>
-            <li>
-              <a>Add a member</a>
-            </li>
+            {subjects.map(({ id, name }) => (
+              <li
+                key={id}
+                onClick={() =>
+                  history.push("/educapp/student/assignature/" + id)
+                }
+              >
+                {" "}
+                <a>{name}</a>{" "}
+              </li>
+            ))}
           </ul>
         </li>
       </ul>

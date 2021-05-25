@@ -9,7 +9,7 @@ export const studentRoutes = [
   },
   {
     exact: true,
-    path: "/educapps/student/assignature",
+    path: "/educapp/student/assignature",
     component: StudentAssignatureViewRenderer,
   },
 ];
