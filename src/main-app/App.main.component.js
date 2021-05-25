@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { setCurrentUser } from "../main-app/modules/user/store/user.actions";
 import { userService } from "../main-app/modules/user/api/usuario-service";
 import loading from "../loading.svg";
+import educAppLogo from "../assets/img/logo-white.svg";
 
 const Loading = () => (
   <div className="spinner">
@@ -66,21 +67,22 @@ const MainApp = () => {
     <div>
       <header>
         <nav
-          className="navbar is-info"
+          className="educapp-nav navbar is-info"
           role="navigation"
           aria-label="main navigation"
         >
           <div className="navbar-brand">
             <a className="navbar-item" href="/home">
               <img
-                src="https://bulma.io/images/bulma-logo.png"
-                alt="Bulma: Free, open source, and modern CSS framework based on Flexbox"
-                width="112"
-                height="28"
+                src={educAppLogo}
+                alt="Educapp logo"
+                width="30"
+                height="30"
               />
             </a>
             {isAuthenticated && (
               <button
+                className="button is-warning"
                 onClick={() => logout({ returnTo: window.location.origin })}
               >
                 Log Out
