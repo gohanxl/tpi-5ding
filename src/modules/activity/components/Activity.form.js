@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { activityService } from "../api/activity-service";
-import { fileService } from "../../file/api/file-service";
+import {
+  fileService,
+  SUBTIPO_CONSIGNAS,
+  TIPO_TAREAS,
+} from "../../file/api/file-service";
 
 export const ActivityForm = (props) => {
   const { claseId } = props;
@@ -58,7 +62,13 @@ export const ActivityForm = (props) => {
           let file = document.querySelector("#activityFile");
           formData.append("file", file.files[0]);
           fileService
-            .uploadTareaConsigna(user.token, formData, actividadId)
+            .uploadFile(
+              user.token,
+              formData,
+              actividadId,
+              TIPO_TAREAS,
+              SUBTIPO_CONSIGNAS
+            )
             .then((res) => {
               console.log("Uploaded file successfully.");
               console.log(res.data);
