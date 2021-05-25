@@ -1,8 +1,19 @@
 @charset "utf-8";
 @import "~bulma/bulma";
 
+$edu-primary: #4dbdd5;
+$edu-secondary: #f5dc17;
+$edu-darker-primary: #1f4d57;
+$edu-dark-primary: #24778a;
+$edu-aquamarine: #90cdb4;
+$edu-light-blue: #b8e3ec;
+
 $app-container-height: calc(100vh - #{$navbar-height});
 $app-content-height: calc(#{$app-container-height} - 168px);
+
+* {
+  font-family: "Poppins", sans-serif;
+}
 
 html {
   overflow: visible !important;
@@ -15,6 +26,6 @@ html {
 }
 
 .app-content {
-  min-height: $app-content-height;
+  height: $app-content-height;
   padding: 10px;
 }

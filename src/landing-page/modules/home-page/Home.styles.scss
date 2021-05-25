@@ -1,0 +1,115 @@
+@import "../../../App.styles.scss";
+
+$header-height: 82px;
+$mancha-1: url(../../../assets/img/mancha-1.svg);
+$mancha-2: url(../../../assets/img/mancha-2.svg);
+
+section {
+  background-repeat: no-repeat;
+  width: 100%;
+  height: calc(100vh - #{$header-height});
+
+  div {
+    height: 100%;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+}
+
+h1 {
+  color: $edu-dark-primary;
+  font-size: 72px;
+}
+
+h3 {
+  color: $edu-darker-primary;
+  font-size: 50px;
+}
+
+.landing-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: transparent;
+  width: 100%;
+  padding: 20px;
+
+  .navbar-item {
+    padding: 0.5rem 3rem;
+  }
+
+  .navbar-item:first-child {
+    padding: 0.5rem 2rem;
+  }
+}
+
+.white-navbar {
+  background-color: white;
+  border-bottom: solid 2px #f5dc17;
+  box-shadow: 0px 2px 9px 0px #b77b0066;
+  animation: to-white-navbar 0.5s;
+}
+
+.hide-navbar {
+  animation: to-transparent-navbar 0.5s;
+}
+
+#inicio {
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  background-image: $mancha-1;
+  background-position: right;
+
+  div {
+    width: 50%;
+
+    p {
+      text-align: justify;
+      margin-top: 20px;
+    }
+
+    .start-button {
+      width: 25%;
+      margin-top: 20px;
+      align-self: flex-end;
+      background-color: $edu-dark-primary;
+    }
+  }
+}
+
+#quienes-somos {
+  background-image: $mancha-2;
+  background-position-x: -150px;
+}
+
+//---------- ANIMATIONS ----------
+
+@keyframes to-white-navbar {
+  from {
+    background-color: transparent;
+    border-bottom: solid 2px transparent;
+    box-shadow: none;
+  }
+  to {
+    background-color: white;
+    border-bottom: solid 2px #f5dc17;
+    box-shadow: 0px 2px 9px 0px #b77b0066;
+  }
+}
+
+@keyframes to-transparent-navbar {
+  from {
+    background-color: white;
+    border-bottom: solid 2px #f5dc17;
+    box-shadow: 0px 2px 9px 0px #b77b0066;
+  }
+  to {
+    background-color: transparent;
+    border-bottom: solid 2px transparent;
+    box-shadow: none;
+  }
+}

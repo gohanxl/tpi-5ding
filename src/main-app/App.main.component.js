@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
-import { Routes } from "./App.routes";
 import { Sidebar } from "./modules/shared-components/Sidebar/Sidebar.component";
-import "./App.styles.scss";
+import { MainAppRoutes } from "./App.main.routes";
 import { useAuth0 } from "@auth0/auth0-react";
-import loading from "./loading.svg";
 import { useDispatch } from "react-redux";
-import { setCurrentUser } from "./modules/user/store/user.actions";
-import { userService } from "./modules/user/api/usuario-service";
+import { setCurrentUser } from "../main-app/modules/user/store/user.actions";
+import { userService } from "../main-app/modules/user/api/usuario-service";
+import loading from "../loading.svg";
+import educAppLogo from "../assets/img/logo-white.svg";
 
 const Loading = () => (
   <div className="spinner">
@@ -14,15 +14,15 @@ const Loading = () => (
   </div>
 );
 
-export const App = () => {
+const MainApp = () => {
   const dispatch = useDispatch();
   const {
     user,
     isAuthenticated,
-    loginWithRedirect,
-    logout,
     error,
     isLoading,
+    loginWithRedirect,
+    logout,
     getAccessTokenSilently,
   } = useAuth0();
 
@@ -53,7 +53,7 @@ export const App = () => {
         })
         .catch((err) => console.log(err));
     }
-  }, [isAuthenticated]);
+  }, [dispatch, getAccessTokenSilently, isAuthenticated, user]);
 
   if (error) {
     return <div>Oops... {error.message}</div>;
@@ -62,26 +62,27 @@ export const App = () => {
   if (isLoading) {
     return <Loading />;
   }
-  //TODO remove href must work as SPA
+
   return (
     <div>
       <header>
         <nav
-          className="navbar is-info"
+          className="educapp-nav navbar is-info"
           role="navigation"
           aria-label="main navigation"
         >
           <div className="navbar-brand">
             <a className="navbar-item" href="/home">
               <img
-                src="https://bulma.io/images/bulma-logo.png"
-                alt="Bulma: Free, open source, and modern CSS framework based on Flexbox"
-                width="112"
-                height="28"
+                src={educAppLogo}
+                alt="Educapp logo"
+                width="30"
+                height="30"
               />
             </a>
             {isAuthenticated && (
               <button
+                className="button is-warning"
                 onClick={() => logout({ returnTo: window.location.origin })}
               >
                 Log Out
@@ -95,8 +96,8 @@ export const App = () => {
           <Sidebar />
         </div>
         <div className="app-container">
-          <div className="app-content">
-            {isAuthenticated && <Routes />}
+          <div className="app-content is-flex">
+            {isAuthenticated && <MainAppRoutes />}
             {!isAuthenticated && loginWithRedirect()}
           </div>
           <footer className="footer">
@@ -109,3 +110,5 @@ export const App = () => {
     </div>
   );
 };
+
+export default MainApp;
