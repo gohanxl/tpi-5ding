@@ -10,6 +10,7 @@ import ContactImage1 from "../../../assets/img/contact-1.svg";
 import Logo from "../../../assets/img/logo.svg";
 import Instagram from "../../../assets/img/instagram.svg";
 import LinkedIn from "../../../assets/img/linkedin.svg";
+import Email from "../../../assets/img/email.svg";
 
 import Mica from "../../../assets/img/team/foto-mica.png";
 import Lucho from "../../../assets/img/team/foto-lucho.png";
@@ -141,13 +142,23 @@ export const Home = () => {
         <div className="section-content">
           <div>
             <h1>EducApp</h1>
-            <h3>¡La escuela en tu casa!</h3>
+            <RoughNotation
+              show={true}
+              type="underline"
+              color="#8bd2b0"
+              animationDelay={500}
+              animationDuration={2000}
+              iterations={3}
+            >
+              <h3>¡La escuela en tu casa!</h3>
+            </RoughNotation>
+
             <h4>Una aplicacion sencilla de usar, accesible para todos.</h4>
             <RoughNotation
-              className="roughNotation"
+              className="button-roughNotation"
               type="circle"
               show={true}
-              animationDelay={500}
+              animationDelay={2500}
               color={"#f5dc17"}
               animationDuration={2000}
               iterations={3}
@@ -237,30 +248,35 @@ export const Home = () => {
               type="highlight"
               color="#aadbc7"
               animationDuration={2000}
-              animationDelay={400}
+              animationDelay={500}
               iterations={3}
               strokeWidth={2}
               padding={10}
             >
               <p>
                 Si tenés alguna consulta o estás interesado, no dudes en
-                contactarnos a través del formulario o por nuestras redes
-                sociales.
+                contactarnos a través del <b>formulario</b> o nuestras
+                <b> redes sociales.</b>
               </p>
             </RoughNotation>
 
             <div className="social-media">
               <a href="https://instagram.com/educapp.ar" target="blank">
                 <img src={Instagram} width="40px" />
+                instagram.com/educapp.ar
               </a>
               <a
                 href="https://www.linkedin.com/company/educapp-ar"
                 target="blank"
               >
                 <img src={LinkedIn} width="40px" />
+                linkedin.com/company/educapp-ar
+              </a>
+              <a href="mailto:contacto.educapp@gmail.com">
+                <img src={Email} width="40px" />
+                contacto.educapp@gmail.com
               </a>
             </div>
-            <p>Email: contacto.educapp@gmail.com</p>
             <form onSubmit={(e) => sendEmail(e)}>
               <input
                 className="input"
@@ -294,7 +310,7 @@ export const Home = () => {
                 type="circle"
                 color="#1eaac3"
                 animationDuration={2000}
-                animationDelay={1000}
+                animationDelay={2500}
                 iterations={3}
                 strokeWidth={2}
                 padding={10}

@@ -69,22 +69,24 @@ h4 {
   background-image: $mancha-1;
   background-position: right;
 
+  h3 {
+    width: fit-content;
+  }
+
   div {
     p {
       text-align: justify;
       margin-top: 20px;
     }
 
-    .roughNotation {
-      width: 25%;
-      margin-top: 40px;
+    .button-roughNotation {
+      margin-top: 50px;
       display: flex;
       justify-content: center;
     }
 
     .start-button {
-      width: 90%;
-      background-color: $edu-dark-primary;
+      background-color: $edu-primary;
     }
   }
 
@@ -99,7 +101,10 @@ h4 {
     }
 
     div {
-      width: 50%;
+      width: 40%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
     }
   }
 }
@@ -192,17 +197,24 @@ h4 {
     .social-media {
       margin: 20px 0;
       display: flex;
-      flex-direction: row;
-      align-items: center;
+      flex-direction: column;
 
       a {
-        display: inline-flex;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        color: black;
+        margin: 5px 0;
+      }
 
-        img {
-          filter: invert(50%) sepia(52%) saturate(582%) hue-rotate(141deg)
-            brightness(100%) contrast(103%);
-          margin-right: 10px;
-        }
+      a:hover {
+        opacity: 0.5;
+      }
+
+      img {
+        filter: invert(50%) sepia(52%) saturate(582%) hue-rotate(141deg)
+          brightness(100%) contrast(103%);
+        margin-right: 10px;
       }
     }
 
