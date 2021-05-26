@@ -194,30 +194,6 @@ h4 {
       margin-bottom: 20px;
     }
 
-    .social-media {
-      margin: 20px 0;
-      display: flex;
-      flex-direction: column;
-
-      a {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        color: black;
-        margin: 5px 0;
-      }
-
-      a:hover {
-        opacity: 0.5;
-      }
-
-      img {
-        filter: invert(50%) sepia(52%) saturate(582%) hue-rotate(141deg)
-          brightness(100%) contrast(103%);
-        margin-right: 10px;
-      }
-    }
-
     .contact-container {
       width: 35%;
     }
@@ -240,6 +216,70 @@ h4 {
           background-color: $edu-secondary;
         }
       }
+    }
+  }
+}
+
+.social-media {
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+
+  a {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: black;
+    margin: 5px 0;
+  }
+
+  a:hover {
+    opacity: 0.5;
+  }
+
+  img {
+    filter: invert(50%) sepia(52%) saturate(582%) hue-rotate(141deg)
+      brightness(100%) contrast(103%);
+    margin-right: 10px;
+  }
+}
+
+.landing-footer {
+  .content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+
+    h3 {
+      margin: 0;
+      margin-left: 20px;
+    }
+
+    div {
+      display: flex;
+    }
+
+    .logo {
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .social-media {
+      margin-top: 15px;
+      margin-bottom: 0;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .footer-nav-container,
+    .footer-nav {
+      flex-direction: column;
+      align-items: start;
+    }
+
+    .footer-nav {
+      margin-left: 50px;
     }
   }
 }

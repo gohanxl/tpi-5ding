@@ -324,11 +324,51 @@ export const Home = () => {
           <img src={ContactImage1} width="55%" />
         </div>
       </section>
-      <footer className="footer">
+      <footer className="footer landing-footer">
         <div className="content has-text-centered">
-          <p>
-            Created by <b>5Ding</b>
-          </p>
+          <div className="footer-nav-container">
+            <div className="logo">
+              <a onClick={() => scrollTo("inicio")}>
+                <img src={Logo} width="40px" />
+              </a>
+              <h3>EducApp</h3>
+            </div>
+            <div className="footer-nav">
+              <a className="navbar-item" onClick={() => scrollTo("inicio")}>
+                Inicio
+              </a>
+              <a className="navbar-item" onClick={() => scrollTo("servicios")}>
+                ¿Por qué elegirnos?
+              </a>
+              <a
+                className="navbar-item"
+                onClick={() => scrollTo("quienes-somos")}
+              >
+                ¿Quiénes Somos?
+              </a>
+              <a className="navbar-item" onClick={() => scrollTo("contacto")}>
+                Contacto
+              </a>
+            </div>
+          </div>
+          <div className="social-media">
+            <h4>Contactanos</h4>
+            <a href="https://instagram.com/educapp.ar" target="blank">
+              <img src={Instagram} width="25px" />
+              instagram.com/educapp.ar
+            </a>
+            <a
+              href="https://www.linkedin.com/company/educapp-ar"
+              target="blank"
+            >
+              <img src={LinkedIn} width="25px" />
+              linkedin.com/company/educapp-ar
+            </a>
+            <a href="mailto:contacto.educapp@gmail.com">
+              <img src={Email} width="25px" />
+              contacto.educapp@gmail.com
+            </a>
+          </div>
         </div>
       </footer>
     </div>
