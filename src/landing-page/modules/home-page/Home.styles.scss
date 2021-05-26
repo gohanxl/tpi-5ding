@@ -1,15 +1,18 @@
 @import "../../../App.styles.scss";
 
-$header-height: 82px;
+$header-height: 75px;
 $mancha-1: url(../../../assets/img/mancha-1.svg);
 $mancha-2: url(../../../assets/img/mancha-2.svg);
+$mancha-3: url(../../../assets/img/mancha-3.svg);
+$mancha-4: url(../../../assets/img/mancha-4.svg);
+$mock-1: url(../../../assets/img/mock-1.svg);
 
 section {
   background-repeat: no-repeat;
   width: 100%;
   height: calc(100vh - #{$header-height});
 
-  div {
+  .section-content {
     height: 100%;
     padding: 50px;
     display: flex;
@@ -26,7 +29,11 @@ h1 {
 
 h3 {
   color: $edu-darker-primary;
-  font-size: 50px;
+  font-size: 36px;
+}
+
+h4 {
+  font-size: 16px;
 }
 
 .landing-nav {
@@ -35,7 +42,7 @@ h3 {
   left: 0;
   background-color: transparent;
   width: 100%;
-  padding: 20px;
+  padding: 15px;
 
   .navbar-item {
     padding: 0.5rem 3rem;
@@ -48,7 +55,7 @@ h3 {
 
 .white-navbar {
   background-color: white;
-  border-bottom: solid 2px #f5dc17;
+  border-bottom: solid 2px white;
   box-shadow: 0px 2px 9px 0px #b77b0066;
   animation: to-white-navbar 0.5s;
 }
@@ -59,31 +66,170 @@ h3 {
 
 #inicio {
   height: 100vh;
-  display: flex;
-  flex-direction: row;
   background-image: $mancha-1;
   background-position: right;
 
   div {
-    width: 50%;
-
     p {
       text-align: justify;
       margin-top: 20px;
     }
 
-    .start-button {
+    .roughNotation {
       width: 25%;
-      margin-top: 20px;
-      align-self: flex-end;
+      margin-top: 40px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .start-button {
+      width: 90%;
       background-color: $edu-dark-primary;
+    }
+  }
+
+  .section-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    h4 {
+      margin-top: 20px;
+    }
+
+    div {
+      width: 50%;
+    }
+  }
+}
+
+#servicios {
+  background-image: $mock-1;
+
+  .section-content {
+    align-items: flex-end;
+    justify-content: center;
+
+    .image-container {
+      width: 50%;
+    }
+
+    .benefits-container {
+      width: 50%;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      margin-top: 20px;
+
+      .card {
+        width: 45%;
+        min-height: 150px;
+        margin: 10px;
+        background-color: $edu-light-blue;
+
+        .content {
+          display: flex;
+          flex-direction: column;
+
+          .benefits-desc {
+            margin-top: 15px;
+          }
+        }
+      }
     }
   }
 }
 
 #quienes-somos {
-  background-image: $mancha-2;
-  background-position-x: -150px;
+  background-image: $mancha-4;
+  background-position: center;
+
+  text-align: justify;
+
+  h3,
+  p {
+    margin-bottom: 20px;
+  }
+
+  .team-images-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 40px;
+
+    .team-image-container {
+      text-align: center;
+
+      .member-image {
+        width: 200px;
+        height: 200px;
+        border-radius: 100%;
+      }
+
+      p {
+        margin-top: 20px;
+      }
+    }
+  }
+}
+
+#contacto {
+  background-image: $mancha-3;
+  background-position: right;
+
+  .section-content {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    h3 {
+      margin-bottom: 20px;
+    }
+
+    .social-media {
+      margin: 20px 0;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      a {
+        display: inline-flex;
+
+        img {
+          filter: invert(50%) sepia(52%) saturate(582%) hue-rotate(141deg)
+            brightness(100%) contrast(103%);
+          margin-right: 10px;
+        }
+      }
+    }
+
+    .contact-container {
+      width: 35%;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+
+      input,
+      textarea {
+        margin-bottom: 20px;
+      }
+
+      .button-container {
+        width: 30%;
+        align-self: flex-end;
+
+        button {
+          width: 100%;
+          background-color: $edu-secondary;
+        }
+      }
+    }
+  }
 }
 
 //---------- ANIMATIONS ----------
@@ -96,7 +242,7 @@ h3 {
   }
   to {
     background-color: white;
-    border-bottom: solid 2px #f5dc17;
+    border-bottom: solid 2px white;
     box-shadow: 0px 2px 9px 0px #b77b0066;
   }
 }
@@ -104,7 +250,7 @@ h3 {
 @keyframes to-transparent-navbar {
   from {
     background-color: white;
-    border-bottom: solid 2px #f5dc17;
+    border-bottom: solid 2px white;
     box-shadow: 0px 2px 9px 0px #b77b0066;
   }
   to {
