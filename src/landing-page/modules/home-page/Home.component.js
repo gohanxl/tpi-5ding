@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import emailjs from "emailjs-com";
 import { emailJsCredentials } from "../../../config/env-config";
-import { RoughNotation } from "react-rough-notation";
+import { RoughNotation, RoughNotationGroup } from "react-rough-notation";
 
 import "./Home.styles.scss";
+
 import TeacherImage1 from "../../../assets/img/teacher-1.svg";
+import ContactImage1 from "../../../assets/img/contact-1.svg";
 import Logo from "../../../assets/img/logo.svg";
 
 import Mica from "../../../assets/img/team/foto-mica.png";
@@ -14,12 +16,47 @@ import Isa from "../../../assets/img/team/foto-isa.png";
 import Marce from "../../../assets/img/team/foto-marce.png";
 
 export const Home = () => {
+  const [shouldUnderlineBenefits, setShouldUnderlineBenefits] = useState(false);
+  const [shouldCircleMembers, setShouldCircleMembers] = useState(false);
+
   const teamImages = [
     { name: "Lucas", img: Lucas },
     { name: "Luciano", img: Lucho },
     { name: "Micaela", img: Mica },
     { name: "Isaias", img: Isa },
     { name: "Marcelo", img: Marce },
+  ];
+
+  const benefits = [
+    {
+      title: "Plataforma accesible",
+      description:
+        "Nos enfocamos en brindar oportunidad de uso para toda persona",
+    },
+    {
+      title: "Comunicación más fluida",
+      description:
+        "Mayor facilidad para conectar con integrantes de la institución",
+    },
+    {
+      title: "Padres informados",
+      description:
+        "Estarán al tanto de las últimas novedades de la institución y sus hijos",
+    },
+    {
+      title: "Todo en uno",
+      description: "Asistencias, notas, eventos y más en un solo lugar",
+    },
+    {
+      title: "Más organización",
+      description:
+        "Desde la creación de recordatorios hasta dar aviso de algún evento",
+    },
+    {
+      title: "Comodidad garantizada",
+      description:
+        "Nos dedicamos a dar la mejor experiencia para todos los usuarios",
+    },
   ];
 
   window.onscroll = function () {
@@ -30,6 +67,14 @@ export const Home = () => {
     } else {
       navbar.classList.remove("white-navbar");
       navbar.classList.add("hide-navbar");
+    }
+
+    if (window.scrollY > 245) {
+      setShouldUnderlineBenefits(true);
+    }
+
+    if (window.scrollY > 1165) {
+      setShouldCircleMembers(true);
     }
   };
 
@@ -70,7 +115,7 @@ export const Home = () => {
               Inicio
             </a>
             <a className="navbar-item" onClick={() => scrollTo("servicios")}>
-              Servicios
+              ¿Por qué elegirnos?
             </a>
             <a
               className="navbar-item"
@@ -100,12 +145,13 @@ export const Home = () => {
             show={true}
             animationDelay={500}
             color={"#8bd1af"}
-            animationDuration={2000}
+            animationDuration={3000}
             iterations={3}
             strokeWidth={2}
+            padding={15}
           >
             <button
-              className="button is-success is-rounded start-button"
+              className="button is-success is-rounded start-button is-medium"
               onClick={() => scrollTo("contacto")}
             >
               ¡Comenzá ya!
@@ -118,53 +164,29 @@ export const Home = () => {
       </section>
       <section id="servicios">
         <div className="section-content">
-          <div>
-            <div className="card">
-              <div className="card-content">
-                <div className="content">
-                  <p>Plataforma accesible</p>
-                  <p>-Inserte texto sobre accesibilidad aquí-</p>
+          <h3>¿Por qué elegirnos?</h3>
+          <div className="benefits-container">
+            <RoughNotationGroup show={shouldUnderlineBenefits}>
+              {benefits.map((benefit, i) => (
+                <div key={i} className="card">
+                  <div className="card-content">
+                    <div className="content">
+                      <RoughNotation order={i} type="underline">
+                        <p>
+                          <b>{benefit.title}</b>
+                        </p>
+                      </RoughNotation>
+                      <p className="benefits-desc">{benefit.description}</p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-
-            <div className="card">
-              <div className="card-content">
-                <div className="content">
-                  <p>Comunicación más fluida</p>
-                  <p>
-                    Mayor facilidad para conectar con integrantes de la
-                    institución
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="card">
-              <div className="card-content">
-                <div className="content">
-                  <p>Padres informados</p>
-                  <p>
-                    Estarán al tanto de las últimas novedades de la institución
-                    y sus hijos
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="card">
-              <div className="card-content">
-                <div className="content">
-                  <p>Otro</p>
-                  <p>-Inserte algun texto aquí-</p>
-                </div>
-              </div>
-            </div>
+              ))}
+            </RoughNotationGroup>
           </div>
         </div>
       </section>
       <section id="quienes-somos">
-        <div className="section-content">
+        <div className="section-content container">
           <h3>¿Quiénes Somos?</h3>
           <p>
             Somos un grupo de estudiantes universitarios enfocados en solucionar
@@ -175,53 +197,72 @@ export const Home = () => {
             minim adipisicing in--
           </p>
           <div className="team-images-container">
-            {teamImages.map((member, i) => (
-              <div key={i} className="team-image">
-                <img src={member.img} width="100%" />
-                <p>{member.name}</p>
-              </div>
-            ))}
+            <RoughNotationGroup show={shouldCircleMembers}>
+              {teamImages.map((member, i) => (
+                <div key={i} className="team-image-container">
+                  <RoughNotation
+                    order={i}
+                    type="circle"
+                    animationDelay={500}
+                    color={"#4dbdd5"}
+                    animationDuration={1000}
+                    iterations={3}
+                    strokeWidth={2}
+                  >
+                    <div>
+                      <img src={member.img} className="member-image" />
+                    </div>
+                  </RoughNotation>
+                  <p>{member.name}</p>
+                </div>
+              ))}
+            </RoughNotationGroup>
           </div>
         </div>
       </section>
       <section id="contacto">
         <div className="section-content">
-          <h3>Contacto</h3>
-          <p>
-            Si tenés alguna consulta o estás interesado, no dudes en
-            contactarnos.
-          </p>
-          <form onSubmit={(e) => sendEmail(e)}>
-            <input
-              className="input"
-              type="text"
-              name="from_name"
-              placeholder="Nombre y apellido"
-              required
-            />
-            <input
-              className="input"
-              type="text"
-              name="user_phone"
-              placeholder="Teléfono"
-            />
-            <input
-              className="input"
-              type="email"
-              name="reply_to"
-              placeholder="Email"
-              required
-            />
-            <textarea
-              className="textarea"
-              name="message"
-              placeholder="Mensaje"
-              required
-            />
-            <button className="button is-warning is-rounded" type="submit">
-              Enviar
-            </button>
-          </form>
+          <div>
+            <h3>Contacto</h3>
+            <p>
+              Si tenés alguna consulta o estás interesado, no dudes en
+              contactarnos.
+            </p>
+            <form onSubmit={(e) => sendEmail(e)}>
+              <input
+                className="input"
+                type="text"
+                name="from_name"
+                placeholder="Nombre y apellido"
+                required
+              />
+              <input
+                className="input"
+                type="text"
+                name="user_phone"
+                placeholder="Teléfono"
+              />
+              <input
+                className="input"
+                type="email"
+                name="reply_to"
+                placeholder="Email"
+                required
+              />
+              <textarea
+                className="textarea"
+                name="message"
+                placeholder="Mensaje"
+                required
+              />
+              <button className="button is-warning is-rounded" type="submit">
+                Enviar
+              </button>
+            </form>
+          </div>
+          <div>
+            <img src={ContactImage1} width="100%" height="100%" />
+          </div>
         </div>
       </section>
       <footer className="footer">
