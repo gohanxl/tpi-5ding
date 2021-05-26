@@ -100,13 +100,13 @@ const MainApp = () => {
             {isAuthenticated && <MainAppRoutes />}
             {!isAuthenticated && loginWithRedirect()}
           </div>
-          <footer className="footer">
-            <p className="has-text-centered">
-              Created by <b>5ding</b>
-            </p>
-          </footer>
         </div>
       </div>
+      <footer className="footer">
+        <p className="has-text-centered">
+          Created by <b>5ding</b>
+        </p>
+      </footer>
     </div>
   );
 };
