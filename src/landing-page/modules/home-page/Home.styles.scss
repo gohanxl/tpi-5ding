@@ -1,9 +1,10 @@
 @import "../../../App.styles.scss";
 
-$header-height: 82px;
+$header-height: 75px;
 $mancha-1: url(../../../assets/img/mancha-1.svg);
 $mancha-2: url(../../../assets/img/mancha-2.svg);
 $mancha-3: url(../../../assets/img/mancha-3.svg);
+$mancha-4: url(../../../assets/img/mancha-4.svg);
 $mock-1: url(../../../assets/img/mock-1.svg);
 
 section {
@@ -65,14 +66,10 @@ h4 {
 
 #inicio {
   height: 100vh;
-  display: flex;
-  flex-direction: row;
   background-image: $mancha-1;
   background-position: right;
 
   div {
-    width: 50%;
-
     p {
       text-align: justify;
       margin-top: 20px;
@@ -80,15 +77,29 @@ h4 {
 
     .roughNotation {
       width: 25%;
-      margin-top: 20px;
+      margin-top: 40px;
       display: flex;
       justify-content: center;
-      align-self: flex-end;
     }
 
     .start-button {
       width: 90%;
       background-color: $edu-dark-primary;
+    }
+  }
+
+  .section-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    h4 {
+      margin-top: 20px;
+    }
+
+    div {
+      width: 50%;
     }
   }
 }
@@ -132,7 +143,11 @@ h4 {
 }
 
 #quienes-somos {
+  background-image: $mancha-4;
+  background-position: center;
+
   text-align: justify;
+
   h3,
   p {
     margin-bottom: 20px;
@@ -164,21 +179,38 @@ h4 {
 #contacto {
   background-image: $mancha-3;
   background-position: right;
+
   .section-content {
     flex-direction: row;
     align-items: center;
+    justify-content: space-between;
 
-    h3,
-    p {
+    h3 {
       margin-bottom: 20px;
     }
 
-    div {
-      width: 50%;
+    .social-media {
+      margin: 20px 0;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      a {
+        display: inline-flex;
+
+        img {
+          filter: invert(50%) sepia(52%) saturate(582%) hue-rotate(141deg)
+            brightness(100%) contrast(103%);
+          margin-right: 10px;
+        }
+      }
+    }
+
+    .contact-container {
+      width: 35%;
     }
 
     form {
-      width: 70%;
       display: flex;
       flex-direction: column;
 
@@ -187,10 +219,14 @@ h4 {
         margin-bottom: 20px;
       }
 
-      button {
-        background-color: $edu-secondary;
+      .button-container {
         width: 30%;
         align-self: flex-end;
+
+        button {
+          width: 100%;
+          background-color: $edu-secondary;
+        }
       }
     }
   }

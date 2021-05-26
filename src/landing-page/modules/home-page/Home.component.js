@@ -8,6 +8,8 @@ import "./Home.styles.scss";
 import TeacherImage1 from "../../../assets/img/teacher-1.svg";
 import ContactImage1 from "../../../assets/img/contact-1.svg";
 import Logo from "../../../assets/img/logo.svg";
+import Instagram from "../../../assets/img/instagram.svg";
+import LinkedIn from "../../../assets/img/linkedin.svg";
 
 import Mica from "../../../assets/img/team/foto-mica.png";
 import Lucho from "../../../assets/img/team/foto-lucho.png";
@@ -18,6 +20,7 @@ import Marce from "../../../assets/img/team/foto-marce.png";
 export const Home = () => {
   const [shouldUnderlineBenefits, setShouldUnderlineBenefits] = useState(false);
   const [shouldCircleMembers, setShouldCircleMembers] = useState(false);
+  const [shouldHighlightContact, setShouldHighlightContact] = useState(false);
 
   const teamImages = [
     { name: "Lucas", img: Lucas },
@@ -34,18 +37,19 @@ export const Home = () => {
         "Nos enfocamos en brindar oportunidad de uso para toda persona",
     },
     {
-      title: "Comunicación más fluida",
+      title: "Motivación",
       description:
-        "Mayor facilidad para conectar con integrantes de la institución",
+        "Facilitamos medios para mantener a los profesores y alumnos motivados",
+    },
+    {
+      title: "Integral",
+      description:
+        "Damos todas las herramientas necesarias para dar clases a larga distancia",
     },
     {
       title: "Padres informados",
       description:
         "Estarán al tanto de las últimas novedades de la institución y sus hijos",
-    },
-    {
-      title: "Todo en uno",
-      description: "Asistencias, notas, eventos y más en un solo lugar",
     },
     {
       title: "Más organización",
@@ -75,6 +79,10 @@ export const Home = () => {
 
     if (window.scrollY > 1165) {
       setShouldCircleMembers(true);
+    }
+
+    if (window.scrollY > 2160) {
+      setShouldHighlightContact(true);
     }
   };
 
@@ -131,30 +139,30 @@ export const Home = () => {
       </nav>
       <section id="inicio">
         <div className="section-content">
-          <h1>EducApp</h1>
-          <h3>¡La escuela en tu casa!</h3>
-          <h4>Una aplicacion sencilla de usar, accesible para todxs</h4>
-          <RoughNotation
-            className="roughNotation"
-            type="circle"
-            show={true}
-            animationDelay={500}
-            color={"#8bd1af"}
-            animationDuration={3000}
-            iterations={3}
-            strokeWidth={2}
-            padding={15}
-          >
-            <button
-              className="button is-success is-rounded start-button is-medium"
-              onClick={() => scrollTo("contacto")}
+          <div>
+            <h1>EducApp</h1>
+            <h3>¡La escuela en tu casa!</h3>
+            <h4>Una aplicacion sencilla de usar, accesible para todos.</h4>
+            <RoughNotation
+              className="roughNotation"
+              type="circle"
+              show={true}
+              animationDelay={500}
+              color={"#f5dc17"}
+              animationDuration={2000}
+              iterations={3}
+              strokeWidth={2}
+              padding={6}
             >
-              ¡Comenzá ya!
-            </button>
-          </RoughNotation>
-        </div>
-        <div>
-          <img src={TeacherImage1} width="100%" height="100%" />
+              <button
+                className="button is-success is-rounded start-button is-medium"
+                onClick={() => scrollTo("contacto")}
+              >
+                ¡Comenzá ya!
+              </button>
+            </RoughNotation>
+          </div>
+          <img src={TeacherImage1} width="45%" />
         </div>
       </section>
       <section id="servicios">
@@ -184,17 +192,17 @@ export const Home = () => {
         <div className="section-content container">
           <h3>¿Quiénes Somos?</h3>
           <p>
-            Somos un grupo de estudiantes universitarios enfocados en solucionar
-            distintas problemáticas al momento de dar clases a distancia, por
-            ejemplo: herramientas insuficientes, falta de atención en las
-            clases, poca motivación, entre otras. Por estas razones, decidimos
-            construir una aplicación que integre todas las herramientas
-            educativas necesarias.
+            Somos un grupo de estudiantes universitarios con el objetivo de
+            solucionar distintas problemáticas que comenzaron a surgir al
+            momento de dar clases a distancia, como por ejemplo: herramientas
+            insuficientes, falta de atención, poca motivación, entre otras. Por
+            estas razones, decidimos construir una aplicación que integre todas
+            las herramientas educativas necesarias.
           </p>
           <p>
-            Además nos esforzamos en lograr una <strong>inclusión total</strong>
-            , enfocándonos en que personas con capacidades diferentes puedan
-            utilizar nuestra aplicación.
+            Nuestra principal meta es lograr una{" "}
+            <strong>inclusión total</strong>, enfocándonos en que personas con
+            capacidades diferentes puedan utilizar nuestra aplicación.
           </p>
           <div className="team-images-container">
             <RoughNotationGroup show={shouldCircleMembers}>
@@ -204,7 +212,7 @@ export const Home = () => {
                     order={i}
                     type="circle"
                     animationDelay={500}
-                    color="#b8e3ec"
+                    color="#f5dc17"
                     animationDuration={1000}
                     iterations={3}
                     strokeWidth={2}
@@ -222,12 +230,37 @@ export const Home = () => {
       </section>
       <section id="contacto">
         <div className="section-content">
-          <div>
+          <div className="contact-container">
             <h3>Contacto</h3>
-            <p>
-              Si tenés alguna consulta o estás interesado, no dudes en
-              contactarnos.
-            </p>
+            <RoughNotation
+              show={shouldHighlightContact}
+              type="highlight"
+              color="#aadbc7"
+              animationDuration={2000}
+              animationDelay={400}
+              iterations={3}
+              strokeWidth={2}
+              padding={10}
+            >
+              <p>
+                Si tenés alguna consulta o estás interesado, no dudes en
+                contactarnos a través del formulario o por nuestras redes
+                sociales.
+              </p>
+            </RoughNotation>
+
+            <div className="social-media">
+              <a href="https://instagram.com/educapp.ar" target="blank">
+                <img src={Instagram} width="40px" />
+              </a>
+              <a
+                href="https://www.linkedin.com/company/educapp-ar"
+                target="blank"
+              >
+                <img src={LinkedIn} width="40px" />
+              </a>
+            </div>
+            <p>Email: contacto.educapp@gmail.com</p>
             <form onSubmit={(e) => sendEmail(e)}>
               <input
                 className="input"
@@ -255,14 +288,24 @@ export const Home = () => {
                 placeholder="Mensaje"
                 required
               />
-              <button className="button is-warning is-rounded" type="submit">
-                Enviar
-              </button>
+              <RoughNotation
+                className="button-container"
+                show={shouldHighlightContact}
+                type="circle"
+                color="#1eaac3"
+                animationDuration={2000}
+                animationDelay={1000}
+                iterations={3}
+                strokeWidth={2}
+                padding={10}
+              >
+                <button className="button is-warning is-rounded" type="submit">
+                  Enviar
+                </button>
+              </RoughNotation>
             </form>
           </div>
-          <div>
-            <img src={ContactImage1} width="100%" height="100%" />
-          </div>
+          <img src={ContactImage1} width="55%" />
         </div>
       </section>
       <footer className="footer">

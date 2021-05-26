@@ -15,12 +15,13 @@
 	</clipPath>
 	<g class="st0">
 		<linearGradient id="SVGID_3_" gradientUnits="userSpaceOnUse" x1="215.5795" y1="133.7959" x2="698.6107" y2="543.0906">
-			<stop  offset="0" style="stop-color:#7BCCB9"/>
-			<stop  offset="0.0417" style="stop-color:#72C9BE"/>
-			<stop  offset="0.1501" style="stop-color:#61C4C9"/>
-			<stop  offset="0.285" style="stop-color:#56C0D0"/>
-			<stop  offset="0.4744" style="stop-color:#4FBED4"/>
-			<stop  offset="1" style="stop-color:#4DBDD5"/>
+			<stop  offset="0" style="stop-color:#64C3B7"/>
+			<stop  offset="0.0363" style="stop-color:#58BFB9"/>
+			<stop  offset="0.121" style="stop-color:#42B7BD"/>
+			<stop  offset="0.221" style="stop-color:#31B1C0"/>
+			<stop  offset="0.3447" style="stop-color:#26ADC2"/>
+			<stop  offset="0.5182" style="stop-color:#1FABC3"/>
+			<stop  offset="1" style="stop-color:#1DAAC3"/>
 		</linearGradient>
 		<path class="st1" d="M767.43,167.2c-10.39-44.25-35.14-86.62-73.55-108.15c-33.91-19-75.37-25.15-112.67-15.62
 			c-35.57,9.09-74.15,102.87-110.39,110.25c-80.89,16.48-91.13-49.75-170.32-81.29c-39.2-15.61-91.68-15.68-111.84,23.06
