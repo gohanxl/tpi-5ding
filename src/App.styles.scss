@@ -1,5 +1,6 @@
 @charset "utf-8";
 @import "~bulma/bulma";
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
 
 $edu-primary: #1eaac3;
 $edu-secondary: #f5dc17;
@@ -27,6 +28,6 @@ html {
 }
 
 .app-content {
-  height: $app-content-height;
+  //height: $app-content-height;
   padding: 10px;
 }

@@ -4,12 +4,12 @@ import { TeacherAssignatureViewRenderer } from "./TeacherAssignature/TeacherAssi
 export const teacherRoutes = [
   {
     exact: true,
-    path: "/teacher",
+    path: "/educapp/teacher",
     component: TeacherLectureViewRenderer,
   },
   {
     exact: true,
-    path: "/teacher/assignature",
+    path: "/educapp/teacher/assignature",
     component: TeacherAssignatureViewRenderer,
   },
 ];
