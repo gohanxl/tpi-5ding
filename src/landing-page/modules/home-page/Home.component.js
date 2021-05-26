@@ -132,13 +132,8 @@ export const Home = () => {
       <section id="inicio">
         <div className="section-content">
           <h1>EducApp</h1>
-          <h3>Gestión total para tu escuela</h3>
-          <p>
-            Amet ea ea et est aute commodo cillum cillum nulla nulla. Quis
-            mollit cillum ut ex sit sunt aliquip quis magna cupidatat officia ut
-            amet tempor. Commodo officia laborum sint minim adipisicing in
-            nostrud officia proident laboris cillum pariatur ea commodo.
-          </p>
+          <h3>¡La escuela en tu casa!</h3>
+          <h4>Una aplicacion sencilla de usar, accesible para todxs</h4>
           <RoughNotation
             className="roughNotation"
             type="circle"
@@ -190,11 +185,16 @@ export const Home = () => {
           <h3>¿Quiénes Somos?</h3>
           <p>
             Somos un grupo de estudiantes universitarios enfocados en solucionar
-            una problematica que surgió a partir de la necesidad de realizar las
-            clases a larga distancia. --Amet ea ea et est aute commodo cillum
-            cillum nulla nulla. Quis mollit cillum ut ex sit sunt aliquip quis
-            magna cupidatat officia ut amet tempor. Commodo officia laborum sint
-            minim adipisicing in--
+            distintas problemáticas al momento de dar clases a distancia, por
+            ejemplo: herramientas insuficientes, falta de atención en las
+            clases, poca motivación, entre otras. Por estas razones, decidimos
+            construir una aplicación que integre todas las herramientas
+            educativas necesarias.
+          </p>
+          <p>
+            Además nos esforzamos en lograr una <strong>inclusión total</strong>
+            , enfocándonos en que personas con capacidades diferentes puedan
+            utilizar nuestra aplicación.
           </p>
           <div className="team-images-container">
             <RoughNotationGroup show={shouldCircleMembers}>
@@ -204,7 +204,7 @@ export const Home = () => {
                     order={i}
                     type="circle"
                     animationDelay={500}
-                    color={"#4dbdd5"}
+                    color="#b8e3ec"
                     animationDuration={1000}
                     iterations={3}
                     strokeWidth={2}
