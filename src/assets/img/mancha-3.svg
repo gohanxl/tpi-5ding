@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 23.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 751.71 587.36" style="enable-background:new 0 0 751.71 587.36;" xml:space="preserve">
+	 viewBox="0 0 766.2 608.14" style="enable-background:new 0 0 766.2 608.14;" xml:space="preserve">
 <style type="text/css">
 	.st0{clip-path:url(#SVGID_2_);}
 	.st1{fill:url(#SVGID_3_);}
 </style>
 <g>
 	<defs>
-		<rect id="SVGID_1_" width="751.71" height="587.36"/>
+		<rect id="SVGID_1_" x="14.49" width="751.71" height="587.36"/>
 	</defs>
 	<clipPath id="SVGID_2_">
 		<use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
 	</clipPath>
 	<g class="st0">
-		<linearGradient id="SVGID_3_" gradientUnits="userSpaceOnUse" x1="178.373" y1="114.5497" x2="682.8" y2="541.9742">
+		<linearGradient id="SVGID_3_" gradientUnits="userSpaceOnUse" x1="215.5795" y1="133.7959" x2="698.6107" y2="543.0906">
 			<stop  offset="0" style="stop-color:#7BCCB9"/>
 			<stop  offset="0.0417" style="stop-color:#72C9BE"/>
 			<stop  offset="0.1501" style="stop-color:#61C4C9"/>
@@ -22,9 +22,9 @@
 			<stop  offset="0.4744" style="stop-color:#4FBED4"/>
 			<stop  offset="1" style="stop-color:#4DBDD5"/>
 		</linearGradient>
-		<path class="st1" d="M752.93,167.2c-10.39-44.25-35.14-86.62-73.55-108.15c-33.91-19-75.37-25.15-112.67-15.62
-			c-35.57,9.09-74.28,56.29-112.75,56.07c-82.55-0.48-85.91-31.54-167.79-52.35c-40.89-10.39-111.39-17.26-131.54,21.48
-			c-16.09,30.92-14.52,64.31-4.7,97.99c9.82,33.67,6.56,70.17,0,104.7c-10.18,53.61-78.49,75.77-90.4,128.99
+		<path class="st1" d="M767.43,167.2c-10.39-44.25-35.14-86.62-73.55-108.15c-33.91-19-75.37-25.15-112.67-15.62
+			c-35.57,9.09-74.15,102.87-110.39,110.25c-80.89,16.48-91.13-49.75-170.32-81.29c-39.2-15.61-91.68-15.68-111.84,23.06
+			c-16.09,30.92-13.91,55.61-4.09,89.28c9.82,33.67,18.64,64.8,12.08,99.33C186.47,337.67,85.94,347.08,74.03,400.3
 			c-8.62,38.53,2.38,91.5,29.16,119.47c24.67,25.77,55.26,47.56,92.85,48.5c15.84,0.4,55.24-1.19,95.03-11.33
 			c28.5-7.27,53.88-22,86.25-29.34c43.93-9.97,97.91,4.67,134.39,23.48c91.67,47.24,233.39-3.36,256.08-29.31"/>
 	</g>
