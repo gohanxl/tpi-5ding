@@ -28,7 +28,11 @@ h1 {
 
 h3 {
   color: $edu-darker-primary;
-  font-size: 50px;
+  font-size: 36px;
+}
+
+h4 {
+  font-size: 16px;
 }
 
 .landing-nav {
@@ -128,6 +132,7 @@ h3 {
 }
 
 #quienes-somos {
+  text-align: justify;
   h3,
   p {
     margin-bottom: 20px;
