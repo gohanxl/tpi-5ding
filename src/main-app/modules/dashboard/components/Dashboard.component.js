@@ -26,18 +26,34 @@ const Dashboard = () => {
       <div className="link-container">
         <div className="level">
           <div className="level-item">
-            <Button image={classSvg} title="ENTRAR A CLASE" />
+            <Button
+              image={classSvg}
+              title="ENTRAR A CLASE"
+              route="/educapp/student"
+            />
           </div>
           <div className="level-item">
-            <Button image={calendarSvg} title="CALENDARIO" />
+            <Button
+              image={calendarSvg}
+              title="CALENDARIO"
+              route="/educapp/student"
+            />
           </div>
         </div>
         <div className="level">
           <div className="level-item">
-            <Button image={subjectSvg} title="MATERIAS" />
+            <Button
+              image={subjectSvg}
+              title="MATERIAS"
+              route="/educapp/student"
+            />
           </div>
           <div className="level-item">
-            <Button image={messageSvg} title="MENSAJES" />
+            <Button
+              image={messageSvg}
+              title="MENSAJES"
+              route="/educapp/student"
+            />
           </div>
         </div>
       </div>

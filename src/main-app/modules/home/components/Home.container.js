@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { Home } from "./Home.component";
+import Dashboard from "../../dashboard/components/Dashboard.component";
 
 import { getCounterValue } from "../store/home.selectors";
 import { addToCounter } from "../store/home.thunks";
@@ -12,4 +12,4 @@ const mapDispatchToProps = {
   addToCounter,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
