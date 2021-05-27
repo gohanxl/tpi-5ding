@@ -96,7 +96,7 @@ const MainApp = () => {
           <Sidebar />
         </div>
         <div className="app-container">
-          <div className="app-content is-flex">
+          <div className="app-content">
             {isAuthenticated && <MainAppRoutes />}
             {!isAuthenticated && loginWithRedirect()}
           </div>
