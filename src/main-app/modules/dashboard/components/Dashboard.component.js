@@ -5,8 +5,11 @@ import calendarSvg from "../../../../assets/img/education/043-calendar.svg";
 import messageSvg from "../../../../assets/img/education/024-virtual class.svg";
 import subjectSvg from "../../../../assets/img/education/015-list.svg";
 import classSvg from "../../../../assets/img/education/005-school bell.svg";
+import { useSelector } from "react-redux";
 
 const Dashboard = () => {
+  const user = useSelector((state) => state.user.currentUser);
+
   return (
     <section className="dashboard-container">
       <div className="title-container">
@@ -14,7 +17,7 @@ const Dashboard = () => {
           <strong>¡Hola de nuevo!</strong>
         </h2>
         <h1 className="title is-2 dashboard-name">
-          <strong>Ignacio</strong>
+          <strong>{user && user.dbUser ? user.dbUser.Nombre : ""}</strong>
         </h1>
       </div>
       <br />
@@ -23,7 +26,7 @@ const Dashboard = () => {
       <div className="link-container">
         <div className="level">
           <div className="level-item">
-            <Button image={messageSvg} title="MENSAJES" />
+            <Button image={classSvg} title="ENTRAR A CLASE" />
           </div>
           <div className="level-item">
             <Button image={calendarSvg} title="CALENDARIO" />
@@ -34,7 +37,7 @@ const Dashboard = () => {
             <Button image={subjectSvg} title="MATERIAS" />
           </div>
           <div className="level-item">
-            <Button image={classSvg} title="ENTRAR A CLASE" />
+            <Button image={messageSvg} title="MENSAJES" />
           </div>
         </div>
       </div>
