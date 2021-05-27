@@ -35,7 +35,7 @@ export const Home = () => {
     {
       title: "Plataforma accesible",
       description:
-        "Nos enfocamos en brindar oportunidad de uso para toda persona",
+        "Nos enfocamos en que todos puedan utilizar la plataforma facilmente",
     },
     {
       title: "Motivación",
@@ -45,7 +45,7 @@ export const Home = () => {
     {
       title: "Integral",
       description:
-        "Damos todas las herramientas necesarias para dar clases a larga distancia",
+        "Damos todas las herramientas necesarias para dar clases a distancia",
     },
     {
       title: "Padres informados",
@@ -148,12 +148,12 @@ export const Home = () => {
               color="#8bd2b0"
               animationDelay={500}
               animationDuration={2000}
-              iterations={3}
+              iterations={5}
             >
               <h3>¡La escuela en tu casa!</h3>
             </RoughNotation>
 
-            <h4>Una aplicacion sencilla de usar, accesible para todos.</h4>
+            <h4>Una aplicación sencilla de usar y accesible para todos.</h4>
             <RoughNotation
               className="button-roughNotation"
               type="circle"
@@ -163,13 +163,13 @@ export const Home = () => {
               animationDuration={2000}
               iterations={3}
               strokeWidth={2}
-              padding={6}
+              padding={9}
             >
               <button
-                className="button is-success is-rounded start-button is-medium"
+                className="button is-success is-rounded start-button is-large"
                 onClick={() => scrollTo("contacto")}
               >
-                ¡Comenzá ya!
+                ¡Me interesa!
               </button>
             </RoughNotation>
           </div>
@@ -254,8 +254,7 @@ export const Home = () => {
               padding={10}
             >
               <p>
-                Si tenés alguna consulta o estás interesado, no dudes en
-                contactarnos a través del <b>formulario</b> o nuestras
+                Contactanos a través del <b>formulario</b> o nuestras
                 <b> redes sociales.</b>
               </p>
             </RoughNotation>
@@ -282,27 +281,21 @@ export const Home = () => {
                 className="input"
                 type="text"
                 name="from_name"
-                placeholder="Nombre y apellido"
+                placeholder="Nombre*"
                 required
-              />
-              <input
-                className="input"
-                type="text"
-                name="user_phone"
-                placeholder="Teléfono"
               />
               <input
                 className="input"
                 type="email"
                 name="reply_to"
-                placeholder="Email"
+                placeholder="Email*"
                 required
               />
-              <textarea
-                className="textarea"
-                name="message"
-                placeholder="Mensaje"
-                required
+              <input
+                className="input"
+                type="text"
+                name="institution"
+                placeholder="Nombre de la institución (opcional)"
               />
               <RoughNotation
                 className="button-container"

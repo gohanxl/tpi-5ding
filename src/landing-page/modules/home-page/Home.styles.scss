@@ -7,6 +7,25 @@ $mancha-3: url(../../../assets/img/mancha-3.svg);
 $mancha-4: url(../../../assets/img/mancha-4.svg);
 $mock-1: url(../../../assets/img/mock-1.svg);
 
+h1 {
+  color: $edu-dark-primary;
+  font-size: 6em;
+}
+
+h3 {
+  color: $edu-darker-primary;
+  font-size: 3em;
+}
+
+h4 {
+  font-size: 1.5em;
+}
+
+p,
+a {
+  font-size: 1.1em;
+}
+
 section {
   background-repeat: no-repeat;
   width: 100%;
@@ -20,20 +39,6 @@ section {
     justify-content: center;
     position: relative;
   }
-}
-
-h1 {
-  color: $edu-dark-primary;
-  font-size: 72px;
-}
-
-h3 {
-  color: $edu-darker-primary;
-  font-size: 36px;
-}
-
-h4 {
-  font-size: 16px;
 }
 
 .landing-nav {
@@ -80,7 +85,7 @@ h4 {
     }
 
     .button-roughNotation {
-      margin-top: 50px;
+      margin-top: 80px;
       display: flex;
       justify-content: center;
     }
@@ -139,7 +144,8 @@ h4 {
           flex-direction: column;
 
           .benefits-desc {
-            margin-top: 15px;
+            margin-top: 20px;
+            line-height: 2;
           }
         }
       }
@@ -163,7 +169,7 @@ h4 {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    margin-top: 40px;
+    margin-top: 30px;
 
     .team-image-container {
       text-align: center;
