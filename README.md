@@ -14,7 +14,7 @@ Creado con [Create React App](https://github.com/facebook/create-react-app).
 
 ## Cómo correr el proyecto
 Si es la primera vez, ejecutar el comando:
-#### `npm intall` -> Este comando instalará las dependencias necesarias.
+#### `npm install` -> Este comando instalará las dependencias necesarias.
 <br>
 
 En la ruta del proyecto, correr el comando:
