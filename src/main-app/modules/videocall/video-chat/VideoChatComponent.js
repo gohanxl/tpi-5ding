@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Peer from "peerjs";
 import { SignalHandlerService } from "../services/signal-handler";
+import { ChatWindowComponent } from "../chat-window/chat-window.component";
 
 export const VideoChatComponent = (props) => {
   const ScreeenSharingStatus = {
@@ -343,9 +344,18 @@ export const VideoChatComponent = (props) => {
 
   return (
     <div>
-      <h1>ClientVideoChatHere: {name}</h1>
-      <div id={"video-" + name}></div>
-      <div id="errorMsg"></div>
+      <div>
+        <ChatWindowComponent
+          name={name}
+          meeting={meetingId}
+          signalRService={signalRService}
+        />
+      </div>
+      <div>
+        <h1>ClientVideoChatHere: {name}</h1>
+        <div id={"video-" + name}></div>
+        <div id="errorMsg"></div>
+      </div>
     </div>
   );
 };

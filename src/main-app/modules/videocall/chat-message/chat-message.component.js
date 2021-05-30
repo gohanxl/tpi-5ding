@@ -5,8 +5,8 @@ export const ChatMessageComponent = (props) => {
 
   return (
     <div style="display: flex; flex-direction: column;">
-      <mat-card
-        styles={{
+      <div
+        style={{
           "background-color": "#536DFE",
           color: "white",
           "align-self": "flex-start",
@@ -29,7 +29,7 @@ export const ChatMessageComponent = (props) => {
           {msg.time || "Here Date"}
         </div>
         <span style="word-wrap: break-word;top: 2px">{msg.content}</span>
-      </mat-card>
+      </div>
     </div>
   );
 };
