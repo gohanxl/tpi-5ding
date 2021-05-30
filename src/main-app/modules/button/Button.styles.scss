@@ -1,0 +1,19 @@
+@import "../../../App.styles.scss";
+
+.button-image{
+  height: 100px;
+  width: 100px;
+  margin-top: 1.5em;
+}
+
+.button-text{
+  padding-top: 0.5em;
+  color: #245e6c !important;
+}
+
+.button-background{
+  height: 10em;
+  width: 10em;
+  background-color: #1eaac3;
+  border-radius: 50%;
+}
