@@ -1,4 +1,3 @@
-import React from "react";
 import * as SignalR from "@microsoft/signalr";
 
 export class SignalHandlerService {
@@ -16,6 +15,24 @@ export class SignalHandlerService {
       return this.instance;
     }
     return this.instance;
+  };
+
+  asyncConnection = () => {
+    this.hubConnection = new SignalR.HubConnectionBuilder()
+      .withUrl("https://localhost:5001/SanvaadConnection")
+      .build();
+
+    return this.hubConnection
+      .start()
+      .then(() => {
+        this.isServiceStarted = true;
+        console.log("Connection established successfully!");
+        return true;
+      })
+      .catch((error) => {
+        console.error(error);
+        return false;
+      });
   };
 
   startConnection = (method) => {
@@ -52,6 +69,7 @@ export class SignalHandlerService {
   };
 
   disConnection = () => {
+    // eslint-disable-next-line
     this.hubConnection.onclose((error) => {
       console.log("Disconncted from call.");
     });
@@ -86,7 +104,7 @@ export class SignalHandlerService {
   };
 
   invokeJoinedRoom = (roomId, userId, displayName) => {
-    this.hubConnection
+    return this.hubConnection
       .invoke("JoinedRoom", roomId, userId, displayName)
       .then(() => {
         console.log("Data broadcasted successfully!");
