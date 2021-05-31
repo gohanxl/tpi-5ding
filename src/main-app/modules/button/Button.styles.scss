@@ -1,19 +1,22 @@
 @import "../../../App.styles.scss";
 
-.button-image{
+.button-image {
   height: 100px;
   width: 100px;
-  margin-top: 1.5em;
 }
 
-.button-text{
+.button-text {
   padding-top: 0.5em;
   color: #245e6c !important;
 }
 
-.button-background{
+.button-background {
   height: 10em;
   width: 10em;
   background-color: #1eaac3;
   border-radius: 50%;
+  display: flex;
+  align-items: center;
+  padding: 40px;
+  justify-content: center;
 }

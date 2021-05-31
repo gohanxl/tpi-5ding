@@ -20,9 +20,6 @@ const Dashboard = () => {
           <strong>{user && user.dbUser ? user.dbUser.Nombre : ""}</strong>
         </h1>
       </div>
-      <br />
-      <br />
-      <br />
       <div className="link-container">
         <div className="level">
           <div className="level-item">
@@ -57,8 +54,6 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      <br />
-      <br />
     </section>
   );
 };

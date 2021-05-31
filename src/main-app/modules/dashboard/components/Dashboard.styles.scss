@@ -1,26 +1,27 @@
 @import "../../../../App.styles.scss";
 $dashboard-1: url(https://i.imgur.com/pGypRQh.png);
 
-.dashboard-container{
+.dashboard-container {
   background-image: $dashboard-1;
   background-size: cover;
   background-repeat: no-repeat;
+  height: 100%;
 }
 
-.link-container{
+.link-container {
   width: 35%;
   margin-left: 3em;
 }
 
-.title-container{
+.title-container {
   padding-left: 5%;
   padding-top: 5%;
 }
 
-.dashboard-greeting{
-  color: #24778a !important;
+.dashboard-greeting {
+  color: $edu-dark-primary !important;
 }
 
-.dashboard-name{
-  color: #245e6c !important;
+.dashboard-name {
+  color: $edu-darker-primary !important;
 }
