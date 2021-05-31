@@ -4,8 +4,6 @@ import Peer from "peerjs";
 import { SignalHandlerService } from "../services/signal-handler";
 import { ChatWindowComponent } from "../chat-window/chat-window.component";
 import { VideoToolbar } from "../video-toolbar/VideoToolbar";
-import { Redirect } from "react-router";
-import * as ReactDOM from "react-dom";
 
 export const VideoChatComponent = (props) => {
   const ScreeenSharingStatus = {
@@ -351,6 +349,7 @@ export const VideoChatComponent = (props) => {
     } else {
       isMute = localUserStream.getAudioTracks()[0].enabled = true;
     }
+    return isMute;
   };
 
   const videoOnOff = () => {
@@ -363,6 +362,8 @@ export const VideoChatComponent = (props) => {
 
   const endCall = () => {
     signalRService.stopConnection();
+    localUserStream.getAudioTracks()[0].stop();
+    localUserStream.getVideoTracks()[0].stop();
     window.location = "/#/educapp/home";
   };
 

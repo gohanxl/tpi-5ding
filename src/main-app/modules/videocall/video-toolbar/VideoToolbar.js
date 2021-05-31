@@ -1,5 +1,12 @@
 /* eslint-disable */
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMicrophoneAlt } from "@fortawesome/free-solid-svg-icons";
+import { faMicrophoneSlash } from "@fortawesome/free-solid-svg-icons";
+import { faVideo } from "@fortawesome/free-solid-svg-icons";
+import { faVideoSlash } from "@fortawesome/free-solid-svg-icons";
+import { faPhoneSlash } from "@fortawesome/free-solid-svg-icons";
+import { faComment } from "@fortawesome/free-solid-svg-icons";
 
 export const VideoToolbar = ({
   videoOnOff,
@@ -7,27 +14,56 @@ export const VideoToolbar = ({
   endCall,
   toggleChat,
 }) => {
+  let isMuted = false;
+  let isVideoOn = true;
+
+  const childMute = async () => {
+    isMuted = !isMuted;
+    if (isMuted) {
+      document
+        .getElementById("muteUnmuteButton")
+        .classList.remove("is-primary");
+      document.getElementById("muteUnmuteButton").classList.add("is-danger");
+    } else {
+      document.getElementById("muteUnmuteButton").classList.add("is-primary");
+      document.getElementById("muteUnmuteButton").classList.remove("is-danger");
+    }
+    muteUnmute();
+  };
+
+  const childVideoOnOff = async () => {
+    isVideoOn = !isVideoOn;
+    if (!isVideoOn) {
+      document.getElementById("videoOnButton").classList.remove("is-primary");
+      document.getElementById("videoOnButton").classList.add("is-danger");
+    } else {
+      document.getElementById("videoOnButton").classList.add("is-primary");
+      document.getElementById("videoOnButton").classList.remove("is-danger");
+    }
+    videoOnOff();
+  };
+
   return (
     <div className="buttons">
       <button
         className="button is-primary"
         id="videoOnButton"
-        onClick={videoOnOff}
+        onClick={childVideoOnOff}
       >
-        On/Stop Video
+        <FontAwesomeIcon icon={faVideo} />
       </button>
       <button
-        className="button is-danger"
+        className="button is-primary"
         id="muteUnmuteButton"
-        onClick={muteUnmute}
+        onClick={childMute}
       >
-        Mute/Unmute
+        <FontAwesomeIcon icon={faMicrophoneAlt} />
       </button>
       <button className="button is-danger" id="endCallButton" onClick={endCall}>
-        End Call
+        <FontAwesomeIcon icon={faPhoneSlash} />
       </button>
       <button className="button is-info" onClick={toggleChat}>
-        Chat
+        <FontAwesomeIcon icon={faComment} />
       </button>
     </div>
   );
