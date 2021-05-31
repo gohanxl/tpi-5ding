@@ -1,10 +1,11 @@
 @import "../../../../App.styles.scss";
-$dashboard-1: url(https://i.imgur.com/pGypRQh.png);
+$dashboard-1: url(../../../../assets/img/school-things.png);
 
 .dashboard-container {
   background-image: $dashboard-1;
-  background-size: cover;
+  background-size: 50%;
   background-repeat: no-repeat;
+  background-position: right top;
   height: 100%;
 }
 
