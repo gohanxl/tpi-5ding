@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 import Peer from "peerjs";
 import { SignalHandlerService } from "../services/signal-handler";
 import { ChatWindowComponent } from "../chat-window/chat-window.component";
+import { VideoToolbar } from "../video-toolbar/VideoToolbar";
+import { Redirect } from "react-router";
+import * as ReactDOM from "react-dom";
 
 export const VideoChatComponent = (props) => {
   const ScreeenSharingStatus = {
@@ -342,13 +345,47 @@ export const VideoChatComponent = (props) => {
     });
   };
 
+  const muteUnmute = () => {
+    if (isMute) {
+      isMute = localUserStream.getAudioTracks()[0].enabled = false;
+    } else {
+      isMute = localUserStream.getAudioTracks()[0].enabled = true;
+    }
+  };
+
+  const videoOnOff = () => {
+    if (isVideoEnabled) {
+      isVideoEnabled = localUserStream.getVideoTracks()[0].enabled = false;
+    } else {
+      isVideoEnabled = localUserStream.getVideoTracks()[0].enabled = true;
+    }
+  };
+
+  const endCall = () => {
+    signalRService.stopConnection();
+    window.location = "/#/educapp/home";
+  };
+
+  const toggleChat = () => {
+    const attr = document.getElementById("chat-window").hidden;
+    document.getElementById("chat-window").hidden = !attr;
+  };
+
   return (
     <div>
-      <div>
+      <div id="chat-window">
         <ChatWindowComponent
           name={name}
           meeting={meetingId}
           signalRService={signalRService}
+        />
+      </div>
+      <div>
+        <VideoToolbar
+          muteUnmute={muteUnmute}
+          videoOnOff={videoOnOff}
+          endCall={endCall}
+          toggleChat={toggleChat}
         />
       </div>
       <div>
