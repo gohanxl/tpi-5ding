@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMicrophoneAlt } from "@fortawesome/free-solid-svg-icons";
 import { faMicrophoneSlash } from "@fortawesome/free-solid-svg-icons";
@@ -14,50 +14,34 @@ export const VideoToolbar = ({
   endCall,
   toggleChat,
 }) => {
-  let isMuted = false;
-  let isVideoOn = true;
+  const [isVideoOn, setIsVideoOn] = useState(true);
+  const [isMute, setIsMute] = useState(false);
 
-  const childMute = async () => {
-    isMuted = !isMuted;
-    if (isMuted) {
-      document
-        .getElementById("muteUnmuteButton")
-        .classList.remove("is-primary");
-      document.getElementById("muteUnmuteButton").classList.add("is-danger");
-    } else {
-      document.getElementById("muteUnmuteButton").classList.add("is-primary");
-      document.getElementById("muteUnmuteButton").classList.remove("is-danger");
-    }
+  const childMute = () => {
+    setIsMute(!isMute);
     muteUnmute();
   };
 
-  const childVideoOnOff = async () => {
-    isVideoOn = !isVideoOn;
-    if (!isVideoOn) {
-      document.getElementById("videoOnButton").classList.remove("is-primary");
-      document.getElementById("videoOnButton").classList.add("is-danger");
-    } else {
-      document.getElementById("videoOnButton").classList.add("is-primary");
-      document.getElementById("videoOnButton").classList.remove("is-danger");
-    }
+  const childVideoOnOff = () => {
+    setIsVideoOn(!isVideoOn);
     videoOnOff();
   };
 
   return (
     <div className="buttons">
       <button
-        className="button is-primary"
+        className={`button ${isVideoOn ? "is-primary" : "is-danger"}`}
         id="videoOnButton"
         onClick={childVideoOnOff}
       >
-        <FontAwesomeIcon icon={faVideo} />
+        <FontAwesomeIcon icon={isVideoOn ? faVideo : faVideoSlash} />
       </button>
       <button
-        className="button is-primary"
+        className={`button ${!isMute ? "is-primary" : "is-danger"}`}
         id="muteUnmuteButton"
         onClick={childMute}
       >
-        <FontAwesomeIcon icon={faMicrophoneAlt} />
+        <FontAwesomeIcon icon={isMute ? faMicrophoneSlash : faMicrophoneAlt} />
       </button>
       <button className="button is-danger" id="endCallButton" onClick={endCall}>
         <FontAwesomeIcon icon={faPhoneSlash} />
