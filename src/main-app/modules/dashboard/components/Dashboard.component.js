@@ -23,6 +23,7 @@ const Dashboard = () => {
       <br />
       <br />
       <br />
+      <br />
       <div className="link-container">
         <div className="level">
           <div className="level-item">
@@ -57,8 +58,6 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      <br />
-      <br />
     </section>
   );
 };

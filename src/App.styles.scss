@@ -24,9 +24,21 @@ html {
   width: 100%;
   height: $app-container-height;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .app-content {
-  //min-height: $app-content-height;
-  //padding: 10px;
+  flex-basis: calc(calc(100vh - 3.25rem) - 168px);
+  height: fit-content;
+}
+
+.app-container.hide-footer {
+  .app-content {
+    flex-basis: unset;
+    height: 100%;
+  }
+  .footer {
+    display: none;
+  }
 }
