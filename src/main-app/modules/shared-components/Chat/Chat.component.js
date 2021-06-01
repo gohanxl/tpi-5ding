@@ -33,7 +33,7 @@ export const Chat = ({ currentUser }) => {
         try {
           connection.invoke("NewUser", user);
         } catch (e) {
-          console.log(e);
+          console.error(e);
         }
       } else {
         alert("No connection to server yet.");
@@ -99,7 +99,7 @@ export const Chat = ({ currentUser }) => {
             setCall({ isReceivingCall: true, from, signal });
           });
         })
-        .catch((e) => console.log("Connection failed: ", e));
+        .catch((e) => console.error("Connection failed: ", e));
     }
   }, [connection, saveUsername, userMetadata?.nickname, users]);
 
@@ -108,7 +108,7 @@ export const Chat = ({ currentUser }) => {
       try {
         connection.invoke("EnviarMensaje", message, userMetadata?.nickname);
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     } else {
       alert("No connection to server yet.");
@@ -120,7 +120,7 @@ export const Chat = ({ currentUser }) => {
       try {
         connection.invoke("BorrarMensaje", id, user);
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     } else {
       alert("No connection to server yet.");
@@ -138,7 +138,7 @@ export const Chat = ({ currentUser }) => {
           const stringData = JSON.stringify(data);
           connection.invoke("CallUser", id, stringData);
         } catch (e) {
-          console.log(e);
+          console.error(e);
         }
       } else {
         alert("No connection to server yet.");
