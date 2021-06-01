@@ -1,6 +1,7 @@
 import React, { Suspense, lazy } from "react";
 import { Route, Switch, Redirect } from "react-router";
 import { Loader } from "./main-app/modules/shared-components/Loader/Loader.component";
+import { NotFound } from "./main-app/modules/shared-components/NotFound/NotFound.component";
 
 const LandingPageComponent = lazy(() =>
   import("./landing-page/LandingPage.component")
@@ -26,7 +27,7 @@ export const Routes = () => {
           />
 
           <Redirect exact from="/educapp" to="/educapp/home" />
-          {/* <Route component={NotFound} /> */}
+          <Route component={NotFound} />
         </Switch>
       </Suspense>
     </>
