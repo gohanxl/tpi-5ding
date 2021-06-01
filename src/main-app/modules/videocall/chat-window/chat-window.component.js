@@ -6,36 +6,8 @@ import { ChatScreenComponent } from "./chat-screen.component";
 
 export const ChatWindowComponent = (props) => {
   const { name, meeting, signalRService } = props;
-
-  // let messages = [
-  //   { content: "fafafa1", mid: v4(), user: name, time: Date.now() },
-  //   { content: "fafafa2", mid: v4(), user: name, time: Date.now() },
-  //   { content: "fafafa3", mid: v4(), user: name, time: Date.now() },
-  // ];
-
   const [messages, setMessages] = useState([]);
-  //     useState([
-  //   {
-  //     content: "fafafa1",
-  //     mid: v4(),
-  //     user: { displayName: "Hardcodeta" },
-  //     time: Date.now(),
-  //   },
-  //   {
-  //     content: "fafafa2",
-  //     mid: v4(),
-  //     user: { displayName: "Hardcodeta" },
-  //     time: Date.now(),
-  //   },
-  //   {
-  //     content: "fafafa3",
-  //     mid: v4(),
-  //     user: { displayName: "Hardcodeta" },
-  //     time: Date.now(),
-  //   },
-  // ]);
   const latestChat = useRef(null);
-  // let localUser = null;
   const [localUser, setLocalUser] = useState();
 
   useEffect(() => {
@@ -47,7 +19,6 @@ export const ChatWindowComponent = (props) => {
   }, [signalRService]);
 
   const onReceiveSelfDetails = (user) => {
-    // localUser = user;
     setLocalUser(user);
   };
 
@@ -58,7 +29,7 @@ export const ChatWindowComponent = (props) => {
     const msg = event.target["message"].value;
 
     if (!msg) {
-      return alert("Please enter a message.");
+      return alert("Por favor ingrese un mensaje");
     }
 
     let message = {
@@ -78,13 +49,7 @@ export const ChatWindowComponent = (props) => {
     const updatedChat = [...latestChat.current];
     updatedChat.push(message);
     setMessages(updatedChat);
-    // setTimeout(() => scrollBottom(), 500);
   };
-  //
-  // const scrollBottom = () => {
-  //   let element = document.getElementById("message_container");
-  //   element.scrollTop = element.scrollHeight;
-  // };
 
   const deleteMessage = (mid, user) => {};
 

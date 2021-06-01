@@ -323,14 +323,11 @@ export const VideoChatComponent = (props) => {
     isScreenSharingEnabled = true;
     isScreenSharingByMe = false;
 
-    // this.changeDetector.detectChanges();TODO esto es de angular no se que carajo es
-    // this.changeDetector.markForCheck();
-
     addScreenSharing(stream);
   };
 
   const addScreenSharing = (stream) => {
-    const videoElement = document.getElementById("screenSharingObj"); // as HTMLVideoElement; TODO esto angular que onda?
+    const videoElement = document.getElementById("screenSharingObj");
     videoElement.muted = false;
     videoElement.srcObject = stream;
   };
@@ -339,7 +336,7 @@ export const VideoChatComponent = (props) => {
     return new Peer(undefined, {
       path: "/",
       host: "localhost",
-      port: "9000",
+      port: "3001",
     });
   };
 

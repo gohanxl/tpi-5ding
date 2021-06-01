@@ -27,20 +27,6 @@ export const CourseSubjectComponent = (props) => {
               />
             </div>
           ))}
-          {/*<div className="level-item button-container">*/}
-          {/*  <Button*/}
-          {/*    image={geographySvg}*/}
-          {/*    title="GEOGRAFÍA"*/}
-          {/*    route="/educapp/student"*/}
-          {/*  />*/}
-          {/*</div>*/}
-          {/*<div className="level-item">*/}
-          {/*  <Button*/}
-          {/*    image={historySvg}*/}
-          {/*    title="HISTORIA"*/}
-          {/*    route="/educapp/student"*/}
-          {/*  />*/}
-          {/*</div>*/}
         </div>
       </div>
     </div>
