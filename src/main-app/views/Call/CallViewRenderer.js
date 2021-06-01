@@ -9,7 +9,7 @@ export const CallViewRenderer = () => {
   return (
     <section>
       <div>
-        <VideoChatComponent name={"Chelo-" + uuid} meeting="1" />
+        <VideoChatComponent name={uuid} meeting="1" />
       </div>
     </section>
   );

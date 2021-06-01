@@ -246,7 +246,7 @@ export const VideoChatComponent = (props) => {
   const GetNewVideoElement = () => {
     const videoElement = document.createElement("video");
     videoElement.setAttribute("playsinline", "");
-    videoElement.setAttribute("class", "videoDisplay");
+    videoElement.setAttribute("class", "video-display");
     videoElement.autoplay = true;
     videoElement.addEventListener("contextmenu", function (event) {
       event.preventDefault();
@@ -263,11 +263,11 @@ export const VideoChatComponent = (props) => {
     isMute = stream.getAudioTracks()[0].enabled;
 
     const divElement = document.createElement("div");
-    divElement.setAttribute("class", "displayNameContainer");
+    divElement.setAttribute("class", "user-camera-container");
 
     const spanElement = document.createElement("span");
     spanElement.innerText = `${userName}`;
-    spanElement.setAttribute("class", "displayName");
+    spanElement.setAttribute("class", "user-name");
 
     divElement.appendChild(spanElement);
     divElement.appendChild(videoElement);
@@ -388,7 +388,7 @@ export const VideoChatComponent = (props) => {
       </div>
       <div>
         <h1>ClientVideoChatHere: {name}</h1>
-        <div id={"video-" + name}></div>
+        <div className="cameras-container" id={"video-" + name}></div>
         <div id="errorMsg"></div>
       </div>
     </div>
