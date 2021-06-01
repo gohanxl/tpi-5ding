@@ -95,6 +95,18 @@ export class SignalHandlerService {
       .catch((error) => console.log(error));
   };
 
+  invokeSendClosedCaption = (roomId, closedCaption) => {
+    this.hubConnection.invoke("SendClosedCaption", roomId, closedCaption);
+  };
+
+  listenReceiveClosedCaption = (method) => {
+    this.hubConnection.on("ReceiveClosedCaption", (data) => {
+      if (method !== null) {
+        method(data);
+      }
+    });
+  };
+
   listenJoinedRoom = (method) => {
     this.hubConnection.on("JoinedRoom", (roomId, userId, displayName) => {
       if (method !== null) {

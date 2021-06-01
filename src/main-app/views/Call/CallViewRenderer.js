@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React from "react";
 import { VideoChatComponent } from "../../modules/videocall/video-chat/VideoChatComponent";
+import { ClosedCaptionComponent } from "../../modules/videocall/closed-caption/ClosedCaption.component";
 import { v4 } from "uuid";
 
 export const CallViewRenderer = () => {
@@ -10,6 +11,9 @@ export const CallViewRenderer = () => {
     <section>
       <div>
         <VideoChatComponent name={"Chelo-" + uuid} meeting="1" />
+      </div>
+      <div>
+        <ClosedCaptionComponent name={uuid} meeting="1" />
       </div>
     </section>
   );
