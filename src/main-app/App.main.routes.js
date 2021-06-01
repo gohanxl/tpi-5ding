@@ -1,23 +1,20 @@
 import React, { lazy } from "react";
 import { Route, Switch, Redirect } from "react-router";
-
-import { studentRoutes } from "./views/student/student.routes";
-import { teacherRoutes } from "./views/teacher/teacher.routes";
+import { NotFound } from "./modules/shared-components/NotFound/NotFound.component";
 
 const HomeContainer = lazy(() =>
   import("./modules/home/components/Home.container")
 );
 
-export const MainAppRoutes = () => {
-  const routes = [...studentRoutes, ...teacherRoutes];
+export const MainAppRoutes = ({ routesRoleConfig }) => {
   return (
     <Switch>
       <Redirect exact from="/" to="/home" />
-      {routes.map((routeProps) => (
+      {routesRoleConfig.map((routeProps) => (
         <Route key={routeProps.path} {...routeProps} />
       ))}
       <Route key="pepe" path="/educapp/home" component={HomeContainer} />
-      {/* <Route component={NotFound} /> */}
+      <Route component={NotFound} />
     </Switch>
   );
 };
