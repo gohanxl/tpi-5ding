@@ -5,14 +5,23 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useDispatch } from "react-redux";
 import { setCurrentUser } from "../main-app/modules/user/store/user.actions";
 import { userService } from "../main-app/modules/user/api/usuario-service";
+import { studentRoutes } from "./views/student/student.routes";
+import { teacherRoutes } from "./views/teacher/teacher.routes";
+import { roleAccessibilty } from "./modules/auth/service/roles.service";
 import loading from "../loading.svg";
 import educAppLogo from "../assets/img/logo-white.svg";
+import { rolesUrl } from "./modules/user/constants/user.constants";
 
 const Loading = () => (
   <div className="spinner">
     <img src={loading} alt="Loading" />
   </div>
 );
+
+roleAccessibilty.setRoutes({
+  student: studentRoutes,
+  teacher: teacherRoutes,
+});
 
 const MainApp = () => {
   const dispatch = useDispatch();
@@ -43,7 +52,7 @@ const MainApp = () => {
               );
             })
             .catch((err) => {
-              console.log(err);
+              console.error(err);
               dispatch(
                 setCurrentUser({
                   token,
@@ -52,13 +61,13 @@ const MainApp = () => {
               );
             });
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.error(err));
     }
   }, [dispatch, getAccessTokenSilently, isAuthenticated, user]);
 
   useEffect(() => {
     setIsDashboard(window.location.hash == "#/educapp/home");
-  });
+  }, []);
 
   if (error) {
     return <div>Oops... {error.message}</div>;
@@ -67,6 +76,8 @@ const MainApp = () => {
   if (isLoading) {
     return <Loading />;
   }
+
+  const routesRoleConfig = roleAccessibilty.getRoutesByRoles(user[rolesUrl]);
 
   return (
     <div>
@@ -102,7 +113,9 @@ const MainApp = () => {
         </div>
         <div className={"app-container" + (!isDashboard ? "" : " hide-footer")}>
           <div className="app-content">
-            {isAuthenticated && <MainAppRoutes />}
+            {isAuthenticated && (
+              <MainAppRoutes routesRoleConfig={routesRoleConfig} />
+            )}
             {!isAuthenticated && loginWithRedirect()}
           </div>
           <footer className="footer">
