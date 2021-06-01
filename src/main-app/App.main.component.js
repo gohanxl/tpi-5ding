@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Sidebar } from "./modules/shared-components/Sidebar/Sidebar.component";
 import { MainAppRoutes } from "./App.main.routes";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -16,6 +16,7 @@ const Loading = () => (
 
 const MainApp = () => {
   const dispatch = useDispatch();
+  const [isDashboard, setIsDashboard] = useState(true);
   const {
     user,
     isAuthenticated,
@@ -55,6 +56,10 @@ const MainApp = () => {
     }
   }, [dispatch, getAccessTokenSilently, isAuthenticated, user]);
 
+  useEffect(() => {
+    setIsDashboard(window.location.hash == "#/educapp/home");
+  });
+
   if (error) {
     return <div>Oops... {error.message}</div>;
   }
@@ -72,7 +77,7 @@ const MainApp = () => {
           aria-label="main navigation"
         >
           <div className="navbar-brand">
-            <a className="navbar-item" href="/home">
+            <a className="navbar-item" href="#/educapp/home">
               <img
                 src={educAppLogo}
                 alt="Educapp logo"
@@ -95,7 +100,7 @@ const MainApp = () => {
         <div>
           <Sidebar />
         </div>
-        <div className="app-container">
+        <div className={"app-container" + (!isDashboard ? "" : " hide-footer")}>
           <div className="app-content">
             {isAuthenticated && <MainAppRoutes />}
             {!isAuthenticated && loginWithRedirect()}

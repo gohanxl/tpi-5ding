@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Peer from "peerjs";
 import { SignalHandlerService } from "../services/signal-handler";
 import { ChatWindowComponent } from "../chat-window/chat-window.component";
+import { VideoToolbar } from "../video-toolbar/VideoToolbar";
 
 export const VideoChatComponent = (props) => {
   const ScreeenSharingStatus = {
@@ -245,7 +246,7 @@ export const VideoChatComponent = (props) => {
   const GetNewVideoElement = () => {
     const videoElement = document.createElement("video");
     videoElement.setAttribute("playsinline", "");
-    videoElement.setAttribute("class", "videoDisplay");
+    videoElement.setAttribute("class", "video-display");
     videoElement.autoplay = true;
     videoElement.addEventListener("contextmenu", function (event) {
       event.preventDefault();
@@ -262,11 +263,11 @@ export const VideoChatComponent = (props) => {
     isMute = stream.getAudioTracks()[0].enabled;
 
     const divElement = document.createElement("div");
-    divElement.setAttribute("class", "displayNameContainer");
+    divElement.setAttribute("class", "user-camera-container");
 
     const spanElement = document.createElement("span");
     spanElement.innerText = `${userName}`;
-    spanElement.setAttribute("class", "displayName");
+    spanElement.setAttribute("class", "user-name");
 
     divElement.appendChild(spanElement);
     divElement.appendChild(videoElement);
@@ -322,14 +323,11 @@ export const VideoChatComponent = (props) => {
     isScreenSharingEnabled = true;
     isScreenSharingByMe = false;
 
-    // this.changeDetector.detectChanges();TODO esto es de angular no se que carajo es
-    // this.changeDetector.markForCheck();
-
     addScreenSharing(stream);
   };
 
   const addScreenSharing = (stream) => {
-    const videoElement = document.getElementById("screenSharingObj"); // as HTMLVideoElement; TODO esto angular que onda?
+    const videoElement = document.getElementById("screenSharingObj");
     videoElement.muted = false;
     videoElement.srcObject = stream;
   };
@@ -338,13 +336,42 @@ export const VideoChatComponent = (props) => {
     return new Peer(undefined, {
       path: "/",
       host: "localhost",
-      port: "9000",
+      port: "3001",
     });
+  };
+
+  const muteUnmute = () => {
+    if (isMute) {
+      isMute = localUserStream.getAudioTracks()[0].enabled = false;
+    } else {
+      isMute = localUserStream.getAudioTracks()[0].enabled = true;
+    }
+    return isMute;
+  };
+
+  const videoOnOff = () => {
+    if (isVideoEnabled) {
+      isVideoEnabled = localUserStream.getVideoTracks()[0].enabled = false;
+    } else {
+      isVideoEnabled = localUserStream.getVideoTracks()[0].enabled = true;
+    }
+  };
+
+  const endCall = () => {
+    signalRService.stopConnection();
+    localUserStream.getAudioTracks()[0].stop();
+    localUserStream.getVideoTracks()[0].stop();
+    window.location = "/#/educapp/home";
+  };
+
+  const toggleChat = () => {
+    const attr = document.getElementById("chat-window").hidden;
+    document.getElementById("chat-window").hidden = !attr;
   };
 
   return (
     <div>
-      <div>
+      <div id="chat-window">
         <ChatWindowComponent
           name={name}
           meeting={meetingId}
@@ -352,8 +379,16 @@ export const VideoChatComponent = (props) => {
         />
       </div>
       <div>
+        <VideoToolbar
+          muteUnmute={muteUnmute}
+          videoOnOff={videoOnOff}
+          endCall={endCall}
+          toggleChat={toggleChat}
+        />
+      </div>
+      <div>
         <h1>ClientVideoChatHere: {name}</h1>
-        <div id={"video-" + name}></div>
+        <div className="cameras-container" id={"video-" + name}></div>
         <div id="errorMsg"></div>
       </div>
     </div>
