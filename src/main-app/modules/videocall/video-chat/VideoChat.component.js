@@ -3,6 +3,8 @@ import {
   cameras_container,
   user_camera_container,
   user_name,
+  videochat_container,
+  chat_window,
 } from "./VideoChat.module.scss";
 import React, { useEffect, useState } from "react";
 import Peer from "peerjs";
@@ -377,28 +379,31 @@ export const VideoChat = (props) => {
   /**/
   /**/
   /**/
+  /**/
 
   return (
-    <div>
-      <div id="chat-window">
+    <div className={videochat_container}>
+      <div>
+        <div>
+          <VideoToolbar
+            muteUnmute={muteUnmute}
+            videoOnOff={videoOnOff}
+            endCall={endCall}
+            toggleChat={toggleChat}
+          />
+        </div>
+        <div>
+          <p>Meet Id = {uuid}</p>
+          <div className={cameras_container} id={"video-" + name}></div>
+          <div id="errorMsg"></div>
+        </div>
+      </div>
+      <div className={chat_window}>
         <ChatWindowComponent
           name={name}
           meeting={meetingId}
           signalRService={signalRService}
         />
-      </div>
-      <div>
-        <VideoToolbar
-          muteUnmute={muteUnmute}
-          videoOnOff={videoOnOff}
-          endCall={endCall}
-          toggleChat={toggleChat}
-        />
-      </div>
-      <div>
-        <h1>Meet Id = {uuid}</h1>
-        <div className={cameras_container} id={"video-" + name}></div>
-        <div id="errorMsg"></div>
       </div>
     </div>
   );

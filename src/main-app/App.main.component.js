@@ -16,7 +16,7 @@ const Loading = () => (
 
 const MainApp = () => {
   const dispatch = useDispatch();
-  const [isDashboard, setIsDashboard] = useState(true);
+  const [hideFooter, setHideFooter] = useState(true);
   const {
     user,
     isAuthenticated,
@@ -57,7 +57,10 @@ const MainApp = () => {
   }, [dispatch, getAccessTokenSilently, isAuthenticated, user]);
 
   useEffect(() => {
-    setIsDashboard(window.location.hash == "#/educapp/home");
+    setHideFooter(
+      window.location.hash == "#/educapp/home" ||
+        window.location.hash == "#/educapp/teacher/call"
+    );
   });
 
   if (error) {
@@ -100,7 +103,7 @@ const MainApp = () => {
         <div>
           <Sidebar />
         </div>
-        <div className={"app-container" + (!isDashboard ? "" : " hide-footer")}>
+        <div className={"app-container" + (!hideFooter ? "" : " hide-footer")}>
           <div className="app-content">
             {isAuthenticated && <MainAppRoutes />}
             {!isAuthenticated && loginWithRedirect()}
