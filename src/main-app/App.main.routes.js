@@ -1,5 +1,6 @@
 import React, { lazy } from "react";
 import { Route, Switch, Redirect } from "react-router";
+import { routes } from "../App.constants";
 import { NotFound } from "./modules/shared-components/NotFound/NotFound.component";
 
 const HomeContainer = lazy(() =>
@@ -13,7 +14,7 @@ export const MainAppRoutes = ({ routesRoleConfig }) => {
       {routesRoleConfig.map((routeProps) => (
         <Route key={routeProps.path} {...routeProps} />
       ))}
-      <Route key="pepe" path="/educapp/home" component={HomeContainer} />
+      <Route key="home" path={routes.dashboard} component={HomeContainer} />
       <Route component={NotFound} />
     </Switch>
   );
