@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { v4 } from "uuid";
 import { ChatInput4Real } from "./chat-input.component";
 import { ChatScreenComponent } from "./chat-screen.component";
+import "./chat-window.styles.scss";
 
 export const ChatWindowComponent = (props) => {
   const { name, meeting, signalRService } = props;
@@ -54,13 +55,9 @@ export const ChatWindowComponent = (props) => {
   const deleteMessage = (mid, user) => {};
 
   return (
-    <div>
-      <div>
-        <ChatScreenComponent messages={messages} />
-      </div>
-      <div>
-        <ChatInput4Real name={name} submit={submit} />
-      </div>
+    <div className="chat_container">
+      <ChatScreenComponent messages={messages} />
+      <ChatInput4Real name={name} submit={submit} />
     </div>
   );
 };

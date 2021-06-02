@@ -5,6 +5,7 @@ import {
   user_name,
   videochat_container,
   chat_window,
+  video_and_toolbar,
 } from "./VideoChat.module.scss";
 import React, { useEffect, useState } from "react";
 import Peer from "peerjs";
@@ -372,10 +373,12 @@ export const VideoChat = (props) => {
   };
 
   const toggleChat = () => {
-    const attr = document.getElementById("chat-window").hidden;
-    document.getElementById("chat-window").hidden = !attr;
+    const attr = document.getElementById("chat_window").hidden;
+    document.getElementById("chat_window").hidden = !attr;
   };
 
+  /**/
+  /**/
   /**/
   /**/
   /**/
@@ -383,22 +386,20 @@ export const VideoChat = (props) => {
 
   return (
     <div className={videochat_container}>
-      <div>
-        <div>
-          <VideoToolbar
-            muteUnmute={muteUnmute}
-            videoOnOff={videoOnOff}
-            endCall={endCall}
-            toggleChat={toggleChat}
-          />
-        </div>
+      <div className={video_and_toolbar}>
+        <VideoToolbar
+          muteUnmute={muteUnmute}
+          videoOnOff={videoOnOff}
+          endCall={endCall}
+          toggleChat={toggleChat}
+        />
         <div>
           <p>Meet Id = {uuid}</p>
           <div className={cameras_container} id={"video-" + name}></div>
           <div id="errorMsg"></div>
         </div>
       </div>
-      <div className={chat_window}>
+      <div id="chat_window" className={chat_window}>
         <ChatWindowComponent
           name={name}
           meeting={meetingId}
