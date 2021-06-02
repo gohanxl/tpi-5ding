@@ -1,2 +1,44 @@
 @charset "utf-8";
 @import "~bulma/bulma";
+
+$edu-primary: #1eaac3;
+$edu-secondary: #f5dc17;
+$edu-darker-primary: #1f4d57;
+$edu-dark-primary: #24778a;
+$edu-light-aquamarine: #aadbc7;
+$edu-aquamarine: #8bd2b0;
+$edu-light-blue: #b8e3ec;
+
+$app-container-height: calc(100vh - #{$navbar-height});
+$app-content-height: calc(#{$app-container-height} - 168px);
+
+* {
+  font-family: "Poppins", sans-serif;
+}
+
+html {
+  overflow: visible !important;
+}
+
+.app-container {
+  width: 100%;
+  height: $app-container-height;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-content {
+  flex-basis: calc(calc(100vh - 3.25rem) - 168px);
+  height: fit-content;
+}
+
+.app-container.hide-footer {
+  .app-content {
+    flex-basis: unset;
+    height: 100%;
+  }
+  .footer {
+    display: none;
+  }
+}
