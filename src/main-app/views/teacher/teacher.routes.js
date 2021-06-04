@@ -1,7 +1,7 @@
 import { TeacherLectureViewRenderer } from "./TeacherLecture/TeacherLecture.view.renderer";
 import { TeacherAssignatureViewRenderer } from "./TeacherAssignature/TeacherAssignature.view.renderer";
 import { TeacherMessageViewRenderer } from "./TeacherMessages/TeacherMessageViewRenderer";
-import { CallViewRenderer } from "../Call/CallViewRenderer";
+import { CallViewContainer } from "../Call/CallView.container";
 
 export const teacherRoutes = [
   {
@@ -27,6 +27,6 @@ export const teacherRoutes = [
   {
     exact: true,
     path: "/educapp/teacher/call",
-    component: CallViewRenderer,
+    component: CallViewContainer,
   },
 ];

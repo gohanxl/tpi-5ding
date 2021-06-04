@@ -30,7 +30,7 @@ const Dashboard = () => {
             <Button
               image={classSvg}
               title="ENTRAR A CLASE"
-              route="/educapp/student"
+              route="/educapp/teacher/call"
             />
           </div>
           <div className="level-item">

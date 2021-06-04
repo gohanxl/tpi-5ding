@@ -1,16 +1,14 @@
 import React from "react";
 
-export const ChatInput4Real = ({ name, submit }) => {
+export const ChatInput4Real = ({ submit }) => {
   return (
     <form onSubmit={submit}>
-      <div htmlFor="user">{name}</div>
-      <br />
-      <label htmlFor="message">Message:</label>
+      <label htmlFor="message">Mensaje</label>
       <br />
       <input type="text" id="message" name="message" />
       <br />
       <br />
-      <button>Submit</button>
+      <button>Enviar</button>
     </form>
   );
 };
