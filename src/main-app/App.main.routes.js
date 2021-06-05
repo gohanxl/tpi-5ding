@@ -8,7 +8,6 @@ const HomeContainer = lazy(() =>
 );
 
 export const MainAppRoutes = ({ routesRoleConfig, currentRole }) => {
-  const formattedCurrentRole = currentRole && currentRole[0].toLowerCase();
   return (
     <Switch>
       {routesRoleConfig.map((routeProps) => (
@@ -16,13 +15,10 @@ export const MainAppRoutes = ({ routesRoleConfig, currentRole }) => {
       ))}
       <Route
         key="dashboard"
-        path={routes.dashboard(formattedCurrentRole)}
+        path={routes.dashboard(currentRole)}
         component={HomeContainer}
       />
-      <Redirect
-        to={routes.dashboard(formattedCurrentRole)}
-        component={HomeContainer}
-      />
+      <Redirect to={routes.dashboard(currentRole)} component={HomeContainer} />
     </Switch>
   );
 };
