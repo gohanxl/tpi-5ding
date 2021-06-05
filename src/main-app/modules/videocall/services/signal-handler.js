@@ -90,7 +90,7 @@ export class SignalHandlerService {
     this.hubConnection
       .invoke("SendMessageToAll", roomId, data)
       .then(() => {
-        console.log("Data broadcasted successfully!");
+        console.log("Chat Message broadcasted successfully!");
       })
       .catch((error) => console.log(error));
   };
@@ -119,7 +119,7 @@ export class SignalHandlerService {
     return this.hubConnection
       .invoke("JoinedRoom", roomId, userId, displayName)
       .then(() => {
-        console.log("Data broadcasted successfully!");
+        console.log("Joined Room broadcasted successfully!");
       })
       .catch((error) => console.log(error));
   };
@@ -164,7 +164,7 @@ export class SignalHandlerService {
     this.hubConnection
       .invoke("GetRemoteUser", userId)
       .then(() => {
-        console.log("Data broadcasted successfully!");
+        console.log("Get remote user details successfully!");
       })
       .catch((error) => console.log(error));
   };
@@ -181,7 +181,7 @@ export class SignalHandlerService {
     this.hubConnection
       .invoke("PaticipantsList", roomId)
       .then(() => {
-        console.log("Data broadcasted successfully!");
+        console.log("Get participants list successfully!");
       })
       .catch((error) => console.log(error));
   };
@@ -190,7 +190,7 @@ export class SignalHandlerService {
     this.hubConnection
       .invoke("AddScreenSharingModality", roomId, userId, screenSharingCallId)
       .then(() => {
-        console.log("Data broadcasted successfully!");
+        console.log("Connected sharescreen peer successfully!");
       })
       .catch((error) => console.log(error));
   };
@@ -218,7 +218,7 @@ export class SignalHandlerService {
     this.hubConnection
       .invoke("ScreenSharingStatus", roomId, userId, status, userName)
       .then(() => {
-        console.log("Data broadcasted successfully!");
+        console.log("Share screen broadcasted successfully!");
       })
       .catch((error) => console.log(error));
   };
