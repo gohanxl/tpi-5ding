@@ -132,6 +132,17 @@ export class SignalHandlerService {
     });
   };
 
+  listenUpdateParticipants = (method) => {
+    this.hubConnection.on(
+      "UpdateParticipants",
+      (roomId, userId, displayName) => {
+        if (method !== null) {
+          method(roomId, userId, displayName);
+        }
+      }
+    );
+  };
+
   listenGetSelfDetails = (method) => {
     this.hubConnection.on("GetSelfDetails", (user) => {
       if (method !== null) {

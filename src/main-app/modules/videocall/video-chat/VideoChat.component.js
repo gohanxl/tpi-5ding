@@ -12,6 +12,7 @@ import Peer from "peerjs";
 import { SignalHandlerService } from "../services/signal-handler";
 import { ChatWindowComponent } from "../chat-window/chat-window.component";
 import { VideoToolbar } from "../video-toolbar/VideoToolbar";
+import { ParticipantListComponent } from "../participant-list/ParticipantList.component";
 
 export const VideoChat = (props) => {
   const ScreeenSharingStatus = {
@@ -133,7 +134,6 @@ export const VideoChat = (props) => {
     const peerConnection = connections.filter((item) => item.UserId === userId);
     if (peerConnection.length === 1) {
       peerConnection[0].CallObject.close();
-      //fafaf
     }
   };
 
@@ -292,6 +292,8 @@ export const VideoChat = (props) => {
     peerConnection.UserId = userId;
     peerConnection.CallObject = callObject;
     peerConnection.DivElement = divElement;
+    peerConnection.userName = userName;
+    peerConnection.isLocalPaticipant = isLocalPaticipant;
     connections.push(peerConnection);
 
     document.getElementById("video-container").appendChild(divElement);
@@ -369,7 +371,8 @@ export const VideoChat = (props) => {
     }
   };
 
-  const endCall = () => {
+  const endCall = async () => {
+    await signalRService.invokeScreenSharingStatus;
     signalRService.stopConnection();
     localUserStream.getAudioTracks()[0].stop();
     localUserStream.getVideoTracks()[0].stop();
@@ -459,6 +462,12 @@ export const VideoChat = (props) => {
           signalRService={signalRService}
         />
       </div>
+      <ParticipantListComponent
+        name={name}
+        meetingId={meetingId}
+        signalRService={signalRService}
+        connections={connections}
+      />
     </div>
   );
 };
