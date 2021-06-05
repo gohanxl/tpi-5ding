@@ -41,6 +41,8 @@ export const VideoChat = (props) => {
   let screenSharinUserName = null;
   let localUserScreenSharingStream = null;
 
+  const displayMediaOptions = { video: { cursor: "always" }, audio: false };
+
   const avContraints = {
     audio: true,
     video: { width: { exact: 640 }, height: { exact: 480 } },
@@ -78,12 +80,16 @@ export const VideoChat = (props) => {
   const onScreeenSharingStatusWithUserList = (userIds, status) => {
     if (userIds.length > 0 && status === ScreeenSharingStatus.Started) {
       userIds.forEach((element) => {
-        if (element !== localUserId) {
-          localUserScreenSharingPeer.call(
-            element,
-            localUserScreenSharingStream
-          );
-          screenSharinUserName = "You";
+        try {
+          if (element !== localUserId) {
+            localUserScreenSharingPeer.call(
+              element,
+              localUserScreenSharingStream
+            );
+            screenSharinUserName = "You";
+          }
+        } catch (e) {
+          console.error(e);
         }
       });
     } else {
@@ -108,8 +114,8 @@ export const VideoChat = (props) => {
   };
 
   const stoppedSharingScreen = () => {
-    const videoElement = document.getElementById("screenSharingObj"); //as HTMLVideoElement;TODO que onda angular aca?
-    const stream = videoElement.srcObject; //as MediaStream;
+    const videoElement = document.getElementById("screenSharingObj");
+    const stream = videoElement.srcObject;
     const tracks = stream.getTracks();
 
     tracks.forEach((track) => track.stop());
@@ -236,7 +242,7 @@ export const VideoChat = (props) => {
       (item) => item.UserId === localUserId
     );
     if (peerConnection.length === 1) {
-      peerConnection[0].VideElement.srcObject = localUserStream; //TODO VideElement???
+      peerConnection[0].VideElement.srcObject = localUserStream;
     }
 
     call.answer(stream);
@@ -293,9 +299,6 @@ export const VideoChat = (props) => {
 
   const sendNotificationOfJoining = (id) => {
     localUserId = id;
-    console.log(meetingId);
-    console.log(id);
-    console.log(userDisplayName);
     signalRService.invokeJoinedRoom(meetingId, id, userDisplayName);
     createScreenSharingPeerObject(id);
   };
@@ -337,6 +340,7 @@ export const VideoChat = (props) => {
   const addScreenSharing = (stream) => {
     const videoElement = document.getElementById("screenSharingObj");
     videoElement.muted = false;
+    videoElement.autoplay = true;
     videoElement.srcObject = stream;
   };
 
@@ -377,6 +381,49 @@ export const VideoChat = (props) => {
     document.getElementById("chat_window").hidden = !attr;
   };
 
+  const startShareScreen = async () => {
+    try {
+      const mediaDevices = navigator.mediaDevices;
+      const stream = await mediaDevices.getDisplayMedia(displayMediaOptions);
+      localUserScreenSharingStream = stream;
+
+      isScreenSharingByMe = true;
+      isScreenSharingEnabled = true;
+      isScreenSharingByRemote = false;
+
+      localUserScreenSharingStream.getVideoTracks()[0].onended = (event) => {
+        sendOtherToScreenClosed();
+      };
+
+      signalRService.invokeScreenSharingStatus(
+        meetingId,
+        localUserId,
+        ScreeenSharingStatus.Started,
+        userDisplayName
+      );
+    } catch (exception) {
+      HandelError(exception);
+    }
+  };
+
+  const stopSharingScreen = () => {
+    const tracks = localUserScreenSharingStream.getTracks();
+    tracks.forEach((track) => track.stop());
+    sendOtherToScreenClosed();
+  };
+
+  const sendOtherToScreenClosed = () => {
+    isScreenSharingByMe = false;
+    isScreenSharingEnabled = false;
+    isScreenSharingByRemote = false;
+    signalRService.invokeScreenSharingStatus(
+      meetingId,
+      localUserId,
+      ScreeenSharingStatus.Stopped,
+      userDisplayName
+    );
+  };
+
   /**/
   /**/
   /**/
@@ -387,11 +434,17 @@ export const VideoChat = (props) => {
   return (
     <div className={videochat_container}>
       <div className={video_and_toolbar}>
+        <div className="screenSharingContainer" id="screenSharing-container">
+          <video id="screenSharingObj"></video>
+        </div>
+
         <VideoToolbar
           muteUnmute={muteUnmute}
           videoOnOff={videoOnOff}
           endCall={endCall}
           toggleChat={toggleChat}
+          startShareScreen={startShareScreen}
+          stopSharingScreen={stopSharingScreen}
         />
         <div>
           <p>Meet Id = {uuid}</p>
