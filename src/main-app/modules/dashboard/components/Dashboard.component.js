@@ -7,7 +7,7 @@ import subjectSvg from "../../../../assets/img/education/015-list.svg";
 import classSvg from "../../../../assets/img/education/005-school bell.svg";
 import { useSelector } from "react-redux";
 
-const Dashboard = () => {
+export const Dashboard = () => {
   const user = useSelector((state) => state.user.currentUser);
 
   return (
@@ -61,5 +61,3 @@ const Dashboard = () => {
     </section>
   );
 };
-
-export default Dashboard;
