@@ -12,6 +12,7 @@ import Peer from "peerjs";
 import { SignalHandlerService } from "../services/signal-handler";
 import { ChatWindowComponent } from "../chat-window/chat-window.component";
 import { VideoToolbar } from "../video-toolbar/VideoToolbar";
+import { ParticipantListComponent } from "../participant-list/ParticipantList.component";
 
 export const VideoChat = (props) => {
   const ScreeenSharingStatus = {
@@ -41,6 +42,8 @@ export const VideoChat = (props) => {
   let screenSharinUserName = null;
   let localUserScreenSharingStream = null;
 
+  const displayMediaOptions = { video: { cursor: "always" }, audio: false };
+
   const avContraints = {
     audio: true,
     video: { width: { exact: 640 }, height: { exact: 480 } },
@@ -48,7 +51,7 @@ export const VideoChat = (props) => {
 
   useEffect(() => {
     async function initSignalR() {
-      const signalRServ = SignalHandlerService.getInstance();
+      const signalRServ = await SignalHandlerService.getInstance();
       const isConnected = await signalRServ.asyncConnection();
       console.log("SignalRHub Connected: " + isConnected);
       setSignalRService(signalRServ);
@@ -78,12 +81,16 @@ export const VideoChat = (props) => {
   const onScreeenSharingStatusWithUserList = (userIds, status) => {
     if (userIds.length > 0 && status === ScreeenSharingStatus.Started) {
       userIds.forEach((element) => {
-        if (element !== localUserId) {
-          localUserScreenSharingPeer.call(
-            element,
-            localUserScreenSharingStream
-          );
-          screenSharinUserName = "You";
+        try {
+          if (element !== localUserId) {
+            localUserScreenSharingPeer.call(
+              element,
+              localUserScreenSharingStream
+            );
+            screenSharinUserName = "You";
+          }
+        } catch (e) {
+          console.error(e);
         }
       });
     } else {
@@ -108,8 +115,8 @@ export const VideoChat = (props) => {
   };
 
   const stoppedSharingScreen = () => {
-    const videoElement = document.getElementById("screenSharingObj"); //as HTMLVideoElement;TODO que onda angular aca?
-    const stream = videoElement.srcObject; //as MediaStream;
+    const videoElement = document.getElementById("screenSharingObj");
+    const stream = videoElement.srcObject;
     const tracks = stream.getTracks();
 
     tracks.forEach((track) => track.stop());
@@ -127,7 +134,6 @@ export const VideoChat = (props) => {
     const peerConnection = connections.filter((item) => item.UserId === userId);
     if (peerConnection.length === 1) {
       peerConnection[0].CallObject.close();
-      //fafaf
     }
   };
 
@@ -158,7 +164,7 @@ export const VideoChat = (props) => {
     const peerConnection = connections.filter((item) => item.UserId === userId);
     if (peerConnection.length === 1) {
       document
-        .getElementById(`video-${name}`)
+        .getElementById("video-container")
         .removeChild(peerConnection[0].DivElement);
       const index = connections.indexOf(peerConnection[0], 0);
       connections = connections.splice(index, 1);
@@ -236,7 +242,7 @@ export const VideoChat = (props) => {
       (item) => item.UserId === localUserId
     );
     if (peerConnection.length === 1) {
-      peerConnection[0].VideElement.srcObject = localUserStream; //TODO VideElement???
+      peerConnection[0].VideElement.srcObject = localUserStream;
     }
 
     call.answer(stream);
@@ -286,16 +292,15 @@ export const VideoChat = (props) => {
     peerConnection.UserId = userId;
     peerConnection.CallObject = callObject;
     peerConnection.DivElement = divElement;
+    peerConnection.userName = userName;
+    peerConnection.isLocalPaticipant = isLocalPaticipant;
     connections.push(peerConnection);
 
-    document.getElementById(`video-${name}`).appendChild(divElement);
+    document.getElementById("video-container").appendChild(divElement);
   };
 
   const sendNotificationOfJoining = (id) => {
     localUserId = id;
-    console.log(meetingId);
-    console.log(id);
-    console.log(userDisplayName);
     signalRService.invokeJoinedRoom(meetingId, id, userDisplayName);
     createScreenSharingPeerObject(id);
   };
@@ -337,6 +342,7 @@ export const VideoChat = (props) => {
   const addScreenSharing = (stream) => {
     const videoElement = document.getElementById("screenSharingObj");
     videoElement.muted = false;
+    videoElement.autoplay = true;
     videoElement.srcObject = stream;
   };
 
@@ -365,7 +371,8 @@ export const VideoChat = (props) => {
     }
   };
 
-  const endCall = () => {
+  const endCall = async () => {
+    await signalRService.invokeScreenSharingStatus;
     signalRService.stopConnection();
     localUserStream.getAudioTracks()[0].stop();
     localUserStream.getVideoTracks()[0].stop();
@@ -375,6 +382,49 @@ export const VideoChat = (props) => {
   const toggleChat = () => {
     const attr = document.getElementById("chat_window").hidden;
     document.getElementById("chat_window").hidden = !attr;
+  };
+
+  const startShareScreen = async () => {
+    try {
+      const mediaDevices = navigator.mediaDevices;
+      const stream = await mediaDevices.getDisplayMedia(displayMediaOptions);
+      localUserScreenSharingStream = stream;
+
+      isScreenSharingByMe = true;
+      isScreenSharingEnabled = true;
+      isScreenSharingByRemote = false;
+
+      localUserScreenSharingStream.getVideoTracks()[0].onended = (event) => {
+        sendOtherToScreenClosed();
+      };
+
+      signalRService.invokeScreenSharingStatus(
+        meetingId,
+        localUserId,
+        ScreeenSharingStatus.Started,
+        userDisplayName
+      );
+    } catch (exception) {
+      HandelError(exception);
+    }
+  };
+
+  const stopSharingScreen = () => {
+    const tracks = localUserScreenSharingStream.getTracks();
+    tracks.forEach((track) => track.stop());
+    sendOtherToScreenClosed();
+  };
+
+  const sendOtherToScreenClosed = () => {
+    isScreenSharingByMe = false;
+    isScreenSharingEnabled = false;
+    isScreenSharingByRemote = false;
+    signalRService.invokeScreenSharingStatus(
+      meetingId,
+      localUserId,
+      ScreeenSharingStatus.Stopped,
+      userDisplayName
+    );
   };
 
   /**/
@@ -387,15 +437,21 @@ export const VideoChat = (props) => {
   return (
     <div className={videochat_container}>
       <div className={video_and_toolbar}>
+        <div className="screenSharingContainer" id="screenSharing-container">
+          <video id="screenSharingObj"></video>
+        </div>
+
         <VideoToolbar
           muteUnmute={muteUnmute}
           videoOnOff={videoOnOff}
           endCall={endCall}
           toggleChat={toggleChat}
+          startShareScreen={startShareScreen}
+          stopSharingScreen={stopSharingScreen}
         />
         <div>
           <p>Meet Id = {uuid}</p>
-          <div className={cameras_container} id={"video-" + name}></div>
+          <div className={cameras_container} id="video-container"></div>
           <div id="errorMsg"></div>
         </div>
       </div>
@@ -406,6 +462,12 @@ export const VideoChat = (props) => {
           signalRService={signalRService}
         />
       </div>
+      <ParticipantListComponent
+        name={name}
+        meetingId={meetingId}
+        signalRService={signalRService}
+        connections={connections}
+      />
     </div>
   );
 };
