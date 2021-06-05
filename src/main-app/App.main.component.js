@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Sidebar } from "./modules/shared-components/Sidebar/Sidebar.component";
 import { MainAppRoutes } from "./App.main.routes";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -25,7 +25,6 @@ roleAccessibilty.setRoutes({
 
 const MainApp = () => {
   const dispatch = useDispatch();
-  const [hideFooter, setHideFooter] = useState(true);
   const {
     user,
     isAuthenticated,
@@ -69,10 +68,6 @@ const MainApp = () => {
     window.location.hash.includes("dashboard") ||
     window.location.hash.includes("call");
 
-  useEffect(() => {
-    setHideFooter(shouldHideFooter);
-  }, [shouldHideFooter]);
-
   if (error) {
     return <div>Oops... {error.message}</div>;
   }
@@ -84,6 +79,8 @@ const MainApp = () => {
   const routesRoleConfig = user
     ? roleAccessibilty.getRoutesByRoles(user[rolesUrl])
     : {};
+
+  const currentRole = user ? user[rolesUrl][0].toLowerCase() : "";
 
   return (
     <div>
@@ -115,19 +112,19 @@ const MainApp = () => {
       </header>
       <div className="App is-flex">
         <div>
-          <Sidebar />
+          <Sidebar currentRole={currentRole} />
         </div>
         <div className={`app-container`}>
           <div className="app-content">
             {isAuthenticated && (
               <MainAppRoutes
                 routesRoleConfig={routesRoleConfig}
-                currentRole={user[rolesUrl]}
+                currentRole={currentRole}
               />
             )}
             {!isAuthenticated && loginWithRedirect()}
           </div>
-          {!hideFooter && (
+          {!shouldHideFooter && (
             <footer className="footer">
               <p className="has-text-centered">
                 Created by <b>5ding</b>
