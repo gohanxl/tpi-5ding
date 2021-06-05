@@ -1,13 +1,13 @@
 import React from "react";
 import "./chat-window.styles.scss";
-import { Message4Real } from "./Message4Real";
+import { ChatMessage } from "./ChatMessage/ChatMessage.component";
 
 export const ChatScreenComponent = ({ messages }) => {
   return (
     <div className="chat_wrapper" id="message_container">
       {messages &&
         messages.map(({ content, user, mid, time }) => (
-          <Message4Real
+          <ChatMessage
             key={mid}
             user={user}
             content={content}
