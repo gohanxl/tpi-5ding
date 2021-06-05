@@ -9,7 +9,7 @@ export const ChatWindowComponent = (props) => {
   const { name, meeting, signalRService } = props;
   const [messages, setMessages] = useState([]);
   const latestChat = useRef(null);
-  const [localUser, setLocalUser] = useState();
+  const [localUser, setLocalUser] = useState({ displayName: name });
 
   useEffect(() => {
     if (signalRService) {

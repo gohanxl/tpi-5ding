@@ -48,7 +48,7 @@ export const VideoChat = (props) => {
 
   useEffect(() => {
     async function initSignalR() {
-      const signalRServ = SignalHandlerService.getInstance();
+      const signalRServ = await SignalHandlerService.getInstance();
       const isConnected = await signalRServ.asyncConnection();
       console.log("SignalRHub Connected: " + isConnected);
       setSignalRService(signalRServ);
@@ -158,7 +158,7 @@ export const VideoChat = (props) => {
     const peerConnection = connections.filter((item) => item.UserId === userId);
     if (peerConnection.length === 1) {
       document
-        .getElementById(`video-${name}`)
+        .getElementById("video-container")
         .removeChild(peerConnection[0].DivElement);
       const index = connections.indexOf(peerConnection[0], 0);
       connections = connections.splice(index, 1);
@@ -288,7 +288,7 @@ export const VideoChat = (props) => {
     peerConnection.DivElement = divElement;
     connections.push(peerConnection);
 
-    document.getElementById(`video-${name}`).appendChild(divElement);
+    document.getElementById("video-container").appendChild(divElement);
   };
 
   const sendNotificationOfJoining = (id) => {
@@ -395,7 +395,7 @@ export const VideoChat = (props) => {
         />
         <div>
           <p>Meet Id = {uuid}</p>
-          <div className={cameras_container} id={"video-" + name}></div>
+          <div className={cameras_container} id="video-container"></div>
           <div id="errorMsg"></div>
         </div>
       </div>
