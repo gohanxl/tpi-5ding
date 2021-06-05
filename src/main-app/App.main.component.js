@@ -65,12 +65,13 @@ const MainApp = () => {
     }
   }, [dispatch, getAccessTokenSilently, isAuthenticated, user]);
 
+  const shouldHideFooter =
+    window.location.hash.includes("dashboard") ||
+    window.location.hash.includes("call");
+
   useEffect(() => {
-    setHideFooter(
-      window.location.hash == "#/educapp/home" ||
-        window.location.hash == "#/educapp/teacher/call"
-    );
-  }, []);
+    setHideFooter(shouldHideFooter);
+  }, [shouldHideFooter]);
 
   if (error) {
     return <div>Oops... {error.message}</div>;
@@ -80,7 +81,9 @@ const MainApp = () => {
     return <Loading />;
   }
 
-  const routesRoleConfig = roleAccessibilty.getRoutesByRoles(user[rolesUrl]);
+  const routesRoleConfig = user
+    ? roleAccessibilty.getRoutesByRoles(user[rolesUrl])
+    : {};
 
   return (
     <div>
@@ -114,18 +117,23 @@ const MainApp = () => {
         <div>
           <Sidebar />
         </div>
-        <div className={"app-container" + (!hideFooter ? "" : " hide-footer")}>
+        <div className={`app-container`}>
           <div className="app-content">
             {isAuthenticated && (
-              <MainAppRoutes routesRoleConfig={routesRoleConfig} />
+              <MainAppRoutes
+                routesRoleConfig={routesRoleConfig}
+                currentRole={user[rolesUrl]}
+              />
             )}
             {!isAuthenticated && loginWithRedirect()}
           </div>
-          <footer className="footer">
-            <p className="has-text-centered">
-              Created by <b>5ding</b>
-            </p>
-          </footer>
+          {!hideFooter && (
+            <footer className="footer">
+              <p className="has-text-centered">
+                Created by <b>5ding</b>
+              </p>
+            </footer>
+          )}
         </div>
       </div>
     </div>
