@@ -19,7 +19,9 @@ export const CallViewRenderer = ({ currentUser }) => {
       <div>
         <VideoChat name={userName} uuid={uuid} meeting="1" />
       </div>
-      <div>{/*<ClosedCaptionComponent name={userName} meeting="1" />*/}</div>
+      <div>
+        <ClosedCaptionComponent name={userName} meeting="1" />
+      </div>
     </section>
   );
 };
