@@ -13,7 +13,6 @@ export const ParticipantListComponent = (props) => {
   }, [signalRService]);
 
   const updateParticipants = (users) => {
-    console.log("ACA TENGO Q UPDATEAR MI USER");
     console.log(users);
     setLocalConnections(users);
   };
@@ -23,7 +22,7 @@ export const ParticipantListComponent = (props) => {
       <ul>
         {localConnections &&
           localConnections.map((user) => (
-            <li key={user.uuid}>{user.displayName}</li>
+            <li key={user.uid}>{user.displayName}</li>
           ))}
       </ul>
     </div>
