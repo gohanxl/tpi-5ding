@@ -2,7 +2,7 @@ import React from "react";
 import { useHistory } from "react-router";
 import "./Sidebar.styles.scss";
 
-export const Sidebar = () => {
+export const Sidebar = ({ currentRole }) => {
   const history = useHistory();
   const subjects = [
     { id: 1, name: "Lengua" },
@@ -16,7 +16,7 @@ export const Sidebar = () => {
         <li>
           <a
             className="is-active"
-            onClick={() => history.push("/educapp/home")}
+            onClick={() => history.push(`/educapp/dashboard/${currentRole}`)}
           >
             Dashboard
           </a>
@@ -39,8 +39,7 @@ export const Sidebar = () => {
                   history.push("/educapp/student/assignature/" + id)
                 }
               >
-                {" "}
-                <a>{name}</a>{" "}
+                <a>{name}</a>
               </li>
             ))}
           </ul>
