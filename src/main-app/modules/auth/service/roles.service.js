@@ -1,3 +1,5 @@
+import { roles } from "../../../../App.constants";
+
 class RoleAccesibilty {
   constructor() {
     this.routes = {};
@@ -15,7 +17,8 @@ class RoleAccesibilty {
   }
 
   getRoutesByRoles([role]) {
-    const roleRoutes = this.routes[role.toLowerCase()];
+    const currentRole = roles[role];
+    const roleRoutes = this.routes[currentRole];
     return roleRoutes;
   }
 }
