@@ -21,6 +21,7 @@ const Loading = () => (
 roleAccessibilty.setRoutes({
   student: studentRoutes,
   teacher: teacherRoutes,
+  admin: [...studentRoutes, ...teacherRoutes],
 });
 
 const MainApp = () => {

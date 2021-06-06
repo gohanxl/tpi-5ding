@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from "react";
 import { Route, Switch, Redirect } from "react-router";
-import { routes } from "./App.constants";
+import { roles, routes } from "./App.constants";
 import { Loader } from "./main-app/modules/shared-components/Loader/Loader.component";
 import { NotFound } from "./main-app/modules/shared-components/NotFound/NotFound.component";
 
@@ -11,6 +11,7 @@ const MainAppComponent = lazy(() => import("./main-app/App.main.component"));
 
 export const Routes = () => {
   const { landingPage, mainApp, dashboard } = routes;
+  const educappRedirectURL = dashboard(roles.TEACHER);
 
   return (
     <>
@@ -25,7 +26,7 @@ export const Routes = () => {
 
           <Route key="main-app" path={mainApp} component={MainAppComponent} />
 
-          <Redirect exact from="/educapp" to={dashboard} />
+          <Redirect exact from="/educapp" to={educappRedirectURL} />
           <Route component={NotFound} />
         </Switch>
       </Suspense>
