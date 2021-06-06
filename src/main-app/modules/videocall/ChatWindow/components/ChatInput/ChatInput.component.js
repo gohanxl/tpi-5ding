@@ -2,6 +2,7 @@ import React from "react";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  chat,
   chat_input__wrapper,
   chat_input,
   chat_button,
@@ -9,7 +10,7 @@ import {
 
 export const ChatInput = ({ submit }) => {
   return (
-    <form onSubmit={submit}>
+    <form className={chat} onSubmit={submit}>
       <div className="field has-addons">
         <div className={`control ${chat_input__wrapper}`}>
           <input
