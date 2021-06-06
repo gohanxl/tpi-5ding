@@ -42,6 +42,9 @@ export const VideoChat = (props) => {
   let screenSharinUserName = null;
   let localUserScreenSharingStream = null;
 
+  let videoRows = [];
+  let videoDivs = [];
+
   const displayMediaOptions = { video: { cursor: "always" }, audio: false };
 
   const avContraints = {
@@ -107,10 +110,12 @@ export const VideoChat = (props) => {
       isScreenSharingEnabled = false;
       isScreenSharingByMe = false;
       screenSharinUserName = "";
+      document.getElementById("screenSharingObj").classList.add("d-none");
       stoppedSharingScreen();
     }
     if (status === ScreeenSharingStatus.Started) {
       screenSharinUserName = remoteUserName;
+      document.getElementById("screenSharingObj").classList.remove("d-none");
     }
   };
 
@@ -197,7 +202,7 @@ export const VideoChat = (props) => {
       HandelSucess(stream);
     } catch (exception) {
       HandelError(exception);
-    } //fafa
+    }
   };
 
   const HandelSucess = (stream) => {
@@ -296,7 +301,51 @@ export const VideoChat = (props) => {
     peerConnection.isLocalPaticipant = isLocalPaticipant;
     connections.push(peerConnection);
 
-    document.getElementById("video-container").appendChild(divElement);
+    videoDivs.push(divElement);
+    divideVideosInRows();
+  };
+
+  const divideVideosInRows = () => {
+    const rows = [];
+    const videoDivsCount = videoDivs.length;
+    let rowsQuantity = videoDivsCount > 2 ? 2 : 1;
+    //const maxRowsCount = 10;
+    const videoDivsCopy = [...videoDivs];
+
+    const camerasPerRow = Math.round(videoDivsCount / rowsQuantity);
+    const remainingCamera = videoDivsCount % rowsQuantity;
+
+    while (rowsQuantity > 0) {
+      rows.push({
+        maxCamsCount:
+          rowsQuantity === 1 && remainingCamera
+            ? remainingCamera
+            : camerasPerRow,
+      });
+      rowsQuantity--;
+    }
+
+    rows.forEach((row, i) => {
+      if (row.maxCamsCount === 1 && camerasPerRow > 2) {
+        rows[i - 1].maxCamsCount--;
+        row++;
+      }
+    });
+
+    rows.forEach((row) => {
+      const divEl = document.createElement("div");
+      divEl.classList.add("row", "mx-0");
+      let remainingCams = row.maxCamsCount;
+
+      while (remainingCams > 0) {
+        const videoCam = videoDivsCopy.shift();
+        divEl.appendChild(videoCam);
+        remainingCams--;
+      }
+      row.divElement = divEl;
+    });
+
+    videoRows = rows;
   };
 
   const sendNotificationOfJoining = (id) => {
@@ -427,18 +476,11 @@ export const VideoChat = (props) => {
     );
   };
 
-  /**/
-  /**/
-  /**/
-  /**/
-  /**/
-  /**/
-
   return (
     <div className={videochat_container}>
       <div className={video_and_toolbar}>
         <div className="screenSharingContainer" id="screenSharing-container">
-          <video id="screenSharingObj"></video>
+          <video className="d-none" id="screenSharingObj"></video>
         </div>
 
         <VideoToolbar
@@ -451,7 +493,9 @@ export const VideoChat = (props) => {
         />
         <div>
           <p>Meet Id = {uuid}</p>
-          <div className={cameras_container} id="video-container"></div>
+          <div className={cameras_container} id="video-container">
+            {videoRows.map((row) => row.divElement)}
+          </div>
           <div id="errorMsg"></div>
         </div>
       </div>
