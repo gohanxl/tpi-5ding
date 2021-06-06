@@ -1,34 +1,11 @@
-import React, { Suspense, lazy } from "react";
-import { Route, Switch, Redirect } from "react-router";
-import { Loader } from "./main-app/modules/shared-components/Loader/Loader.component";
-
-const LandingPageComponent = lazy(() =>
-  import("./landing-page/LandingPage.component")
-);
-const MainAppComponent = lazy(() => import("./main-app/App.main.component"));
+import React from "react";
+import { Route, Switch } from "react-router";
+import { Home } from "./modules/home-page/Home.component.js";
 
 export const Routes = () => {
   return (
-    <>
-      <Suspense fallback={<Loader />}>
-        <Switch>
-          <Route
-            key="landing-page"
-            path="/"
-            exact
-            component={LandingPageComponent}
-          />
-
-          <Route
-            key="main-app"
-            path={"/educapp/**"}
-            component={MainAppComponent}
-          />
-
-          <Redirect exact from="/educapp" to="/educapp/home" />
-          {/* <Route component={NotFound} /> */}
-        </Switch>
-      </Suspense>
-    </>
+    <Switch>
+      <Route key="landing" path="/" component={Home} />
+    </Switch>
   );
 };
