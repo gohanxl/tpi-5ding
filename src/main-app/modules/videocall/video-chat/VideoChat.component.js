@@ -10,8 +10,8 @@ import {
 import React, { useEffect, useState } from "react";
 import Peer from "peerjs";
 import { SignalHandlerService } from "../services/signal-handler";
-import { ChatWindowComponent } from "../chat-window/chat-window.component";
 import { VideoToolbar } from "../video-toolbar/VideoToolbar";
+import { ChatWindow } from "../ChatWindow/ChatWindow.component";
 import { ParticipantListComponent } from "../participant-list/ParticipantList.component";
 
 export const VideoChat = (props) => {
@@ -456,7 +456,7 @@ export const VideoChat = (props) => {
         </div>
       </div>
       <div id="chat_window" className={chat_window}>
-        <ChatWindowComponent
+        <ChatWindow
           name={name}
           meeting={meetingId}
           signalRService={signalRService}
