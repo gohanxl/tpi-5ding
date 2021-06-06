@@ -1,24 +1,23 @@
 import React, { lazy } from "react";
 import { Route, Switch, Redirect } from "react-router";
-import { routes } from "../App.constants";
-// import { NotFound } from "./modules/shared-components/NotFound/NotFound.component";
+import { roles, routes } from "../App.constants";
 
 const HomeContainer = lazy(() =>
   import("./modules/home/components/Home.container")
 );
 
 export const MainAppRoutes = ({ routesRoleConfig, currentRole }) => {
+  const isAdmin = currentRole === roles.ADMIN;
+  const dashboardRoute = routes.dashboard(
+    isAdmin ? roles.TEACHER : currentRole
+  );
   return (
     <Switch>
       {routesRoleConfig.map((routeProps) => (
         <Route key={routeProps.path} {...routeProps} />
       ))}
-      <Route
-        key="dashboard"
-        path={routes.dashboard(currentRole)}
-        component={HomeContainer}
-      />
-      <Redirect to={routes.dashboard(currentRole)} component={HomeContainer} />
+      <Route key="dashboard" path={dashboardRoute} component={HomeContainer} />
+      <Redirect to={dashboardRoute} component={HomeContainer} />
     </Switch>
   );
 };
