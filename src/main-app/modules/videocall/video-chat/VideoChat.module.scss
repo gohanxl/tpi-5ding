@@ -6,6 +6,8 @@
 
 .video_and_toolbar {
   position: relative;
+  height: fit-content;
+  flex: 1;
 }
 
 .cameras_container {
@@ -44,7 +46,6 @@
 }
 
 .chat_window {
-  width: 25%;
   height: 600px;
 }
 

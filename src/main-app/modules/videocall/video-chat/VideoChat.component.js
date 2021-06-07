@@ -521,26 +521,19 @@ export const VideoChat = (props) => {
           stopSharingScreen={stopSharingScreen}
         />
         <div id="chat_window" className={chat_window}>
-          <ChatWindowComponent
+          <ChatWindow
             name={name}
             meeting={meetingId}
             signalRService={signalRService}
           />
         </div>
       </div>
-      <div id="chat_window" className={chat_window}>
-        <ChatWindow
-          name={name}
-          meeting={meetingId}
-          signalRService={signalRService}
-        />
-      </div>
-      <ParticipantListComponent
+      {/* <ParticipantListComponent
         name={name}
         meetingId={meetingId}
         signalRService={signalRService}
         connections={connections}
-      />
+      /> */}
     </div>
   );
 };
