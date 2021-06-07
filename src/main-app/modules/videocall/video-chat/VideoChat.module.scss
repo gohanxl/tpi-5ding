@@ -17,6 +17,13 @@
   justify-content: center;
 }
 
+.cameras_row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+}
+
 .user_camera_container {
   position: relative;
   width: fit-content;

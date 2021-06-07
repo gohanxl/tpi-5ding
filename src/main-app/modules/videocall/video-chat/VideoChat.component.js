@@ -6,6 +6,7 @@ import {
   videochat_container,
   chat_window,
   video_and_toolbar,
+  cameras_row,
 } from "./VideoChat.module.scss";
 import React, { useEffect, useState } from "react";
 import Peer from "peerjs";
@@ -335,7 +336,7 @@ export const VideoChat = (props) => {
 
     rows.forEach((row) => {
       const divEl = document.createElement("div");
-      divEl.classList.add("row", "mx-0");
+      divEl.classList.add(cameras_row);
       let remainingCams = row.maxCamsCount;
 
       while (remainingCams > 0) {
@@ -482,9 +483,11 @@ export const VideoChat = (props) => {
     videoRows
   );
 
-  const Pepe = ({ element }) => {
-    return <div ref={(ref) => ref.appendChild(element)}></div>;
+  const CameraRow = ({ element }) => {
+    return <div ref={(ref) => ref && ref.appendChild(element)} />;
   };
+
+  /**/
 
   return (
     <div className={videochat_container}>
@@ -505,7 +508,7 @@ export const VideoChat = (props) => {
           <p>Meet Id = {uuid}</p>
           <div className={cameras_container} id="video-container">
             {videoRows.map(({ divElement }, index) => {
-              return <Pepe key={index} element={divElement}></Pepe>;
+              return <CameraRow key={index} element={divElement} />;
             })}
           </div>
           <div id="errorMsg"></div>
