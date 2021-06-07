@@ -13,8 +13,8 @@ import {
 import React, { useEffect, useState } from "react";
 import Peer from "peerjs";
 import { SignalHandlerService } from "../services/signal-handler";
-import { ChatWindowComponent } from "../chat-window/chat-window.component";
 import { VideoToolbar } from "../video-toolbar/VideoToolbar";
+import { ChatWindow } from "../ChatWindow/ChatWindow.component";
 import { ParticipantListComponent } from "../participant-list/ParticipantList.component";
 import { ClosedCaptionComponent } from "../../../modules/videocall/closed-caption/ClosedCaption.component";
 
@@ -483,7 +483,7 @@ export const VideoChat = (props) => {
   };
 
   console.log(
-    "🚀 ~ file: VideoChat.component.js ~ line 349 ~ divideVideosInRows ~ videoRows",
+    "?? ~ file: VideoChat.component.js ~ line 349 ~ divideVideosInRows ~ videoRows",
     videoRows
   );
 
@@ -527,6 +527,13 @@ export const VideoChat = (props) => {
             signalRService={signalRService}
           />
         </div>
+      </div>
+      <div id="chat_window" className={chat_window}>
+        <ChatWindow
+          name={name}
+          meeting={meetingId}
+          signalRService={signalRService}
+        />
       </div>
       <ParticipantListComponent
         name={name}
