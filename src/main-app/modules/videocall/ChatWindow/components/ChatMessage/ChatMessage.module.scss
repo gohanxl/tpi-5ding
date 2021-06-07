@@ -1,0 +1,12 @@
+.chat_message__wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 75px;
+  background: whitesmoke;
+  border-radius: 5px;
+  padding: 10px 10px;
+  margin: 10px 0;
+  word-break: break-word;
+  overflow: hidden;
+}

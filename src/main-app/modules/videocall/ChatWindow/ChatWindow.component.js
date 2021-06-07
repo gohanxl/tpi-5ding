@@ -1,11 +1,11 @@
 /* eslint-disable */
 import React, { useEffect, useRef, useState } from "react";
 import { v4 } from "uuid";
-import { ChatInput4Real } from "./chat-input.component";
-import { ChatScreenComponent } from "./chat-screen.component";
-import "./chat-window.styles.scss";
+import { ChatScreen } from "./components/ChatScreen/ChatScreen.component";
+import { ChatInput } from "./components/ChatInput/ChatInput.component";
+import "./ChatWindow.styles.scss";
 
-export const ChatWindowComponent = (props) => {
+export const ChatWindow = (props) => {
   const { name, meeting, signalRService } = props;
   const [messages, setMessages] = useState([]);
   const latestChat = useRef(null);
@@ -56,8 +56,8 @@ export const ChatWindowComponent = (props) => {
 
   return (
     <div className="chat_container">
-      <ChatScreenComponent messages={messages} />
-      <ChatInput4Real name={name} submit={submit} />
+      <ChatScreen messages={messages} />
+      <ChatInput name={name} submit={submit} />
     </div>
   );
 };
