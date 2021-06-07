@@ -6,7 +6,8 @@ import { useDispatch } from "react-redux";
 import { setCurrentUser } from "../main-app/modules/user/store/user.actions";
 import { userService } from "../main-app/modules/user/api/usuario-service";
 import loading from "../loading.svg";
-import educAppLogo from "../assets/img/logo-white.svg";
+import educAppWhiteLogo from "../assets/img/logo-white.svg";
+import educAppLogo from "../assets/img/logo.svg";
 
 const Loading = () => (
   <div className="spinner">
@@ -82,7 +83,7 @@ const MainApp = () => {
           <div className="navbar-brand">
             <a className="navbar-item" href="#/educapp/home">
               <img
-                src={educAppLogo}
+                src={educAppWhiteLogo}
                 alt="Educapp logo"
                 width="30"
                 height="30"
@@ -110,7 +111,14 @@ const MainApp = () => {
           </div>
           <footer className="footer">
             <p className="has-text-centered">
-              Created by <b>5ding</b>
+              <span>Powered by</span>
+              <img
+                src={educAppLogo}
+                className="mx-2 mb-1"
+                alt="Educapp logo"
+                width="20"
+              />
+              <b>EducApp</b>
             </p>
           </footer>
         </div>
