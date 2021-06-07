@@ -13,6 +13,7 @@ import { SignalHandlerService } from "../services/signal-handler";
 import { ChatWindowComponent } from "../chat-window/chat-window.component";
 import { VideoToolbar } from "../video-toolbar/VideoToolbar";
 import { ParticipantListComponent } from "../participant-list/ParticipantList.component";
+import { Attendance4Real } from "../../shared-components/Attendance/components/Attendance4Real";
 
 export const VideoChat = (props) => {
   const ScreeenSharingStatus = {
@@ -448,6 +449,11 @@ export const VideoChat = (props) => {
           toggleChat={toggleChat}
           startShareScreen={startShareScreen}
           stopSharingScreen={stopSharingScreen}
+        />
+        <Attendance4Real
+          classId={2}
+          meetingId={meetingId}
+          signalRService={signalRService}
         />
         <div>
           <p>Meet Id = {uuid}</p>
