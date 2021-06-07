@@ -9,6 +9,8 @@ $edu-light-aquamarine: #aadbc7;
 $edu-aquamarine: #8bd2b0;
 $edu-light-blue: #b8e3ec;
 
+$navbar-height: 70px;
+
 $app-container-height: calc(100vh - #{$navbar-height});
 $app-content-height: calc(#{$app-container-height} - 168px);
 

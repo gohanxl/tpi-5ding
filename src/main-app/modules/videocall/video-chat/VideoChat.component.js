@@ -7,6 +7,8 @@ import {
   chat_window,
   video_and_toolbar,
   cameras_row,
+  cameras_and_cc,
+  close_caption,
 } from "./VideoChat.module.scss";
 import React, { useEffect, useState } from "react";
 import Peer from "peerjs";
@@ -14,6 +16,7 @@ import { SignalHandlerService } from "../services/signal-handler";
 import { ChatWindowComponent } from "../chat-window/chat-window.component";
 import { VideoToolbar } from "../video-toolbar/VideoToolbar";
 import { ParticipantListComponent } from "../participant-list/ParticipantList.component";
+import { ClosedCaptionComponent } from "../../../modules/videocall/closed-caption/ClosedCaption.component";
 
 export const VideoChat = (props) => {
   const ScreeenSharingStatus = {
@@ -310,7 +313,8 @@ export const VideoChat = (props) => {
   const divideVideosInRows = () => {
     const rows = [];
     const videoDivsCount = videoDivs.length;
-    let rowsQuantity = videoDivsCount > 2 ? 2 : 1;
+    const initialRowsCount = 2;
+    let rowsQuantity = videoDivsCount > initialRowsCount ? initialRowsCount : 1;
     //const maxRowsCount = 10;
     const videoDivsCopy = [...videoDivs];
 
@@ -493,9 +497,21 @@ export const VideoChat = (props) => {
     <div className={videochat_container}>
       <div className={video_and_toolbar}>
         <div className="screenSharingContainer" id="screenSharing-container">
-          <video className="d-none" id="screenSharingObj"></video>
+          <video className="d-none" id="screenSharingObj" autoplay />
         </div>
-
+        <div className={cameras_and_cc}>
+          <div className="cameras-container" id="video-container">
+            {videoRows.map(({ divElement }, index) => {
+              return <CameraRow key={index} element={divElement} />;
+            })}
+          </div>
+          <div className={close_caption}>
+            <ClosedCaptionComponent name={userDisplayName} meeting="1" />
+          </div>
+          <div id="errorMsg"></div>
+        </div>
+      </div>
+      <div>
         <VideoToolbar
           muteUnmute={muteUnmute}
           videoOnOff={videoOnOff}
@@ -504,22 +520,13 @@ export const VideoChat = (props) => {
           startShareScreen={startShareScreen}
           stopSharingScreen={stopSharingScreen}
         />
-        <div>
-          <p>Meet Id = {uuid}</p>
-          <div className={cameras_container} id="video-container">
-            {videoRows.map(({ divElement }, index) => {
-              return <CameraRow key={index} element={divElement} />;
-            })}
-          </div>
-          <div id="errorMsg"></div>
+        <div id="chat_window" className={chat_window}>
+          <ChatWindowComponent
+            name={name}
+            meeting={meetingId}
+            signalRService={signalRService}
+          />
         </div>
-      </div>
-      <div id="chat_window" className={chat_window}>
-        <ChatWindowComponent
-          name={name}
-          meeting={meetingId}
-          signalRService={signalRService}
-        />
       </div>
       <ParticipantListComponent
         name={name}
