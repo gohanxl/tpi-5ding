@@ -75,7 +75,7 @@ const MainApp = () => {
     <div>
       <header>
         <nav
-          className="educapp-nav navbar is-info"
+          className="educapp-nav navbar"
           role="navigation"
           aria-label="main navigation"
         >

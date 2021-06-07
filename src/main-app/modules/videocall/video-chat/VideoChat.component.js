@@ -491,13 +491,11 @@ export const VideoChat = (props) => {
     return <div ref={(ref) => ref && ref.appendChild(element)} />;
   };
 
-  /**/
-
   return (
     <div className={videochat_container}>
       <div className={video_and_toolbar}>
         <div className="screenSharingContainer" id="screenSharing-container">
-          <video className="d-none" id="screenSharingObj" autoplay />
+          <video className="d-none" id="screenSharingObj" autoPlay />
         </div>
         <div className={cameras_and_cc}>
           <div className="cameras-container" id="video-container">

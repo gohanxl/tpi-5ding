@@ -22,6 +22,10 @@ html {
   overflow: visible !important;
 }
 
+.educapp-nav {
+  background-color: $edu-primary;
+}
+
 .app-container {
   width: 100%;
   height: $app-container-height;
