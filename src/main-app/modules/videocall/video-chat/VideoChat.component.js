@@ -23,6 +23,7 @@ export const VideoChat = (props) => {
   const { name, uuid, meeting } = props;
 
   const [signalRService, setSignalRService] = useState();
+  const [videoRows, setVideoRows] = useState([]);
 
   let userDisplayName = name;
   let localUserPeer = null;
@@ -42,7 +43,7 @@ export const VideoChat = (props) => {
   let screenSharinUserName = null;
   let localUserScreenSharingStream = null;
 
-  let videoRows = [];
+  // let videoRows = [];
   let videoDivs = [];
 
   const displayMediaOptions = { video: { cursor: "always" }, audio: false };
@@ -247,7 +248,7 @@ export const VideoChat = (props) => {
       (item) => item.UserId === localUserId
     );
     if (peerConnection.length === 1) {
-      peerConnection[0].VideElement.srcObject = localUserStream;
+      peerConnection[0].VideoElement.srcObject = localUserStream;
     }
 
     call.answer(stream);
@@ -293,7 +294,7 @@ export const VideoChat = (props) => {
 
     const peerConnection = {};
     peerConnection.RoomId = meetingId;
-    peerConnection.VideElement = videoElement;
+    peerConnection.VideoElement = videoElement;
     peerConnection.UserId = userId;
     peerConnection.CallObject = callObject;
     peerConnection.DivElement = divElement;
@@ -345,7 +346,7 @@ export const VideoChat = (props) => {
       row.divElement = divEl;
     });
 
-    videoRows = rows;
+    setVideoRows(rows);
   };
 
   const sendNotificationOfJoining = (id) => {
@@ -476,6 +477,15 @@ export const VideoChat = (props) => {
     );
   };
 
+  console.log(
+    "🚀 ~ file: VideoChat.component.js ~ line 349 ~ divideVideosInRows ~ videoRows",
+    videoRows
+  );
+
+  const Pepe = ({ element }) => {
+    return <div ref={(ref) => ref.appendChild(element)}></div>;
+  };
+
   return (
     <div className={videochat_container}>
       <div className={video_and_toolbar}>
@@ -494,7 +504,9 @@ export const VideoChat = (props) => {
         <div>
           <p>Meet Id = {uuid}</p>
           <div className={cameras_container} id="video-container">
-            {videoRows.map((row) => row.divElement)}
+            {videoRows.map(({ divElement }, index) => {
+              return <Pepe key={index} element={divElement}></Pepe>;
+            })}
           </div>
           <div id="errorMsg"></div>
         </div>
