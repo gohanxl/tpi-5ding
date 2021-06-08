@@ -66,12 +66,14 @@ export const Home = () => {
 
   window.onscroll = function () {
     const navbar = document.getElementById("navbar");
-    if (window.scrollY !== 0) {
-      navbar.classList.remove("hide-navbar");
-      navbar.classList.add("white-navbar");
-    } else {
-      navbar.classList.remove("white-navbar");
-      navbar.classList.add("hide-navbar");
+    if (navbar) {
+      if (window.scrollY !== 0) {
+        navbar.classList.remove("hide-navbar");
+        navbar.classList.add("white-navbar");
+      } else {
+        navbar.classList.remove("white-navbar");
+        navbar.classList.add("hide-navbar");
+      }
     }
 
     if (window.scrollY > 245) {
