@@ -15,7 +15,7 @@ export const ClosedCaptionComponent = (props) => {
 
   useEffect(() => {
     async function initSignalR() {
-      const signalRServ = SignalHandlerService.getInstance();
+      const signalRServ = await SignalHandlerService.getInstance();
       const isConnected = await signalRServ.asyncConnection();
       console.log("SignalRHub Connected: " + isConnected);
       setSignalRService(signalRServ);

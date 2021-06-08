@@ -9,6 +9,7 @@ import { faPhoneSlash } from "@fortawesome/free-solid-svg-icons";
 import { faComment } from "@fortawesome/free-solid-svg-icons";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { faStop } from "@fortawesome/free-solid-svg-icons";
+import { toolbar_buttons } from "./VideoToolbar.module.scss";
 
 export const VideoToolbar = ({
   videoOnOff,
@@ -49,7 +50,7 @@ export const VideoToolbar = ({
   };
 
   return (
-    <div className="buttons">
+    <div className={toolbar_buttons}>
       <button
         className={`button ${isVideoOn ? "is-primary" : "is-danger"}`}
         id="videoOnButton"
