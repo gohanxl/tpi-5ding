@@ -5,10 +5,11 @@ import {
   user_name,
   videochat_container,
   chat_window,
-  video_and_toolbar,
+  cameras_and_screen,
   cameras_row,
   cameras_and_cc,
   close_caption,
+  toolbar_and_chat,
 } from "./VideoChat.module.scss";
 import React, { useEffect, useState } from "react";
 import Peer from "peerjs";
@@ -345,8 +346,10 @@ export const VideoChat = (props) => {
 
       while (remainingCams > 0) {
         const videoCam = videoDivsCopy.shift();
-        divEl.appendChild(videoCam);
-        remainingCams--;
+        if (videoCam) {
+          divEl.appendChild(videoCam);
+          remainingCams--;
+        }
       }
       row.divElement = divEl;
     });
@@ -493,7 +496,7 @@ export const VideoChat = (props) => {
 
   return (
     <div className={videochat_container}>
-      <div className={video_and_toolbar}>
+      <div className={cameras_and_screen}>
         <div className="screenSharingContainer" id="screenSharing-container">
           <video className="d-none" id="screenSharingObj" autoPlay />
         </div>
@@ -509,7 +512,7 @@ export const VideoChat = (props) => {
           <div id="errorMsg"></div>
         </div>
       </div>
-      <div>
+      <div className={toolbar_and_chat}>
         <VideoToolbar
           muteUnmute={muteUnmute}
           videoOnOff={videoOnOff}
