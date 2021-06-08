@@ -1,0 +1,14 @@
+@import "../../../../App.styles.scss";
+
+.toolbar_buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: $edu-darker-primary;
+
+  button {
+    width: 18%;
+    margin: 0;
+  }
+}
