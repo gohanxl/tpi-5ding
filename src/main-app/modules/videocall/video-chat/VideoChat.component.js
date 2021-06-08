@@ -18,6 +18,7 @@ import { VideoToolbar } from "../video-toolbar/VideoToolbar";
 import { ChatWindow } from "../ChatWindow/ChatWindow.component";
 import { ParticipantListComponent } from "../participant-list/ParticipantList.component";
 import { ClosedCaptionComponent } from "../../../modules/videocall/closed-caption/ClosedCaption.component";
+import { VideoGridComponent } from "./VideoGridComponent.component";
 
 export const VideoChat = (props) => {
   const ScreeenSharingStatus = {
@@ -28,7 +29,7 @@ export const VideoChat = (props) => {
   const { name, uuid, meeting } = props;
 
   const [signalRService, setSignalRService] = useState();
-  const [videoRows, setVideoRows] = useState([]);
+  let videoRows = [];
 
   let userDisplayName = name;
   let localUserPeer = null;
@@ -354,7 +355,7 @@ export const VideoChat = (props) => {
       row.divElement = divEl;
     });
 
-    setVideoRows(rows);
+    videoRows = rows;
   };
 
   const sendNotificationOfJoining = (id) => {
@@ -490,10 +491,6 @@ export const VideoChat = (props) => {
     videoRows
   );
 
-  const CameraRow = ({ element }) => {
-    return <div ref={(ref) => ref && ref.appendChild(element)} />;
-  };
-
   return (
     <div className={videochat_container}>
       <div className={cameras_and_screen}>
@@ -501,13 +498,9 @@ export const VideoChat = (props) => {
           <video className="d-none" id="screenSharingObj" autoPlay />
         </div>
         <div className={cameras_and_cc}>
-          <div className="cameras-container" id="video-container">
-            {videoRows.map(({ divElement }, index) => {
-              return <CameraRow key={index} element={divElement} />;
-            })}
-          </div>
+          <VideoGridComponent rows={videoRows} />
           <div className={close_caption}>
-            <ClosedCaptionComponent name={userDisplayName} meeting="1" />
+            {/*<ClosedCaptionComponent name={userDisplayName} meeting="1" />*/}
           </div>
           <div id="errorMsg"></div>
         </div>
