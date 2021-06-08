@@ -1,4 +1,6 @@
+/* eslint-disable */
 import React, { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Sidebar } from "./modules/shared-components/Sidebar/Sidebar.component";
 import { MainAppRoutes } from "./App.main.routes";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -8,6 +10,7 @@ import { userService } from "../main-app/modules/user/api/usuario-service";
 import loading from "../loading.svg";
 import educAppWhiteLogo from "../assets/img/logo-white.svg";
 import educAppLogo from "../assets/img/logo.svg";
+import { faBell, faUser } from "@fortawesome/free-solid-svg-icons";
 
 const Loading = () => (
   <div className="spinner">
@@ -89,15 +92,48 @@ const MainApp = () => {
                 height="30"
               />
             </a>
-            {isAuthenticated && (
-              <button
-                className="button is-warning"
-                onClick={() => logout({ returnTo: window.location.origin })}
-              >
-                Log Out
-              </button>
-            )}
           </div>
+
+          {isAuthenticated ? (
+            <div class="navbar-end">
+              <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link is-arrowless">
+                  <FontAwesomeIcon color="white" size="lg" icon={faBell} />
+                </a>
+                <div class="navbar-dropdown is-right">
+                  <a class="navbar-item">Ir a clases</a>
+                  <a class="navbar-item">Examen de lengua</a>
+                  <a class="navbar-item">Entregar tarea de Historia</a>
+                </div>
+              </div>
+              <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link is-arrowless">
+                  <FontAwesomeIcon color="white" size="lg" icon={faUser} />
+                </a>
+                <div class="navbar-dropdown is-right">
+                  <a class="navbar-item">Mi perfil</a>
+                  <hr class="dropdown-divider"></hr>
+                  <a
+                    class="navbar-item"
+                    onClick={() => logout({ returnTo: window.location.origin })}
+                  >
+                    Cerrar sesión
+                  </a>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div class="navbar-end">
+              <div class="navbar-item">
+                <button
+                  className="btn btn-warning"
+                  onClick={() => logout({ returnTo: window.location.origin })}
+                >
+                  Log Out
+                </button>
+              </div>
+            </div>
+          )}
         </nav>
       </header>
       <div className="App is-flex">
