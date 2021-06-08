@@ -19,6 +19,8 @@ import { ChatWindow } from "../ChatWindow/ChatWindow.component";
 import { ParticipantListComponent } from "../participant-list/ParticipantList.component";
 import { ClosedCaptionComponent } from "../../../modules/videocall/closed-caption/ClosedCaption.component";
 import { VideoGridComponent } from "./VideoGridComponent.component";
+import { useDispatch } from "react-redux";
+import { setVideoRows } from "./store/video.actions";
 
 export const VideoChat = (props) => {
   const ScreeenSharingStatus = {
@@ -280,7 +282,13 @@ export const VideoChat = (props) => {
     return videoElement;
   };
 
-  const addUser = (stream, userId, callObject, userName, isLocalPaticipant) => {
+  const addUser = async (
+    stream,
+    userId,
+    callObject,
+    userName,
+    isLocalPaticipant
+  ) => {
     const videoElement = GetNewVideoElement();
     videoElement.muted = isLocalPaticipant;
     videoElement.srcObject = stream;
@@ -356,7 +364,10 @@ export const VideoChat = (props) => {
     });
 
     videoRows = rows;
+    dispatch(setVideoRows(rows));
   };
+
+  const dispatch = useDispatch();
 
   const sendNotificationOfJoining = (id) => {
     localUserId = id;
@@ -498,9 +509,9 @@ export const VideoChat = (props) => {
           <video className="d-none" id="screenSharingObj" autoPlay />
         </div>
         <div className={cameras_and_cc}>
-          <VideoGridComponent rows={videoRows} />
+          <VideoGridComponent />
           <div className={close_caption}>
-            {/*<ClosedCaptionComponent name={userDisplayName} meeting="1" />*/}
+            <ClosedCaptionComponent name={userDisplayName} meeting="1" />
           </div>
           <div id="errorMsg"></div>
         </div>
