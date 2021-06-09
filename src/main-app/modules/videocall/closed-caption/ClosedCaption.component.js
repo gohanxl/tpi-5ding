@@ -1,17 +1,37 @@
+/* eslint-disable */
 import { SignalHandlerService } from "../services/signal-handler";
 
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
-import React, { useEffect, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 
-export const ClosedCaptionComponent = (props) => {
+export const ClosedCaptionComponent = forwardRef((props, ref) => {
   const { name, meeting } = props;
 
   const [closedCaptionSend, setClosedCaptionSend] = useState(null);
   const [closedCaptionReceive, setClosedCaptionReceive] = useState(null);
   const [signalRService, setSignalRService] = useState();
   const { transcript } = useSpeechRecognition();
+  const [isMuted, setIsMuted] = useState(false);
+
+  useImperativeHandle(ref, () => ({
+    async muteClosedCaption() {
+      console.log("ACA MUTEO CC");
+      await SpeechRecognition.abortListening();
+      setIsMuted(true);
+    },
+    async unMuteClosedCaption() {
+      console.log("ACA DESMUTEO CC");
+      await SpeechRecognition.startListening({ language: "es-AR" });
+      setIsMuted(false);
+    },
+  }));
 
   useEffect(() => {
     async function initSignalR() {
@@ -29,24 +49,25 @@ export const ClosedCaptionComponent = (props) => {
       console.log(closedCaptionReceive);
       signalRService.listenReceiveClosedCaption(setClosedCaptionReceive);
     }
-  }, [signalRService]);
+  }, [signalRService, isMuted]);
 
   if (SpeechRecognition.browserSupportsSpeechRecognition()) {
-    SpeechRecognition.startListening({ language: "es-AR" });
-    try {
-      if (transcript && transcript !== closedCaptionSend) {
-        setClosedCaptionSend(transcript);
-      } else if (!transcript && closedCaptionSend) {
-        signalRService.invokeSendClosedCaption(meeting, closedCaptionSend);
-        setClosedCaptionSend(null);
+    if (!isMuted) {
+      SpeechRecognition.startListening({ language: "es-AR" });
+
+      try {
+        if (transcript && transcript !== closedCaptionSend) {
+          setClosedCaptionSend(transcript);
+        } else if (!transcript && closedCaptionSend) {
+          signalRService.invokeSendClosedCaption(meeting, closedCaptionSend);
+          setClosedCaptionSend(null);
+        }
+      } catch (e) {
+        console.error(e);
       }
-    } catch (e) {
-      console.error(e);
     }
   } else {
-    // TODO: Fallback behaviour
-    // https://github.com/JamesBrill/react-speech-recognition/blob/HEAD/docs/POLYFILLS.md
-    console.exception("browser not support speech recognition");
+    console.error("browser not support speech recognition");
   }
 
   return (
@@ -54,4 +75,4 @@ export const ClosedCaptionComponent = (props) => {
       {name}: {closedCaptionReceive}
     </p>
   );
-};
+});

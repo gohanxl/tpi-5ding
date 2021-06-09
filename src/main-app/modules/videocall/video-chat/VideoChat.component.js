@@ -33,6 +33,7 @@ export const VideoChat = (props) => {
 
   const user = useSelector((state) => state.user.currentUser);
   const toolbarRef = useRef();
+  const ccRef = useRef();
 
   const [signalRService, setSignalRService] = useState();
   let videoRows = [];
@@ -432,8 +433,10 @@ export const VideoChat = (props) => {
   const muteUnmute = () => {
     if (isMute) {
       isMute = localUserStream.getAudioTracks()[0].enabled = false;
+      ccRef.current.muteClosedCaption();
     } else {
       isMute = localUserStream.getAudioTracks()[0].enabled = true;
+      ccRef.current.unMuteClosedCaption();
     }
     return isMute;
   };
@@ -517,7 +520,11 @@ export const VideoChat = (props) => {
         <div className={cameras_and_cc}>
           <VideoGridComponent />
           <div className={close_caption}>
-            <ClosedCaptionComponent name={userDisplayName} meeting="1" />
+            <ClosedCaptionComponent
+              name={userDisplayName}
+              meeting="1"
+              ref={ccRef}
+            />
           </div>
           <div id="errorMsg"></div>
         </div>
