@@ -21,6 +21,7 @@ import { ClosedCaptionComponent } from "../../../modules/videocall/closed-captio
 import { VideoGridComponent } from "./VideoGridComponent.component";
 import { useDispatch } from "react-redux";
 import { setVideoRows } from "./store/video.actions";
+import { Attendance } from "../../shared-components/Attendance/components/Attendance";
 
 export const VideoChat = (props) => {
   const ScreeenSharingStatus = {
@@ -525,10 +526,10 @@ export const VideoChat = (props) => {
           startShareScreen={startShareScreen}
           stopSharingScreen={stopSharingScreen}
         />
-        <Attendance4Real
-            classId={2}
-            meetingId={meetingId}
-            signalRService={signalRService}
+        <Attendance
+          classId={2}
+          meetingId={meetingId}
+          signalRService={signalRService}
         />
         <div id="chat_window" className={chat_window}>
           <ChatWindow
@@ -536,14 +537,14 @@ export const VideoChat = (props) => {
             meeting={meetingId}
             signalRService={signalRService}
           />
+          <ParticipantListComponent
+            name={name}
+            meetingId={meetingId}
+            signalRService={signalRService}
+            connections={connections}
+          />
         </div>
       </div>
-      {/* <ParticipantListComponent
-        name={name}
-        meetingId={meetingId}
-        signalRService={signalRService}
-        connections={connections}
-      /> */}
     </div>
   );
 };

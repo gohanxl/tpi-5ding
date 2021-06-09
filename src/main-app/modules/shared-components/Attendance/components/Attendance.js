@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { AttendanceModal } from "./Attendance.modal";
 import { useSelector } from "react-redux";
 
-export const Attendance4Real = (props) => {
+export const Attendance = (props) => {
   const { classId, meetingId, signalRService } = props;
   const [modalOpened, setModalOpened] = useState(false);
   const [cronogramaId, setCronogramaId] = useState(classId);
