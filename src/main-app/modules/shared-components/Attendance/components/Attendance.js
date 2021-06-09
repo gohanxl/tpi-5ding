@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { AttendanceModal } from "./Attendance.modal";
 import { useSelector } from "react-redux";
+import { attendanceService } from "../api/attendance-service";
 
 export const Attendance = (props) => {
   const { classId, meetingId, signalRService } = props;
@@ -21,16 +22,24 @@ export const Attendance = (props) => {
     if (!isTeacher()) {
       setCronogramaId(cronoId);
       setModalOpened(true);
-      setTimeout(() => setModalOpened(false), 5000);
+      setTimeout(() => {
+        setModalOpened(false);
+      }, 5000);
     }
   };
 
   const checkAttendance = () => {
-    try {
-      signalRService.invokeCheckAttendance(classId, user.dbUser.Id, meetingId);
-    } catch (e) {
-      console.error(e);
-    }
+    attendanceService
+      .absentStudents(user.token, classId)
+      .then((res) => {
+        console.log(res.data);
+        signalRService.invokeCheckAttendance(
+          classId,
+          user.dbUser.Id,
+          meetingId
+        );
+      })
+      .catch((err) => console.error(err));
   };
 
   const iAmPresent = () => {
