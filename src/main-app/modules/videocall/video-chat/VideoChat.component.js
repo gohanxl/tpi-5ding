@@ -19,7 +19,7 @@ import { ChatWindow } from "../ChatWindow/ChatWindow.component";
 import { ParticipantListComponent } from "../participant-list/ParticipantList.component";
 import { ClosedCaptionComponent } from "../../../modules/videocall/closed-caption/ClosedCaption.component";
 import { VideoGridComponent } from "./VideoGridComponent.component";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setVideoRows } from "./store/video.actions";
 import { Attendance } from "../../shared-components/Attendance/components/Attendance";
 
@@ -30,6 +30,8 @@ export const VideoChat = (props) => {
   };
 
   const { name, uuid, meeting } = props;
+
+  const user = useSelector((state) => state.user.currentUser);
 
   const [signalRService, setSignalRService] = useState();
   let videoRows = [];
@@ -69,9 +71,10 @@ export const VideoChat = (props) => {
       console.log("SignalRHub Connected: " + isConnected);
       setSignalRService(signalRServ);
     }
-
-    initSignalR();
-  }, []);
+    if (user && user.dbUser) {
+      initSignalR();
+    }
+  }, [user]);
 
   useEffect(() => {
     if (signalRService && signalRService.isServiceStarted) {
