@@ -11,7 +11,7 @@ import {
   close_caption,
   toolbar_and_chat,
 } from "./VideoChat.module.scss";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Peer from "peerjs";
 import { SignalHandlerService } from "../services/signal-handler";
 import { VideoToolbar } from "../video-toolbar/VideoToolbar";
@@ -32,6 +32,7 @@ export const VideoChat = (props) => {
   const { name, uuid, meeting } = props;
 
   const user = useSelector((state) => state.user.currentUser);
+  const toolbarRef = useRef();
 
   const [signalRService, setSignalRService] = useState();
   let videoRows = [];
@@ -469,6 +470,7 @@ export const VideoChat = (props) => {
       isScreenSharingByRemote = false;
 
       localUserScreenSharingStream.getVideoTracks()[0].onended = (event) => {
+        toolbarRef.current.stopScreenShareFromBrowser();
         sendOtherToScreenClosed();
       };
 
@@ -528,6 +530,7 @@ export const VideoChat = (props) => {
           toggleChat={toggleChat}
           startShareScreen={startShareScreen}
           stopSharingScreen={stopSharingScreen}
+          ref={toolbarRef}
         />
         <Attendance
           classId={2}
