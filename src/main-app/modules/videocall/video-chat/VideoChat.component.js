@@ -5,15 +5,22 @@ import {
   user_name,
   videochat_container,
   chat_window,
-  video_and_toolbar,
+  cameras_and_screen,
+  cameras_row,
+  cameras_and_cc,
+  close_caption,
+  toolbar_and_chat,
 } from "./VideoChat.module.scss";
 import React, { useEffect, useState } from "react";
 import Peer from "peerjs";
 import { SignalHandlerService } from "../services/signal-handler";
-import { ChatWindowComponent } from "../chat-window/chat-window.component";
 import { VideoToolbar } from "../video-toolbar/VideoToolbar";
+import { ChatWindow } from "../ChatWindow/ChatWindow.component";
 import { ParticipantListComponent } from "../participant-list/ParticipantList.component";
-import { Attendance4Real } from "../../shared-components/Attendance/components/Attendance4Real";
+import { ClosedCaptionComponent } from "../../../modules/videocall/closed-caption/ClosedCaption.component";
+import { VideoGridComponent } from "./VideoGridComponent.component";
+import { useDispatch } from "react-redux";
+import { setVideoRows } from "./store/video.actions";
 
 export const VideoChat = (props) => {
   const ScreeenSharingStatus = {
@@ -24,6 +31,7 @@ export const VideoChat = (props) => {
   const { name, uuid, meeting } = props;
 
   const [signalRService, setSignalRService] = useState();
+  let videoRows = [];
 
   let userDisplayName = name;
   let localUserPeer = null;
@@ -42,6 +50,9 @@ export const VideoChat = (props) => {
   let localUserCallObject = null;
   let screenSharinUserName = null;
   let localUserScreenSharingStream = null;
+
+  // let videoRows = [];
+  let videoDivs = [];
 
   const displayMediaOptions = { video: { cursor: "always" }, audio: false };
 
@@ -108,10 +119,12 @@ export const VideoChat = (props) => {
       isScreenSharingEnabled = false;
       isScreenSharingByMe = false;
       screenSharinUserName = "";
+      document.getElementById("screenSharingObj").classList.add("d-none");
       stoppedSharingScreen();
     }
     if (status === ScreeenSharingStatus.Started) {
       screenSharinUserName = remoteUserName;
+      document.getElementById("screenSharingObj").classList.remove("d-none");
     }
   };
 
@@ -198,7 +211,7 @@ export const VideoChat = (props) => {
       HandelSucess(stream);
     } catch (exception) {
       HandelError(exception);
-    } //fafa
+    }
   };
 
   const HandelSucess = (stream) => {
@@ -243,7 +256,7 @@ export const VideoChat = (props) => {
       (item) => item.UserId === localUserId
     );
     if (peerConnection.length === 1) {
-      peerConnection[0].VideElement.srcObject = localUserStream;
+      peerConnection[0].VideoElement.srcObject = localUserStream;
     }
 
     call.answer(stream);
@@ -269,7 +282,13 @@ export const VideoChat = (props) => {
     return videoElement;
   };
 
-  const addUser = (stream, userId, callObject, userName, isLocalPaticipant) => {
+  const addUser = async (
+    stream,
+    userId,
+    callObject,
+    userName,
+    isLocalPaticipant
+  ) => {
     const videoElement = GetNewVideoElement();
     videoElement.muted = isLocalPaticipant;
     videoElement.srcObject = stream;
@@ -289,7 +308,7 @@ export const VideoChat = (props) => {
 
     const peerConnection = {};
     peerConnection.RoomId = meetingId;
-    peerConnection.VideElement = videoElement;
+    peerConnection.VideoElement = videoElement;
     peerConnection.UserId = userId;
     peerConnection.CallObject = callObject;
     peerConnection.DivElement = divElement;
@@ -297,8 +316,58 @@ export const VideoChat = (props) => {
     peerConnection.isLocalPaticipant = isLocalPaticipant;
     connections.push(peerConnection);
 
-    document.getElementById("video-container").appendChild(divElement);
+    videoDivs.push(divElement);
+    divideVideosInRows();
   };
+
+  const divideVideosInRows = () => {
+    const rows = [];
+    const videoDivsCount = videoDivs.length;
+    const initialRowsCount = 2;
+    let rowsQuantity = videoDivsCount > initialRowsCount ? initialRowsCount : 1;
+    //const maxRowsCount = 10;
+    const videoDivsCopy = [...videoDivs];
+
+    const camerasPerRow = Math.round(videoDivsCount / rowsQuantity);
+    const remainingCamera = videoDivsCount % rowsQuantity;
+
+    while (rowsQuantity > 0) {
+      rows.push({
+        maxCamsCount:
+          rowsQuantity === 1 && remainingCamera
+            ? remainingCamera
+            : camerasPerRow,
+      });
+      rowsQuantity--;
+    }
+
+    rows.forEach((row, i) => {
+      if (row.maxCamsCount === 1 && camerasPerRow > 2) {
+        rows[i - 1].maxCamsCount--;
+        row++;
+      }
+    });
+
+    rows.forEach((row) => {
+      const divEl = document.createElement("div");
+      divEl.classList.add(cameras_row);
+      let remainingCams = row.maxCamsCount;
+
+      while (remainingCams > 0) {
+        const videoCam = videoDivsCopy.shift();
+        if (videoCam) {
+          divEl.appendChild(videoCam);
+          remainingCams--;
+        }
+      }
+      row.divElement = divEl;
+    });
+
+    videoRows = rows;
+    dispatch(setVideoRows(rows));
+  };
+
+  const dispatch = useDispatch();
 
   const sendNotificationOfJoining = (id) => {
     localUserId = id;
@@ -428,20 +497,26 @@ export const VideoChat = (props) => {
     );
   };
 
-  /**/
-  /**/
-  /**/
-  /**/
-  /**/
-  /**/
+  console.log(
+    "?? ~ file: VideoChat.component.js ~ line 349 ~ divideVideosInRows ~ videoRows",
+    videoRows
+  );
 
   return (
     <div className={videochat_container}>
-      <div className={video_and_toolbar}>
+      <div className={cameras_and_screen}>
         <div className="screenSharingContainer" id="screenSharing-container">
-          <video id="screenSharingObj"></video>
+          <video className="d-none" id="screenSharingObj" autoPlay />
         </div>
-
+        <div className={cameras_and_cc}>
+          <VideoGridComponent />
+          <div className={close_caption}>
+            <ClosedCaptionComponent name={userDisplayName} meeting="1" />
+          </div>
+          <div id="errorMsg"></div>
+        </div>
+      </div>
+      <div className={toolbar_and_chat}>
         <VideoToolbar
           muteUnmute={muteUnmute}
           videoOnOff={videoOnOff}
@@ -451,29 +526,24 @@ export const VideoChat = (props) => {
           stopSharingScreen={stopSharingScreen}
         />
         <Attendance4Real
-          classId={2}
-          meetingId={meetingId}
-          signalRService={signalRService}
+            classId={2}
+            meetingId={meetingId}
+            signalRService={signalRService}
         />
-        <div>
-          <p>Meet Id = {uuid}</p>
-          <div className={cameras_container} id="video-container"></div>
-          <div id="errorMsg"></div>
+        <div id="chat_window" className={chat_window}>
+          <ChatWindow
+            name={name}
+            meeting={meetingId}
+            signalRService={signalRService}
+          />
         </div>
       </div>
-      <div id="chat_window" className={chat_window}>
-        <ChatWindowComponent
-          name={name}
-          meeting={meetingId}
-          signalRService={signalRService}
-        />
-      </div>
-      <ParticipantListComponent
+      {/* <ParticipantListComponent
         name={name}
         meetingId={meetingId}
         signalRService={signalRService}
         connections={connections}
-      />
+      /> */}
     </div>
   );
 };
