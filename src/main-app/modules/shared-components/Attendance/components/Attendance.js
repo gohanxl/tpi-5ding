@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { AttendanceModal } from "./Attendance.modal";
 import { useSelector } from "react-redux";
 import { attendanceService } from "../api/attendance-service";
+import "./Attendance.styles.scss";
 
 export const Attendance = (props) => {
   const { classId, meetingId, signalRService } = props;
@@ -64,7 +65,10 @@ export const Attendance = (props) => {
   return (
     <div>
       {isTeacher() && (
-        <button className="button is-info" onClick={checkAttendance}>
+        <button
+          className="button is-info attendance_button"
+          onClick={checkAttendance}
+        >
           Tomar Lista
         </button>
       )}
