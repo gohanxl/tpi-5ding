@@ -11,7 +11,7 @@ import {
   close_caption,
   toolbar_and_chat,
 } from "./VideoChat.module.scss";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Peer from "peerjs";
 import { SignalHandlerService } from "../services/signal-handler";
 import { VideoToolbar } from "../video-toolbar/VideoToolbar";
@@ -19,8 +19,9 @@ import { ChatWindow } from "../ChatWindow/ChatWindow.component";
 import { ParticipantListComponent } from "../participant-list/ParticipantList.component";
 import { ClosedCaptionComponent } from "../../../modules/videocall/closed-caption/ClosedCaption.component";
 import { VideoGridComponent } from "./VideoGridComponent.component";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setVideoRows } from "./store/video.actions";
+import { Attendance } from "../../shared-components/Attendance/components/Attendance";
 
 export const VideoChat = (props) => {
   const ScreeenSharingStatus = {
@@ -29,6 +30,10 @@ export const VideoChat = (props) => {
   };
 
   const { name, uuid, meeting } = props;
+
+  const user = useSelector((state) => state.user.currentUser);
+  const toolbarRef = useRef();
+  const ccRef = useRef();
 
   const [signalRService, setSignalRService] = useState();
   let videoRows = [];
@@ -68,9 +73,10 @@ export const VideoChat = (props) => {
       console.log("SignalRHub Connected: " + isConnected);
       setSignalRService(signalRServ);
     }
-
-    initSignalR();
-  }, []);
+    if (user && user.dbUser) {
+      initSignalR();
+    }
+  }, [user]);
 
   useEffect(() => {
     if (signalRService && signalRService.isServiceStarted) {
@@ -427,8 +433,10 @@ export const VideoChat = (props) => {
   const muteUnmute = () => {
     if (isMute) {
       isMute = localUserStream.getAudioTracks()[0].enabled = false;
+      ccRef.current.muteClosedCaption();
     } else {
       isMute = localUserStream.getAudioTracks()[0].enabled = true;
+      ccRef.current.unMuteClosedCaption();
     }
     return isMute;
   };
@@ -465,6 +473,7 @@ export const VideoChat = (props) => {
       isScreenSharingByRemote = false;
 
       localUserScreenSharingStream.getVideoTracks()[0].onended = (event) => {
+        toolbarRef.current.stopScreenShareFromBrowser();
         sendOtherToScreenClosed();
       };
 
@@ -511,7 +520,11 @@ export const VideoChat = (props) => {
         <div className={cameras_and_cc}>
           <VideoGridComponent />
           <div className={close_caption}>
-            <ClosedCaptionComponent name={userDisplayName} meeting="1" />
+            <ClosedCaptionComponent
+              name={userDisplayName}
+              meeting="1"
+              ref={ccRef}
+            />
           </div>
           <div id="errorMsg"></div>
         </div>
@@ -524,6 +537,12 @@ export const VideoChat = (props) => {
           toggleChat={toggleChat}
           startShareScreen={startShareScreen}
           stopSharingScreen={stopSharingScreen}
+          ref={toolbarRef}
+        />
+        <Attendance
+          classId={2}
+          meetingId={meetingId}
+          signalRService={signalRService}
         />
         <div id="chat_window" className={chat_window}>
           <ChatWindow
@@ -531,14 +550,14 @@ export const VideoChat = (props) => {
             meeting={meetingId}
             signalRService={signalRService}
           />
+          <ParticipantListComponent
+            name={name}
+            meetingId={meetingId}
+            signalRService={signalRService}
+            connections={connections}
+          />
         </div>
       </div>
-      {/* <ParticipantListComponent
-        name={name}
-        meetingId={meetingId}
-        signalRService={signalRService}
-        connections={connections}
-      /> */}
     </div>
   );
 };
