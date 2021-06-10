@@ -1,0 +1,28 @@
+@import "../../../../App.styles.scss";
+$dashboard-1: url(../../../../assets/img/school-things.png);
+
+.dashboard-container {
+  background-image: $dashboard-1;
+  background-size: 50%;
+  background-repeat: no-repeat;
+  background-position: right top;
+  height: 100%;
+}
+
+.link-container {
+  width: 35%;
+  margin-left: 3em;
+}
+
+.title-container {
+  padding-left: 5%;
+  padding-top: 5%;
+}
+
+.dashboard-greeting {
+  color: $edu-dark-primary !important;
+}
+
+.dashboard-name {
+  color: $edu-darker-primary !important;
+}
