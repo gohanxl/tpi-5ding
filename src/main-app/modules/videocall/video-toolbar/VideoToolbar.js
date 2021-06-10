@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState } from "react";
+import React, { forwardRef, useImperativeHandle, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMicrophoneAlt } from "@fortawesome/free-solid-svg-icons";
 import { faMicrophoneSlash } from "@fortawesome/free-solid-svg-icons";
@@ -11,17 +11,25 @@ import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { faStop } from "@fortawesome/free-solid-svg-icons";
 import { toolbar_buttons } from "./VideoToolbar.module.scss";
 
-export const VideoToolbar = ({
-  videoOnOff,
-  muteUnmute,
-  endCall,
-  toggleChat,
-  startShareScreen,
-  stopSharingScreen,
-}) => {
+export const VideoToolbar = forwardRef((props, ref) => {
+  const {
+    videoOnOff,
+    muteUnmute,
+    endCall,
+    toggleChat,
+    startShareScreen,
+    stopSharingScreen,
+  } = props;
+
   const [isVideoOn, setIsVideoOn] = useState(true);
   const [isMute, setIsMute] = useState(false);
   const [isScreenShareOn, setIsScreenShareOn] = useState(false);
+
+  useImperativeHandle(ref, () => ({
+    stopScreenShareFromBrowser() {
+      setIsScreenShareOn(false);
+    },
+  }));
 
   const childMute = () => {
     setIsMute(!isMute);
@@ -91,4 +99,4 @@ export const VideoToolbar = ({
       )}
     </div>
   );
-};
+});

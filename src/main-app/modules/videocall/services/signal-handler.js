@@ -233,4 +233,30 @@ export class SignalHandlerService {
       })
       .catch((error) => console.log(error));
   };
+
+  invokeCheckAttendance = (classId, userId, meetingId) => {
+    this.hubConnection
+      .invoke("CheckAttendance", classId, userId, meetingId)
+      .then(() => {
+        console.log("Asked for attendance broadcasted successfully!");
+      })
+      .catch((error) => console.log(error));
+  };
+
+  listenAskForAttendance = (method) => {
+    this.hubConnection.on("AskForAttendance", (cronogramaId) => {
+      if (method !== null) {
+        method(cronogramaId);
+      }
+    });
+  };
+
+  invokeIAmPresent = (cronogramaId, userId) => {
+    this.hubConnection
+      .invoke("IAmPresent", cronogramaId, userId)
+      .then(() => {
+        console.log("I am present broadcasted successfully!");
+      })
+      .catch((error) => console.log(error));
+  };
 }
