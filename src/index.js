@@ -13,7 +13,8 @@ const renderApp = () =>
   render(
     <HashRouter history={browserHistory}>
       <App />
-    </HashRouter>
+    </HashRouter>,
+    document.getElementById("root")
   );
 
 renderApp();
