@@ -19,7 +19,7 @@ export class SignalHandlerService {
 
   asyncConnection = () => {
     this.hubConnection = new SignalR.HubConnectionBuilder()
-      .withUrl("https://localhost:5001/SanvaadConnection")
+      .withUrl(process.env.REACT_APP_HUB_URL)
       .build();
 
     return this.hubConnection
@@ -42,7 +42,7 @@ export class SignalHandlerService {
       }
     } else {
       this.hubConnection = new SignalR.HubConnectionBuilder()
-        .withUrl("https://localhost:5001/SanvaadConnection")
+        .withUrl(process.env.REACT_APP_HUB_URL)
         .build();
 
       this.hubConnection

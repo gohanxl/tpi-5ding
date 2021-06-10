@@ -424,9 +424,9 @@ export const VideoChat = (props) => {
 
   const getPeerObject = () => {
     return new Peer(undefined, {
-      path: "/",
-      host: "localhost",
-      port: "3001",
+      path: process.env.REACT_APP_PEERJS_PATH,
+      host: process.env.REACT_APP_PEERJS_HOST,
+      port: process.env.REACT_APP_PEERJS_PORT,
     });
   };
 
