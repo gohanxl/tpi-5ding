@@ -259,4 +259,21 @@ export class SignalHandlerService {
       })
       .catch((error) => console.log(error));
   };
+
+  invokeRemoveParticipant = (roomId, userId) => {
+    this.hubConnection
+      .invoke("RemoveParticipant", roomId, userId)
+      .then(() => {
+        console.log(`Removed participant ${userId} broadcasted successfully!`);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  listenIAmExpelled = (method) => {
+    this.hubConnection.on("IAmExpelled", () => {
+      if (method !== null) {
+        method();
+      }
+    });
+  };
 }

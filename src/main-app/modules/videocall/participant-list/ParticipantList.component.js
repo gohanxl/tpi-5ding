@@ -1,15 +1,11 @@
 /* eslint-disable */
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBan,
-  faMicrophoneSlash,
-  faPhoneSlash,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBan, faMicrophoneSlash } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 
 export const ParticipantListComponent = (props) => {
-  const { signalRService, toggle } = props;
+  const { signalRService, toggle, meetingId } = props;
   const [localConnections, setLocalConnections] = useState([]);
   const [isOpened, setIsOpened] = useState(false);
   const user = useSelector((state) => state.user.currentUser);
@@ -38,14 +34,16 @@ export const ParticipantListComponent = (props) => {
 
   const muteAllParticipants = () => {
     console.log("ACA MUTEE A TODOS");
+    console.log(meetingId);
   };
 
   const muteParticipant = (uid) => {
     console.log(`ACA MUTEO SOLO AL UID: ${uid}`);
+    console.log(meetingId);
   };
 
   const expelParticipant = (uid) => {
-    console.log(`ACA expulso SOLO AL UID: ${uid}`);
+    signalRService.invokeRemoveParticipant(meetingId, uid);
   };
 
   const isTeacher = () => {

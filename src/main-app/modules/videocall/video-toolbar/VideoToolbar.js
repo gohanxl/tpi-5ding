@@ -21,6 +21,7 @@ export const VideoToolbar = forwardRef((props, ref) => {
     signalRService,
     startShareScreen,
     stopSharingScreen,
+    meetingId,
   } = props;
 
   const [isVideoOn, setIsVideoOn] = useState(true);
@@ -108,6 +109,7 @@ export const VideoToolbar = forwardRef((props, ref) => {
         </button>
       )}
       <ParticipantListComponent
+        meetingId={meetingId}
         isOpened={modalOpened}
         signalRService={signalRService}
         toggle={toggleParticipantModal}

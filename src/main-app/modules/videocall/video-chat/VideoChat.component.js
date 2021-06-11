@@ -94,6 +94,7 @@ export const VideoChat = (props) => {
     signalRService.listenScreeenSharingStatusWithUserList(
       onScreeenSharingStatusWithUserList
     );
+    signalRService.listenIAmExpelled(endCall);
   };
 
   const onScreeenSharingStatusWithUserList = (userIds, status) => {
@@ -531,6 +532,7 @@ export const VideoChat = (props) => {
       </div>
       <div className={toolbar_and_chat}>
         <VideoToolbar
+          meetingId={meetingId}
           muteUnmute={muteUnmute}
           videoOnOff={videoOnOff}
           endCall={endCall}
