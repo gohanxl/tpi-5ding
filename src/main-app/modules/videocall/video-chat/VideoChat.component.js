@@ -520,11 +520,11 @@ export const VideoChat = (props) => {
         <div className={cameras_and_cc}>
           <VideoGridComponent />
           <div className={close_caption}>
-            <ClosedCaptionComponent
-              name={userDisplayName}
-              meeting="1"
-              ref={ccRef}
-            />
+            {/*<ClosedCaptionComponent*/}
+            {/*  name={userDisplayName}*/}
+            {/*  meeting="1"*/}
+            {/*  ref={ccRef}*/}
+            {/*/>*/}
           </div>
           <div id="errorMsg"></div>
         </div>
@@ -537,6 +537,7 @@ export const VideoChat = (props) => {
           toggleChat={toggleChat}
           startShareScreen={startShareScreen}
           stopSharingScreen={stopSharingScreen}
+          signalRService={signalRService}
           ref={toolbarRef}
         />
         <Attendance
@@ -549,12 +550,6 @@ export const VideoChat = (props) => {
             name={name}
             meeting={meetingId}
             signalRService={signalRService}
-          />
-          <ParticipantListComponent
-            name={name}
-            meetingId={meetingId}
-            signalRService={signalRService}
-            connections={connections}
           />
         </div>
       </div>

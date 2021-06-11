@@ -9,14 +9,16 @@ import { faPhoneSlash } from "@fortawesome/free-solid-svg-icons";
 import { faComment } from "@fortawesome/free-solid-svg-icons";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { faStop } from "@fortawesome/free-solid-svg-icons";
+import { faUserFriends } from "@fortawesome/free-solid-svg-icons";
 import { toolbar_buttons } from "./VideoToolbar.module.scss";
+import { ParticipantListComponent } from "../participant-list/ParticipantList.component";
 
 export const VideoToolbar = forwardRef((props, ref) => {
   const {
     videoOnOff,
     muteUnmute,
     endCall,
-    toggleChat,
+    signalRService,
     startShareScreen,
     stopSharingScreen,
   } = props;
@@ -24,6 +26,7 @@ export const VideoToolbar = forwardRef((props, ref) => {
   const [isVideoOn, setIsVideoOn] = useState(true);
   const [isMute, setIsMute] = useState(false);
   const [isScreenShareOn, setIsScreenShareOn] = useState(false);
+  const [modalOpened, setModalOpened] = useState(false);
 
   useImperativeHandle(ref, () => ({
     stopScreenShareFromBrowser() {
@@ -57,6 +60,10 @@ export const VideoToolbar = forwardRef((props, ref) => {
     stopSharingScreen();
   };
 
+  const toggleParticipantModal = () => {
+    setModalOpened((prevOpened) => !prevOpened);
+  };
+
   return (
     <div className={toolbar_buttons}>
       <button
@@ -76,8 +83,11 @@ export const VideoToolbar = forwardRef((props, ref) => {
       <button className="button is-danger" id="endCallButton" onClick={endCall}>
         <FontAwesomeIcon icon={faPhoneSlash} />
       </button>
-      <button className="button is-info" onClick={toggleChat}>
-        <FontAwesomeIcon icon={faComment} />
+      {/*<button className="button is-info" onClick={toggleChat}>*/}
+      {/*  <FontAwesomeIcon icon={faComment} />*/}
+      {/*</button>*/}
+      <button className="button is-info" onClick={toggleParticipantModal}>
+        <FontAwesomeIcon icon={faUserFriends} />
       </button>
       {!isScreenShareOn && (
         <button
@@ -97,6 +107,11 @@ export const VideoToolbar = forwardRef((props, ref) => {
           <FontAwesomeIcon icon={faStop} />
         </button>
       )}
+      <ParticipantListComponent
+        isOpened={modalOpened}
+        signalRService={signalRService}
+        toggle={toggleParticipantModal}
+      />
     </div>
   );
 });
