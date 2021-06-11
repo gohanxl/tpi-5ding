@@ -276,4 +276,24 @@ export class SignalHandlerService {
       }
     });
   };
+
+  invokeGetSelfUid = () => {
+    this.hubConnection
+      .invoke("GetSelfUid")
+      .then(() => {
+        console.log("Trying to get self uid successfully!");
+      })
+      .catch((error) => console.log(error));
+  };
+
+  listenGetSelfUid = (method) => {
+    this.hubConnection.on("GetSelfUid", (uid) => {
+      if (method !== null) {
+        method(uid);
+        console.log("Received get self uid and method executed.", uid);
+      } else {
+        console.log("Received get self uid and method not executed.", uid);
+      }
+    });
+  };
 }

@@ -8,18 +8,28 @@ export const ParticipantListComponent = (props) => {
   const { signalRService, toggle, meetingId } = props;
   const [localConnections, setLocalConnections] = useState([]);
   const [isOpened, setIsOpened] = useState(false);
+  const [myUid, setMyUid] = useState();
   const user = useSelector((state) => state.user.currentUser);
 
   useEffect(() => {
     if (signalRService) {
       signalRService.startConnection(null);
       signalRService.listenUpdateParticipants(updateParticipants);
+      signalRService.listenGetSelfUid(onReceiveGetSelfUid);
     }
   }, [signalRService]);
 
   useEffect(() => {
+    if (signalRService && !myUid) {
+      signalRService.invokeGetSelfUid();
+    }
     setIsOpened(props.isOpened);
   }, [props]);
+
+  const onReceiveGetSelfUid = (uid) => {
+    console.log(`Recibi este uid: ${uid}`);
+    setMyUid(uid);
+  };
 
   const toggleChild = (e) => {
     e.preventDefault();
@@ -81,12 +91,12 @@ export const ParticipantListComponent = (props) => {
                 <li key={user.uid}>
                   <div className="row">
                     <p className="col-6">{user.displayName}</p>
-                    {isTeacher() && (
+                    {isTeacher() && (myUid ? user.uid !== myUid : true) && (
                       <div className="col-1 level">
                         <div className="level-left">
                           <button
                             className="button is-danger level-item"
-                            id={`mutear_${user.uid}`}
+                            id={`mutear_${user.displayName}`}
                             title="Mutear Alumno"
                             onClick={(event) => muteParticipant(user.uid)}
                           >
