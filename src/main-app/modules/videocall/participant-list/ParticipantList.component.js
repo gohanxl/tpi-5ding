@@ -80,8 +80,18 @@ export const ParticipantListComponent = (props) => {
               Mutear a Todos
             </button>
           )}
-
           <br />
+          <div className="row">
+            <p className="col-6">
+              <strong>Nombre</strong>
+            </p>
+            <p className="col-2">
+              <strong>Status</strong>
+            </p>
+            <p className="col-1">
+              <strong>Acciones</strong>
+            </p>
+          </div>
           <ul>
             {localConnections &&
               localConnections.map((user) => (
