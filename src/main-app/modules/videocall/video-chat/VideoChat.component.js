@@ -528,7 +528,7 @@ export const VideoChat = (props) => {
           <video className="d-none" id="screenSharingObj" autoPlay />
         </div>
         <div className={cameras_and_cc} id="camarastest">
-          <VideoGridComponent />
+          {/*<VideoGridComponent />*/}
           <div className={close_caption}>
             <ClosedCaptionComponent
               name={userDisplayName}
