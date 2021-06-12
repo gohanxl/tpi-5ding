@@ -72,10 +72,6 @@ const MainApp = () => {
     return <div>Oops... {error.message}</div>;
   }
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
   const routesRoleConfig = user
     ? roleAccessibilty.getRoutesByRoles(user[rolesUrl])
     : {};
@@ -106,26 +102,26 @@ const MainApp = () => {
               </div>
 
               {isAuthenticated ? (
-                <div class="navbar-end">
-                  <div class="navbar-item has-dropdown is-hoverable">
-                    <a class="navbar-link is-arrowless">
+                <div className="navbar-end">
+                  <div className="navbar-item has-dropdown is-hoverable">
+                    <a className="navbar-link is-arrowless">
                       <FontAwesomeIcon color="white" size="lg" icon={faBell} />
                     </a>
-                    <div class="navbar-dropdown is-right">
-                      <a class="navbar-item">Ir a clases</a>
-                      <a class="navbar-item">Examen de lengua</a>
-                      <a class="navbar-item">Entregar tarea de Historia</a>
+                    <div className="navbar-dropdown is-right">
+                      <a className="navbar-item">Ir a clases</a>
+                      <a className="navbar-item">Examen de lengua</a>
+                      <a className="navbar-item">Entregar tarea de Historia</a>
                     </div>
                   </div>
-                  <div class="navbar-item has-dropdown is-hoverable">
-                    <a class="navbar-link is-arrowless">
+                  <div className="navbar-item has-dropdown is-hoverable">
+                    <a className="navbar-link is-arrowless">
                       <FontAwesomeIcon color="white" size="lg" icon={faUser} />
                     </a>
-                    <div class="navbar-dropdown is-right">
-                      <a class="navbar-item">Mi perfil</a>
-                      <hr class="dropdown-divider"></hr>
+                    <div className="navbar-dropdown is-right">
+                      <a className="navbar-item">Mi perfil</a>
+                      <hr className="dropdown-divider"></hr>
                       <a
-                        class="navbar-item"
+                        className="navbar-item"
                         onClick={() =>
                           logout({ returnTo: window.location.origin })
                         }
@@ -136,8 +132,8 @@ const MainApp = () => {
                   </div>
                 </div>
               ) : (
-                <div class="navbar-end">
-                  <div class="navbar-item">
+                <div className="navbar-end">
+                  <div className="navbar-item">
                     <button
                       className="btn btn-warning"
                       onClick={() =>
@@ -155,7 +151,11 @@ const MainApp = () => {
             <div>
               <Sidebar currentRole={currentRole} />
             </div>
-            <div className={`app-container`}>
+            <div
+              className={
+                "app-container" + (shouldHideFooter ? " hide-footer" : "")
+              }
+            >
               <div className="app-content">
                 {isAuthenticated && (
                   <MainAppRoutes

@@ -18,7 +18,6 @@ class RoleAccesibilty {
 
   getRoutesByRoles([role]) {
     const currentRole = roles[role.toUpperCase()];
-    console.log(role);
     const roleRoutes = this.routes[currentRole];
     return roleRoutes;
   }
