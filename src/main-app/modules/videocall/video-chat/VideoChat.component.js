@@ -95,6 +95,7 @@ export const VideoChat = (props) => {
       onScreeenSharingStatusWithUserList
     );
     signalRService.listenIAmExpelled(endCall);
+    signalRService.listenIAmMuted(muteByTeacher);
   };
 
   const onScreeenSharingStatusWithUserList = (userIds, status) => {
@@ -429,6 +430,12 @@ export const VideoChat = (props) => {
       host: process.env.REACT_APP_PEERJS_HOST,
       port: process.env.REACT_APP_PEERJS_PORT,
     });
+  };
+
+  const muteByTeacher = () => {
+    isMute = localUserStream.getAudioTracks()[0].enabled = false;
+    ccRef.current.muteClosedCaption();
+    toolbarRef.current.muteByTeacher();
   };
 
   const muteUnmute = () => {

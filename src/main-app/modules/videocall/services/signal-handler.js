@@ -277,6 +277,23 @@ export class SignalHandlerService {
     });
   };
 
+  invokeMuteParticipant = (roomId, userId) => {
+    this.hubConnection
+      .invoke("MuteParticipant", roomId, userId)
+      .then(() => {
+        console.log(`Mute participant ${userId} broadcasted successfully!`);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  listenIAmMuted = (method) => {
+    this.hubConnection.on("IAmMuted", () => {
+      if (method !== null) {
+        method();
+      }
+    });
+  };
+
   invokeGetSelfUid = () => {
     this.hubConnection
       .invoke("GetSelfUid")

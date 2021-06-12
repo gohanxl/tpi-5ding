@@ -33,6 +33,9 @@ export const VideoToolbar = forwardRef((props, ref) => {
     stopScreenShareFromBrowser() {
       setIsScreenShareOn(false);
     },
+    muteByTeacher() {
+      setIsMute(true);
+    },
   }));
 
   const childMute = () => {

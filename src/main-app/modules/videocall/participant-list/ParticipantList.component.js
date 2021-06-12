@@ -48,8 +48,7 @@ export const ParticipantListComponent = (props) => {
   };
 
   const muteParticipant = (uid) => {
-    console.log(`ACA MUTEO SOLO AL UID: ${uid}`);
-    console.log(meetingId);
+    signalRService.invokeMuteParticipant(meetingId, uid);
   };
 
   const expelParticipant = (uid) => {
