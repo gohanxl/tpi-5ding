@@ -313,4 +313,13 @@ export class SignalHandlerService {
       }
     });
   };
+
+  invokeMuteAllParticipant = (roomId) => {
+    this.hubConnection
+      .invoke("MuteAllParticipant", roomId)
+      .then(() => {
+        console.log("Mute all participants broadcast successfully!");
+      })
+      .catch((error) => console.log(error));
+  };
 }

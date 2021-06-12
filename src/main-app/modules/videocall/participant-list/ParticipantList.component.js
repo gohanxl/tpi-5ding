@@ -38,13 +38,11 @@ export const ParticipantListComponent = (props) => {
   };
 
   const updateParticipants = (users) => {
-    console.log(users);
     setLocalConnections(users);
   };
 
   const muteAllParticipants = () => {
-    console.log("ACA MUTEE A TODOS");
-    console.log(meetingId);
+    signalRService.invokeMuteAllParticipant(meetingId);
   };
 
   const muteParticipant = (uid) => {

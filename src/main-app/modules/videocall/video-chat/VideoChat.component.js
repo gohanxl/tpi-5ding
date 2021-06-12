@@ -434,17 +434,17 @@ export const VideoChat = (props) => {
 
   const muteByTeacher = () => {
     isMute = localUserStream.getAudioTracks()[0].enabled = false;
-    ccRef.current.muteClosedCaption();
+    // ccRef.current.muteClosedCaption();
     toolbarRef.current.muteByTeacher();
   };
 
   const muteUnmute = () => {
     if (isMute) {
       isMute = localUserStream.getAudioTracks()[0].enabled = false;
-      ccRef.current.muteClosedCaption();
+      // ccRef.current.muteClosedCaption();
     } else {
       isMute = localUserStream.getAudioTracks()[0].enabled = true;
-      ccRef.current.unMuteClosedCaption();
+      // ccRef.current.unMuteClosedCaption();
     }
     return isMute;
   };
