@@ -45,7 +45,7 @@ export const Attendance = (props) => {
 
   const iAmPresent = () => {
     try {
-      signalRService.invokeIAmPresent(cronogramaId, user.dbUser.Id);
+      signalRService.invokeIAmPresent(cronogramaId, user.dbUser.Id, meetingId);
       setModalOpened(false);
     } catch (e) {
       console.error(e);

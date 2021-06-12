@@ -65,6 +65,7 @@ export const VideoToolbar = forwardRef((props, ref) => {
   };
 
   const toggleParticipantModal = () => {
+    signalRService.invokeUpdateParticipants(meetingId);
     setModalOpened((prevOpened) => !prevOpened);
   };
 

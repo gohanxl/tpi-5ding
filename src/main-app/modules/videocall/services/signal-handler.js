@@ -251,9 +251,9 @@ export class SignalHandlerService {
     });
   };
 
-  invokeIAmPresent = (cronogramaId, userId) => {
+  invokeIAmPresent = (cronogramaId, userId, roomId) => {
     this.hubConnection
-      .invoke("IAmPresent", cronogramaId, userId)
+      .invoke("IAmPresent", cronogramaId, userId, roomId)
       .then(() => {
         console.log("I am present broadcasted successfully!");
       })
@@ -319,6 +319,15 @@ export class SignalHandlerService {
       .invoke("MuteAllParticipant", roomId)
       .then(() => {
         console.log("Mute all participants broadcast successfully!");
+      })
+      .catch((error) => console.log(error));
+  };
+
+  invokeUpdateParticipants = (roomId) => {
+    this.hubConnection
+      .invoke("UpdateParticipants", roomId)
+      .then(() => {
+        console.log("Get participants list successfully!");
       })
       .catch((error) => console.log(error));
   };

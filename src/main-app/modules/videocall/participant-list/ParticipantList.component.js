@@ -89,6 +89,11 @@ export const ParticipantListComponent = (props) => {
                   <div className="row">
                     <p className="col-6">{user.displayName}</p>
                     {isTeacher() && (myUid ? user.uid !== myUid : true) && (
+                      <div className="col-2">
+                        <p>{user?.isPresent ? "Presente" : "Ausente"}</p>
+                      </div>
+                    )}
+                    {isTeacher() && (myUid ? user.uid !== myUid : true) && (
                       <div className="col-1 level">
                         <div className="level-left">
                           <button
