@@ -85,12 +85,16 @@ export const ParticipantListComponent = (props) => {
             <p className="col-6">
               <strong>Nombre</strong>
             </p>
-            <p className="col-2">
-              <strong>Status</strong>
-            </p>
-            <p className="col-1">
-              <strong>Acciones</strong>
-            </p>
+            {isTeacher() && (
+              <>
+                <p className="col-2">
+                  <strong>Status</strong>
+                </p>
+                <p className="col-1">
+                  <strong>Acciones</strong>
+                </p>
+              </>
+            )}
           </div>
           <ul>
             {localConnections &&
