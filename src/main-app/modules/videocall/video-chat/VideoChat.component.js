@@ -185,9 +185,9 @@ export const VideoChat = (props) => {
   const onRemoteUserClosed = (userId) => {
     const peerConnection = connections.filter((item) => item.UserId === userId);
     if (peerConnection.length === 1) {
-      document
-        .getElementById("video-container")
-        .removeChild(peerConnection[0].DivElement);
+      const indexDiv = videoDivs.indexOf(peerConnection.DivElement);
+      videoDivs.splice(indexDiv, 1);
+      divideVideosInRows();
       const index = connections.indexOf(peerConnection[0], 0);
       connections = connections.splice(index, 1);
     }
@@ -306,6 +306,7 @@ export const VideoChat = (props) => {
 
     const divElement = document.createElement("div");
     divElement.setAttribute("class", user_camera_container);
+    divElement.setAttribute("id", userId);
 
     const spanElement = document.createElement("span");
     spanElement.innerText = `${userName}`;
