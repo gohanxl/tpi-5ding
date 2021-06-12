@@ -326,7 +326,8 @@ export const VideoChat = (props) => {
     connections.push(peerConnection);
 
     videoDivs.push(divElement);
-    divideVideosInRows();
+    document.getElementById("camarastest").appendChild(divElement);
+    // divideVideosInRows();
   };
 
   const divideVideosInRows = () => {
@@ -435,17 +436,17 @@ export const VideoChat = (props) => {
 
   const muteByTeacher = () => {
     isMute = localUserStream.getAudioTracks()[0].enabled = false;
-    //ccRef.current.muteClosedCaption();
+    ccRef.current.muteClosedCaption();
     toolbarRef.current.muteByTeacher();
   };
 
   const muteUnmute = () => {
     if (isMute) {
       isMute = localUserStream.getAudioTracks()[0].enabled = false;
-      //ccRef.current.muteClosedCaption();
+      ccRef.current.muteClosedCaption();
     } else {
       isMute = localUserStream.getAudioTracks()[0].enabled = true;
-      //ccRef.current.unMuteClosedCaption();
+      ccRef.current.unMuteClosedCaption();
     }
     return isMute;
   };
@@ -526,14 +527,14 @@ export const VideoChat = (props) => {
         <div className="screenSharingContainer" id="screenSharing-container">
           <video className="d-none" id="screenSharingObj" autoPlay />
         </div>
-        <div className={cameras_and_cc}>
+        <div className={cameras_and_cc} id="camarastest">
           <VideoGridComponent />
           <div className={close_caption}>
-            {/* <ClosedCaptionComponent
+            <ClosedCaptionComponent
               name={userDisplayName}
               meeting="1"
               ref={ccRef}
-            /> */}
+            />
           </div>
           <div id="errorMsg"></div>
         </div>
