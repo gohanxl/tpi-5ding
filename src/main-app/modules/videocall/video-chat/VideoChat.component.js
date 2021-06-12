@@ -94,6 +94,8 @@ export const VideoChat = (props) => {
     signalRService.listenScreeenSharingStatusWithUserList(
       onScreeenSharingStatusWithUserList
     );
+    signalRService.listenIAmExpelled(endCall);
+    signalRService.listenIAmMuted(muteByTeacher);
   };
 
   const onScreeenSharingStatusWithUserList = (userIds, status) => {
@@ -430,6 +432,12 @@ export const VideoChat = (props) => {
     });
   };
 
+  const muteByTeacher = () => {
+    isMute = localUserStream.getAudioTracks()[0].enabled = false;
+    ccRef.current.muteClosedCaption();
+    toolbarRef.current.muteByTeacher();
+  };
+
   const muteUnmute = () => {
     if (isMute) {
       isMute = localUserStream.getAudioTracks()[0].enabled = false;
@@ -531,12 +539,14 @@ export const VideoChat = (props) => {
       </div>
       <div className={toolbar_and_chat}>
         <VideoToolbar
+          meetingId={meetingId}
           muteUnmute={muteUnmute}
           videoOnOff={videoOnOff}
           endCall={endCall}
           toggleChat={toggleChat}
           startShareScreen={startShareScreen}
           stopSharingScreen={stopSharingScreen}
+          signalRService={signalRService}
           ref={toolbarRef}
         />
         <Attendance
@@ -549,12 +559,6 @@ export const VideoChat = (props) => {
             name={name}
             meeting={meetingId}
             signalRService={signalRService}
-          />
-          <ParticipantListComponent
-            name={name}
-            meetingId={meetingId}
-            signalRService={signalRService}
-            connections={connections}
           />
         </div>
       </div>

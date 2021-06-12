@@ -251,11 +251,83 @@ export class SignalHandlerService {
     });
   };
 
-  invokeIAmPresent = (cronogramaId, userId) => {
+  invokeIAmPresent = (cronogramaId, userId, roomId) => {
     this.hubConnection
-      .invoke("IAmPresent", cronogramaId, userId)
+      .invoke("IAmPresent", cronogramaId, userId, roomId)
       .then(() => {
         console.log("I am present broadcasted successfully!");
+      })
+      .catch((error) => console.log(error));
+  };
+
+  invokeRemoveParticipant = (roomId, userId) => {
+    this.hubConnection
+      .invoke("RemoveParticipant", roomId, userId)
+      .then(() => {
+        console.log(`Removed participant ${userId} broadcasted successfully!`);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  listenIAmExpelled = (method) => {
+    this.hubConnection.on("IAmExpelled", () => {
+      if (method !== null) {
+        method();
+      }
+    });
+  };
+
+  invokeMuteParticipant = (roomId, userId) => {
+    this.hubConnection
+      .invoke("MuteParticipant", roomId, userId)
+      .then(() => {
+        console.log(`Mute participant ${userId} broadcasted successfully!`);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  listenIAmMuted = (method) => {
+    this.hubConnection.on("IAmMuted", () => {
+      if (method !== null) {
+        method();
+      }
+    });
+  };
+
+  invokeGetSelfUid = () => {
+    this.hubConnection
+      .invoke("GetSelfUid")
+      .then(() => {
+        console.log("Trying to get self uid successfully!");
+      })
+      .catch((error) => console.log(error));
+  };
+
+  listenGetSelfUid = (method) => {
+    this.hubConnection.on("GetSelfUid", (uid) => {
+      if (method !== null) {
+        method(uid);
+        console.log("Received get self uid and method executed.", uid);
+      } else {
+        console.log("Received get self uid and method not executed.", uid);
+      }
+    });
+  };
+
+  invokeMuteAllParticipant = (roomId) => {
+    this.hubConnection
+      .invoke("MuteAllParticipant", roomId)
+      .then(() => {
+        console.log("Mute all participants broadcast successfully!");
+      })
+      .catch((error) => console.log(error));
+  };
+
+  invokeUpdateParticipants = (roomId) => {
+    this.hubConnection
+      .invoke("UpdateParticipants", roomId)
+      .then(() => {
+        console.log("Get participants list successfully!");
       })
       .catch((error) => console.log(error));
   };
