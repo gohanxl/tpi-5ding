@@ -22,12 +22,10 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     async muteClosedCaption() {
-      console.log("ACA MUTEO CC");
       await SpeechRecognition.abortListening();
       setIsMuted(true);
     },
     async unMuteClosedCaption() {
-      console.log("ACA DESMUTEO CC");
       await SpeechRecognition.startListening({ language: "es-AR" });
       setIsMuted(false);
     },
@@ -44,22 +42,28 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
     initSignalR();
   }, []);
 
+  const setClosedCaptions = (name, closedCaption) => {
+    setClosedCaptionReceive({ name, closedCaption });
+  };
+
   useEffect(() => {
     if (signalRService && signalRService.isServiceStarted) {
-      console.log(closedCaptionReceive);
-      signalRService.listenReceiveClosedCaption(setClosedCaptionReceive);
+      signalRService.listenReceiveClosedCaption(setClosedCaptions);
     }
   }, [signalRService, isMuted]);
 
   if (SpeechRecognition.browserSupportsSpeechRecognition()) {
     if (!isMuted) {
       SpeechRecognition.startListening({ language: "es-AR" });
-
       try {
         if (transcript && transcript !== closedCaptionSend) {
           setClosedCaptionSend(transcript);
         } else if (!transcript && closedCaptionSend) {
-          signalRService.invokeSendClosedCaption(meeting, closedCaptionSend);
+          signalRService.invokeSendClosedCaption(
+            meeting,
+            name,
+            closedCaptionSend
+          );
           setClosedCaptionSend(null);
         }
       } catch (e) {
@@ -71,8 +75,10 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
   }
 
   return (
-    <p>
-      {name}: {closedCaptionReceive}
-    </p>
+    closedCaptionReceive && (
+      <p>
+        {closedCaptionReceive.name}: {closedCaptionReceive.closedCaption}
+      </p>
+    )
   );
 });

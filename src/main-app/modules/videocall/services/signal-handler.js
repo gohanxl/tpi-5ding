@@ -95,14 +95,14 @@ export class SignalHandlerService {
       .catch((error) => console.log(error));
   };
 
-  invokeSendClosedCaption = (roomId, closedCaption) => {
-    this.hubConnection.invoke("SendClosedCaption", roomId, closedCaption);
+  invokeSendClosedCaption = (roomId, name, closedCaption) => {
+    this.hubConnection.invoke("SendClosedCaption", roomId, name, closedCaption);
   };
 
   listenReceiveClosedCaption = (method) => {
-    this.hubConnection.on("ReceiveClosedCaption", (data) => {
+    this.hubConnection.on("ReceiveClosedCaption", (name, closedCaption) => {
       if (method !== null) {
-        method(data);
+        method(name, closedCaption);
       }
     });
   };
