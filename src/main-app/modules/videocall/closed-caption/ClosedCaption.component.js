@@ -15,7 +15,7 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
   const { name, meeting } = props;
 
   const [closedCaptionSend, setClosedCaptionSend] = useState(null);
-  const [closedCaptionReceive, setClosedCaptionReceive] = useState(null);
+  const [closedCaptionReceive, setClosedCaptionReceive] = useState([]);
   const [signalRService, setSignalRService] = useState();
   const { transcript } = useSpeechRecognition();
   const [isMuted, setIsMuted] = useState(false);
@@ -43,7 +43,7 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
   }, []);
 
   const setClosedCaptions = (name, closedCaption) => {
-    setClosedCaptionReceive({ name, closedCaption });
+    setClosedCaptionReceive([...closedCaptionReceive, { name, closedCaption }]);
   };
 
   useEffect(() => {
@@ -75,10 +75,11 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
   }
 
   return (
-    closedCaptionReceive && (
+    closedCaptionReceive &&
+    closedCaptionReceive.map(({ name, closedCaption }) => (
       <p>
-        {closedCaptionReceive.name}: {closedCaptionReceive.closedCaption}
+        {name}: {closedCaption}
       </p>
-    )
+    ))
   );
 });
