@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable react/display-name */
 import { SignalHandlerService } from "../services/signal-handler";
 
 import SpeechRecognition, {
@@ -42,16 +42,6 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
     initSignalR();
   }, []);
 
-  const setClosedCaptions = (name, closedCaption) => {
-    setClosedCaptionReceive([...closedCaptionReceive, { name, closedCaption }]);
-  };
-
-  useEffect(() => {
-    if (signalRService && signalRService.isServiceStarted) {
-      signalRService.listenReceiveClosedCaption(setClosedCaptions);
-    }
-  }, [signalRService, isMuted]);
-
   if (SpeechRecognition.browserSupportsSpeechRecognition()) {
     if (!isMuted) {
       SpeechRecognition.startListening({ language: "es-AR" });
@@ -63,6 +53,11 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
             meeting,
             name,
             closedCaptionSend
+          );
+          setClosedCaptionReceive(
+            closedCaptionReceive.length < 2
+              ? [...closedCaptionReceive, { name, closedCaptionSend }]
+              : [{ name, closedCaptionSend }]
           );
           setClosedCaptionSend(null);
         }
@@ -76,10 +71,12 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
 
   return (
     closedCaptionReceive &&
-    closedCaptionReceive.map(({ name, closedCaption }) => (
-      <p>
-        {name}: {closedCaption}
-      </p>
-    ))
+    closedCaptionReceive.map(
+      ({ name, closedCaptionSend: closedCaption }, index) => (
+        <p key={index}>
+          {name}: {closedCaption}
+        </p>
+      )
+    )
   );
 });
