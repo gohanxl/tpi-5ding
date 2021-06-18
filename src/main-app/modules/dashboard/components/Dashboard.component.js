@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Dashboard.styles.scss";
 import Button from "../../button/Button.component";
 import calendarSvg from "../../../../assets/img/education/043-calendar.svg";
@@ -9,9 +9,22 @@ import { useSelector } from "react-redux";
 
 const Dashboard = () => {
   const user = useSelector((state) => state.user.currentUser);
+  const isColorBlind = useSelector((state) => state.user.isColorBlind);
+
+  useEffect(() => {
+    const dashboard = document.getElementById("dashboard");
+    if (dashboard) {
+      if (isColorBlind) {
+        dashboard.style.backgroundImage =
+          "var(--colorblind-dashboard-background)";
+      } else {
+        dashboard.style.backgroundImage = "var(--dashboard-background)";
+      }
+    }
+  }, [isColorBlind]);
 
   return (
-    <section className="dashboard-container">
+    <section id="dashboard" className="dashboard-container">
       <div className="title-container">
         <h2 className="title is-3 dashboard-greeting">
           <strong>¡Hola de nuevo!</strong>
