@@ -8,12 +8,12 @@ $mancha-4: url(../../../assets/img/mancha-4.svg);
 $mock-1: url(../../../assets/img/mock-1.svg);
 
 h1 {
-  color: $edu-dark-primary;
+  color: var(--darker-primary);
   font-size: 6em;
 }
 
 h3 {
-  color: $edu-darker-primary;
+  color: var(--dark-primary);
   font-size: 3em;
 }
 
@@ -91,7 +91,7 @@ section {
     }
 
     .start-button {
-      background-color: $edu-primary;
+      background-color: var(--primary);
     }
   }
 
@@ -137,7 +137,7 @@ section {
         width: 45%;
         min-height: 150px;
         margin: 10px;
-        background-color: $edu-light-blue;
+        background-color: var(--light-blue);
 
         .content {
           display: flex;
@@ -219,7 +219,7 @@ section {
 
         button {
           width: 100%;
-          background-color: $edu-secondary;
+          background-color: var(--secondary);
         }
       }
     }
