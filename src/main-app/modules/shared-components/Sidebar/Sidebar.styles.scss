@@ -1,19 +1,63 @@
 .sidebar-menu {
+  width: 50px;
   height: 100%;
-  width: 12vw;
-  padding: 10px;
-  background-color: #272727;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #353535;
+}
 
-  ul {
-    li {
-      p {
-        color: #828282;
-        padding: 0.5em 0.75em;
-        cursor: default;
-      }
-    }
-    a {
-      color: #b9b9b9;
-    }
-  }
+.bm-burger-button {
+  position: relative;
+  width: 30px;
+  height: 25px;
+  left: 0;
+  top: 10px;
+}
+
+.bm-burger-bars {
+  background: #ffffff;
+  height: 10% !important;
+}
+
+.bm-burger-bars-hover {
+  background: #ffffff9d;
+}
+
+.bm-cross-button {
+  height: 24px;
+  width: 24px;
+}
+
+.bm-cross {
+  background: #bdc3c7;
+}
+
+.bm-menu-wrap {
+  position: absolute !important;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.bm-menu {
+  background: #353535;
+  padding: 2.5em 1.5em;
+  font-size: 1.15em;
+}
+
+.bm-morph-shape {
+  fill: #353535;
+}
+
+.bm-item-list {
+  color: #b8b7ad;
+  padding: 0.8em;
+  display: flex;
+  flex-direction: column;
+}
+
+.bm-item {
+  display: inline-block;
 }

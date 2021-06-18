@@ -20,6 +20,7 @@ $app-content-height: calc(#{$app-container-height} - 168px);
 
 html {
   overflow: visible !important;
+  height: 100vh;
 }
 
 .educapp-nav {
