@@ -1,13 +1,25 @@
 @charset "utf-8";
 @import "~bulma/bulma";
 
-$edu-primary: #1eaac3;
-$edu-secondary: #f5dc17;
-$edu-darker-primary: #1f4d57;
-$edu-dark-primary: #24778a;
-$edu-light-aquamarine: #aadbc7;
-$edu-aquamarine: #8bd2b0;
-$edu-light-blue: #b8e3ec;
+// $edu-primary: #1eaac3;
+// $edu-secondary: #f5dc17;
+// $edu-darker-primary: #1f4d57;
+// $edu-dark-primary: #24778a;
+// $edu-light-aquamarine: #aadbc7;
+// $edu-aquamarine: #8bd2b0;
+// $edu-light-blue: #b8e3ec;
+
+:root {
+  --primary: #1eaac3;
+  --secondary: #f5dc17;
+  --darker-primary: #1f4d57;
+  --dark-primary: #24778a;
+  --light-aquamarine: #aadbc7;
+  --aquamarine: #8bd2b0;
+  --light-blue: #b8e3ec;
+  --colorblind-dashboard-background: url(./assets/img/mancha-1.svg);
+  --dashboard-background: url(./assets/img/dashboard-background.svg);
+}
 
 $navbar-height: 70px;
 
@@ -23,8 +35,11 @@ html {
 }
 
 .educapp-nav {
-  background-color: $edu-primary;
+  background-color: var(--primary);
   box-shadow: 0px 2px 9px 0px #00000054;
+  -webkit-transition: background-color 500ms ease-in-out;
+  -ms-transition: background-color 500ms ease-in-out;
+  transition: background-color 500ms ease-in-out;
 }
 
 .app-container {
