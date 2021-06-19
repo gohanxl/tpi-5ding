@@ -102,7 +102,9 @@ export class SignalHandlerService {
   };
 
   invokeSendClosedCaption = (roomId, closedCaption) => {
-    this.hubConnection.invoke("SendClosedCaption", roomId, closedCaption);
+    this.hubConnection
+      .invoke("SendClosedCaption", roomId, closedCaption)
+      .catch((error) => console.log(error));
   };
 
   listenReceiveClosedCaption = (method) => {
