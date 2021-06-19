@@ -9,7 +9,7 @@ const LandingPageComponent = lazy(() =>
 const MainAppComponent = lazy(() => import("./main-app/App.main.component"));
 
 export const Routes = () => {
-  if (screen.width <= 800) {
+  if (screen.width <= 1) {
     return <ComingSoonComponent />;
   }
   return (

@@ -36,7 +36,7 @@ export const VideoChat = (props) => {
   const ccRef = useRef();
 
   const [signalRService, setSignalRService] = useState();
-  let videoRows = [];
+  // let videoRows = []; /*traer con use selector, limpiar la store cuando se va uno*/
 
   let userDisplayName = name;
   let localUserPeer = null;
@@ -56,8 +56,8 @@ export const VideoChat = (props) => {
   let screenSharinUserName = null;
   let localUserScreenSharingStream = null;
 
-  // let videoRows = [];
-  let videoDivs = [];
+  //let videoDivs = [];
+  const videoDivsRedux = useSelector((state) => state.video.rows);
 
   const displayMediaOptions = { video: { cursor: "always" }, audio: false };
 
@@ -78,8 +78,11 @@ export const VideoChat = (props) => {
     }
   }, [user]);
 
+  let signalCargo = false;
+
   useEffect(() => {
-    if (signalRService && signalRService.isServiceStarted) {
+    if (signalRService && signalRService.isServiceStarted && !signalCargo) {
+      signalCargo = true;
       onUserDisplayNameReceived(name);
     }
   }, [signalRService]);
@@ -156,6 +159,16 @@ export const VideoChat = (props) => {
     const peerConnection = connections.filter((item) => item.UserId === userId);
     if (peerConnection.length === 1) {
       peerConnection[0].CallObject.close();
+      const filteredDivsArray = videoDivsRedux.filter(
+        (div) => div.getAttribute("id") !== userId
+      );
+      dispatch(setVideoRows(filteredDivsArray));
+      /*
+      const indexDiv = videoDivs.indexOf(peerConnection.DivElement);
+      videoDivs.splice(indexDiv, 1);
+      */
+
+      /*divideVideosInRows();*/
     }
   };
 
@@ -185,9 +198,6 @@ export const VideoChat = (props) => {
   const onRemoteUserClosed = (userId) => {
     const peerConnection = connections.filter((item) => item.UserId === userId);
     if (peerConnection.length === 1) {
-      const indexDiv = videoDivs.indexOf(peerConnection.DivElement);
-      videoDivs.splice(indexDiv, 1);
-      divideVideosInRows();
       const index = connections.indexOf(peerConnection[0], 0);
       connections = connections.splice(index, 1);
     }
@@ -205,11 +215,16 @@ export const VideoChat = (props) => {
     }
   };
 
+  const loguearErrorPeer = (error) => {
+    console.error(err);
+  };
+
   const onSuccessfullConnection = async () => {
     const peer = await getPeerObject();
     localUserPeer = peer;
     peer.on("open", sendNotificationOfJoining);
     peer.on("call", onCallReceive);
+    peer.on("error", loguearErrorPeer);
     await GetUserDevices();
   };
 
@@ -325,56 +340,59 @@ export const VideoChat = (props) => {
     peerConnection.isLocalPaticipant = isLocalPaticipant;
     connections.push(peerConnection);
 
-    videoDivs.push(divElement);
-    document.getElementById("camarastest").appendChild(divElement);
+    /*ESTO ES PARA PROBAR SIN REDUX*/
+    //videoDivs.push(divElement);
+    //document.getElementById("camarastest").appendChild(divElement);
+    /************ */
+
+    refreshVideos(divElement);
     // divideVideosInRows();
   };
 
+  const refreshVideos = (divElement) => {
+    const newArrayVideo = [...videoDivsRedux];
+    newArrayVideo.push(divElement);
+    dispatch(setVideoRows(newArrayVideo));
+  };
+
   const divideVideosInRows = () => {
-    const rows = [];
-    const videoDivsCount = videoDivs.length;
-    const initialRowsCount = 2;
-    let rowsQuantity = videoDivsCount > initialRowsCount ? initialRowsCount : 1;
-    //const maxRowsCount = 10;
-    const videoDivsCopy = [...videoDivs];
-
-    const camerasPerRow = Math.round(videoDivsCount / rowsQuantity);
-    const remainingCamera = videoDivsCount % rowsQuantity;
-
-    while (rowsQuantity > 0) {
-      rows.push({
-        maxCamsCount:
-          rowsQuantity === 1 && remainingCamera
-            ? remainingCamera
-            : camerasPerRow,
-      });
-      rowsQuantity--;
-    }
-
-    rows.forEach((row, i) => {
-      if (row.maxCamsCount === 1 && camerasPerRow > 2) {
-        rows[i - 1].maxCamsCount--;
-        row++;
-      }
-    });
-
-    rows.forEach((row) => {
-      const divEl = document.createElement("div");
-      divEl.classList.add(cameras_row);
-      let remainingCams = row.maxCamsCount;
-
-      while (remainingCams > 0) {
-        const videoCam = videoDivsCopy.shift();
-        if (videoCam) {
-          divEl.appendChild(videoCam);
-          remainingCams--;
-        }
-      }
-      row.divElement = divEl;
-    });
-
-    videoRows = rows;
-    dispatch(setVideoRows(rows));
+    // const rows = [];
+    // const videoDivsCount = videoDivs.length;
+    // const initialRowsCount = 2;
+    // let rowsQuantity = videoDivsCount > initialRowsCount ? initialRowsCount : 1;
+    // const videoDivsCopy = [...videoDivs];
+    // const camerasPerRow = Math.round(videoDivsCount / rowsQuantity);
+    // const remainingCamera = videoDivsCount % rowsQuantity;
+    // while (rowsQuantity > 0) {
+    //   rows.push({
+    //     maxCamsCount:
+    //       rowsQuantity === 1 && remainingCamera
+    //         ? remainingCamera
+    //         : camerasPerRow,
+    //   });
+    //   rowsQuantity--;
+    // }
+    // rows.forEach((row, i) => {
+    //   if (row.maxCamsCount === 1 && camerasPerRow > 2) {
+    //     rows[i - 1].maxCamsCount--;
+    //     row++;
+    //   }
+    // });
+    // rows.forEach((row) => {
+    //   const divEl = document.createElement("div");
+    //   divEl.classList.add(cameras_row);
+    //   let remainingCams = row.maxCamsCount;
+    //   while (remainingCams > 0) {
+    //     const videoCam = videoDivsCopy.shift();
+    //     if (videoCam) {
+    //       divEl.appendChild(videoCam);
+    //       remainingCams--;
+    //     }
+    //   }
+    //   row.divElement = divEl;
+    // });
+    // videoRows = rows;
+    // dispatch(setVideoRows(rows));
   };
 
   const dispatch = useDispatch();
@@ -427,10 +445,13 @@ export const VideoChat = (props) => {
   };
 
   const getPeerObject = () => {
+    console.log("creo nuevo peer");
+
     return new Peer(undefined, {
       path: process.env.REACT_APP_PEERJS_PATH,
       host: process.env.REACT_APP_PEERJS_HOST,
       port: process.env.REACT_APP_PEERJS_PORT,
+      debug: 3,
     });
   };
 
@@ -460,10 +481,10 @@ export const VideoChat = (props) => {
   };
 
   const endCall = async () => {
+    await localUserStream.getAudioTracks()[0].stop();
+    await localUserStream.getVideoTracks()[0].stop();
     await signalRService.invokeScreenSharingStatus;
-    signalRService.stopConnection();
-    localUserStream.getAudioTracks()[0].stop();
-    localUserStream.getVideoTracks()[0].stop();
+    await signalRService.stopConnection();
     window.location = "/#/educapp/home";
   };
 
@@ -516,10 +537,10 @@ export const VideoChat = (props) => {
     );
   };
 
-  console.log(
-    "?? ~ file: VideoChat.component.js ~ line 349 ~ divideVideosInRows ~ videoRows",
-    videoRows
-  );
+  // console.log(
+  //   "?? ~ file: VideoChat.component.js ~ line 349 ~ divideVideosInRows ~ videoRows",
+  //   videoRows
+  // );
 
   return (
     <div className={videochat_container}>
