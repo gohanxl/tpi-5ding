@@ -19,7 +19,7 @@ import { ChatWindow } from "../ChatWindow/ChatWindow.component";
 import { ParticipantListComponent } from "../participant-list/ParticipantList.component";
 import { ClosedCaptionComponent } from "../../../modules/videocall/closed-caption/ClosedCaption.component";
 import { VideoGridComponent } from "./VideoGridComponent.component";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector, useStore } from "react-redux";
 import { setVideoRows } from "./store/video.actions";
 import { Attendance } from "../../shared-components/Attendance/components/Attendance";
 
@@ -58,6 +58,7 @@ export const VideoChat = (props) => {
 
   // let videoRows = [];
   let videoDivs = [];
+  const store = useStore();
 
   const displayMediaOptions = { video: { cursor: "always" }, audio: false };
 
@@ -156,6 +157,22 @@ export const VideoChat = (props) => {
     const peerConnection = connections.filter((item) => item.UserId === userId);
     if (peerConnection.length === 1) {
       peerConnection[0].CallObject.close();
+
+      const reduxVideos = store.getState().video.rows;
+
+      console.log("AL PRINCIPIO");
+      console.log(reduxVideos);
+      //const newArrayVideo = reduxVideos.filter(div => div.getAttribute("id") !== userId);
+      console.log("INDEX");
+      const index = reduxVideos.indexOf(peerConnection[0].DivElement);
+      console.log(index);
+      console.log("PEER DIV ELEMENT");
+      console.log(peerConnection[0].DivElement);
+
+      reduxVideos.splice(index, 1);
+      console.log("AL FINAL");
+      console.log(reduxVideos);
+      dispatch(setVideoRows(reduxVideos));
     }
   };
 
@@ -210,6 +227,7 @@ export const VideoChat = (props) => {
     localUserPeer = peer;
     peer.on("open", sendNotificationOfJoining);
     peer.on("call", onCallReceive);
+    peer.on("error", (err) => console.error(err));
     await GetUserDevices();
   };
 
@@ -326,7 +344,11 @@ export const VideoChat = (props) => {
     connections.push(peerConnection);
 
     videoDivs.push(divElement);
-    divideVideosInRows();
+    // divideVideosInRows();
+    const reduxVideos = store.getState().video.rows;
+    const newArrayVideo = [...reduxVideos];
+    newArrayVideo.push(divElement);
+    dispatch(setVideoRows(newArrayVideo));
   };
 
   const divideVideosInRows = () => {
@@ -430,6 +452,7 @@ export const VideoChat = (props) => {
       path: process.env.REACT_APP_PEERJS_PATH,
       host: process.env.REACT_APP_PEERJS_HOST,
       port: process.env.REACT_APP_PEERJS_PORT,
+      debug: 0,
     });
   };
 
