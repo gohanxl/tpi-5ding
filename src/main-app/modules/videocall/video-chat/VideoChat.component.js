@@ -474,6 +474,11 @@ export const VideoChat = (props) => {
   const endCall = async () => {
     await signalRService.invokeScreenSharingStatus;
     signalRService.stopConnection();
+
+    localUserPeer.destroy();
+
+    dispatch(setVideoRows([]));
+
     localUserStream.getAudioTracks()[0].stop();
     localUserStream.getVideoTracks()[0].stop();
     window.location = "/#/educapp/home";
