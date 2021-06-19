@@ -159,20 +159,21 @@ export const VideoChat = (props) => {
       peerConnection[0].CallObject.close();
 
       const reduxVideos = store.getState().video.rows;
-
-      console.log("AL PRINCIPIO");
-      console.log(reduxVideos);
       //const newArrayVideo = reduxVideos.filter(div => div.getAttribute("id") !== userId);
-      console.log("INDEX");
       const index = reduxVideos.indexOf(peerConnection[0].DivElement);
-      console.log(index);
-      console.log("PEER DIV ELEMENT");
-      console.log(peerConnection[0].DivElement);
+      if (index > 0) {
+        const newArrayVideo = [...reduxVideos];
+        newArrayVideo.splice(index, 1);
+        dispatch(setVideoRows(newArrayVideo));
+      }
+    }
+  };
 
-      reduxVideos.splice(index, 1);
-      console.log("AL FINAL");
-      console.log(reduxVideos);
-      dispatch(setVideoRows(reduxVideos));
+  const onRemoteUserClosed = (roomId, userId) => {
+    const peerConnection = connections.filter((item) => item.UserId === userId);
+    if (peerConnection.length === 1) {
+      const index = connections.indexOf(peerConnection[0], 0);
+      connections = connections.splice(index, 1);
     }
   };
 
@@ -195,18 +196,7 @@ export const VideoChat = (props) => {
           console.log("Error during receiving stream", error);
         }
       );
-      localUserCallObject.on("close", () => onRemoteUserClosed(userId));
-    }
-  };
-
-  const onRemoteUserClosed = (userId) => {
-    const peerConnection = connections.filter((item) => item.UserId === userId);
-    if (peerConnection.length === 1) {
-      const indexDiv = videoDivs.indexOf(peerConnection.DivElement);
-      videoDivs.splice(indexDiv, 1);
-      divideVideosInRows();
-      const index = connections.indexOf(peerConnection[0], 0);
-      connections = connections.splice(index, 1);
+      localUserCallObject.on("close", () => onRemoteUserClosed(roomId, userId));
     }
   };
 
@@ -552,11 +542,11 @@ export const VideoChat = (props) => {
         <div className={cameras_and_cc}>
           <VideoGridComponent />
           <div className={close_caption}>
-            <ClosedCaptionComponent
+            {/* <ClosedCaptionComponent
               name={userDisplayName}
               meeting="1"
               ref={ccRef}
-            />
+            /> */}
           </div>
           <div id="errorMsg"></div>
         </div>
