@@ -11,6 +11,11 @@ import "./Sidebar.styles.scss";
 
 export const Sidebar = () => {
   const history = useHistory();
+
+  let isMenuOpen = function (state) {
+    return state.isOpen;
+  };
+
   const subjects = [
     { id: 1, name: "Lengua" },
     { id: 2, name: "Matemática" },
@@ -20,60 +25,45 @@ export const Sidebar = () => {
   const goToPage = (event, page) => {
     event.preventDefault();
     history.push(page);
+    isMenuOpen = false;
   };
 
   return (
     <div className="sidebar-menu">
-      <Menu>
+      <Menu isOpen={isMenuOpen(false)}>
         <a
           id="home"
           className="menu-item"
-          href="#"
+          href="#dashboard"
           onClick={(e) => goToPage(e, "/educapp/home")}
         >
-          <FontAwesomeIcon icon={faHome} className="mr-2" />
+          <FontAwesomeIcon icon={faHome} className="mr-3" />
           Dashboard
         </a>
         <a
           id="home"
           className="menu-item"
-          href="#"
+          href="#calendario"
           onClick={(e) => goToPage(e, "/educapp/home")}
         >
-          <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" />
+          <FontAwesomeIcon icon={faCalendarAlt} className="mr-3" />
           Calendario
         </a>
         <a
           id="home"
           className="menu-item"
-          href="#"
+          href="#mensajes"
           onClick={(e) => goToPage(e, "/educapp/home")}
         >
-          <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
+          <FontAwesomeIcon icon={faEnvelope} className="mr-3" />
           Mensajes
         </a>
-        <a
-          id="student"
-          className="menu-item"
-          href="#"
-          onClick={(e) => goToPage(e, "/educapp/student")}
-        >
-          Student
-        </a>
-        <a
-          id="profesor"
-          className="menu-item"
-          href="#"
-          onClick={(e) => goToPage(e, "/educapp/teacher")}
-        >
-          Profesor
-        </a>
-        <p className="menu-item mt-4">Materias</p>
+        <p className="menu-group-title">Materias</p>
         {subjects.map(({ id, name }) => (
           <a
             key={id}
-            className="menu-item"
-            href=""
+            className="menu-item assignature"
+            href={"#materia-" + id}
             onClick={(e) => goToPage(e, "/educapp/student/assignature/" + id)}
           >
             {name}

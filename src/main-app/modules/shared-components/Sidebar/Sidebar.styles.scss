@@ -1,3 +1,5 @@
+@import "../../../../App.styles.scss";
+
 .sidebar-menu {
   width: 50px;
   height: 100%;
@@ -43,8 +45,27 @@
 
 .bm-menu {
   background: #353535;
-  padding: 2.5em 1.5em;
+  padding: 2.5em 0px;
   font-size: 1.15em;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+    height: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.1);
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.8);
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.7);
+  }
+  &::-webkit-scrollbar-thumb:active {
+    background: rgba(255, 255, 255, 0.4);
+  }
 }
 
 .bm-morph-shape {
@@ -52,12 +73,47 @@
 }
 
 .bm-item-list {
-  color: #b8b7ad;
-  padding: 0.8em;
+  color: #c4c4c4;
+  padding: 0px;
   display: flex;
   flex-direction: column;
 }
 
 .bm-item {
   display: inline-block;
+}
+
+.menu-group-title {
+  padding: 10px;
+  background-color: #{$edu-primary + "29"};
+}
+
+.menu-group-title,
+.menu-item {
+  border: solid #ffffff1a;
+  border-width: 1px 0;
+}
+
+.menu-item {
+  color: #c4c4c4;
+  padding: 15px;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.menu-item:first-child {
+  border-top-width: 2px;
+}
+
+.menu-item:last-child {
+  border-bottom-width: 2px;
+}
+
+.menu-item:hover,
+.menu-item:focus {
+  color: #c4c4c4;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.menu-item.assignature {
+  padding-left: 40px;
 }
