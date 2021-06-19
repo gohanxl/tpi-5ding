@@ -12,12 +12,12 @@ import React, {
 } from "react";
 
 export const ClosedCaptionComponent = forwardRef((props, ref) => {
-  const { name, meeting } = props;
+  const { name, meeting, signalRService } = props;
 
   const [closedCaptionSend, setClosedCaptionSend] = useState(null);
   const [closedCaptionReceive, setClosedCaptionReceive] = useState(null);
-  const [signalRService, setSignalRService] = useState();
-  const { transcript } = useSpeechRecognition();
+  // const [signalRService, setSignalRService] = useState();
+  const { transcript, resetTranscript } = useSpeechRecognition();
   const [isMuted, setIsMuted] = useState(false);
 
   useImperativeHandle(ref, () => ({
@@ -31,18 +31,17 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
       await SpeechRecognition.startListening({ language: "es-AR" });
       setIsMuted(false);
     },
+    async endCloseCaption() {
+      await SpeechRecognition.abortListening();
+      await resetTranscript();
+    },
   }));
 
   useEffect(() => {
-    async function initSignalR() {
-      const signalRServ = await SignalHandlerService.getInstance();
-      const isConnected = await signalRServ.asyncConnection();
-      console.log("SignalRHub Connected: " + isConnected);
-      setSignalRService(signalRServ);
+    if (signalRService) {
+      signalRService.startConnection(null);
     }
-
-    initSignalR();
-  }, []);
+  }, [signalRService]);
 
   useEffect(() => {
     if (signalRService && signalRService.isServiceStarted) {

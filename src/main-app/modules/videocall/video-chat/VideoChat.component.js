@@ -472,8 +472,8 @@ export const VideoChat = (props) => {
   };
 
   const endCall = async () => {
-    await signalRService.invokeScreenSharingStatus;
-    signalRService.stopConnection();
+    await ccRef.current.endCloseCaption();
+    await signalRService.stopConnection();
 
     localUserPeer.destroy();
 
@@ -551,6 +551,7 @@ export const VideoChat = (props) => {
               name={userDisplayName}
               meeting="1"
               ref={ccRef}
+              signalRService={signalRService}
             />
           </div>
           <div id="errorMsg"></div>
