@@ -1,5 +1,10 @@
 /* eslint-disable */
-import React, { forwardRef, useImperativeHandle, useState } from "react";
+import React, {
+  useEffect,
+  forwardRef,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMicrophoneAlt } from "@fortawesome/free-solid-svg-icons";
 import { faMicrophoneSlash } from "@fortawesome/free-solid-svg-icons";
@@ -12,6 +17,7 @@ import { faStop } from "@fortawesome/free-solid-svg-icons";
 import { faUserFriends } from "@fortawesome/free-solid-svg-icons";
 import { toolbar_buttons } from "./VideoToolbar.module.scss";
 import { ParticipantListComponent } from "../participant-list/ParticipantList.component";
+import { useSelector } from "react-redux";
 
 export const VideoToolbar = forwardRef((props, ref) => {
   const {
@@ -25,23 +31,17 @@ export const VideoToolbar = forwardRef((props, ref) => {
   } = props;
 
   const [isVideoOn, setIsVideoOn] = useState(true);
-  const [isMute, setIsMute] = useState(false);
+  const micOn = useSelector((state) => state.video.micOn);
   const [isScreenShareOn, setIsScreenShareOn] = useState(false);
   const [modalOpened, setModalOpened] = useState(false);
+
+  useEffect(() => {}, [micOn]);
 
   useImperativeHandle(ref, () => ({
     stopScreenShareFromBrowser() {
       setIsScreenShareOn(false);
     },
-    muteByTeacher() {
-      setIsMute(true);
-    },
   }));
-
-  const childMute = () => {
-    setIsMute(!isMute);
-    muteUnmute();
-  };
 
   const childVideoOnOff = () => {
     setIsVideoOn(!isVideoOn);
@@ -79,11 +79,11 @@ export const VideoToolbar = forwardRef((props, ref) => {
         <FontAwesomeIcon icon={isVideoOn ? faVideo : faVideoSlash} />
       </button>
       <button
-        className={`button ${!isMute ? "is-primary" : "is-danger"}`}
+        className={`button ${micOn ? "is-primary" : "is-danger"}`}
         id="muteUnmuteButton"
-        onClick={childMute}
+        onClick={muteUnmute}
       >
-        <FontAwesomeIcon icon={isMute ? faMicrophoneSlash : faMicrophoneAlt} />
+        <FontAwesomeIcon icon={!micOn ? faMicrophoneSlash : faMicrophoneAlt} />
       </button>
       <button className="button is-danger" id="endCallButton" onClick={endCall}>
         <FontAwesomeIcon icon={faPhoneSlash} />

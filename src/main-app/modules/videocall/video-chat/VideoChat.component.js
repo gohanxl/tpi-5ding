@@ -20,7 +20,7 @@ import { ParticipantListComponent } from "../participant-list/ParticipantList.co
 import { ClosedCaptionComponent } from "../../../modules/videocall/closed-caption/ClosedCaption.component";
 import { VideoGridComponent } from "./VideoGridComponent.component";
 import { useDispatch, useSelector, useStore } from "react-redux";
-import { setVideoRows } from "./store/video.actions";
+import { setMicOn, setVideoRows } from "./store/video.actions";
 import { Attendance } from "../../shared-components/Attendance/components/Attendance";
 
 export const VideoChat = (props) => {
@@ -51,7 +51,7 @@ export const VideoChat = (props) => {
   let connections = [];
   let remoteConnectionIds = [];
   let isVideoEnabled = false;
-  let isMute = false;
+  //let isMute = false;
   let localUserCallObject = null;
   let screenSharinUserName = null;
   let localUserScreenSharingStream = null;
@@ -224,13 +224,13 @@ export const VideoChat = (props) => {
   const GetUserDevices = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia(avContraints);
-      HandelSucess(stream);
+      successHandler(stream);
     } catch (exception) {
-      HandelError(exception);
+      errorHandler(exception);
     }
   };
 
-  const HandelSucess = (stream) => {
+  const successHandler = (stream) => {
     const videoTracks = stream.getVideoTracks();
     const constraints = videoTracks[0].getConstraints();
 
@@ -238,7 +238,7 @@ export const VideoChat = (props) => {
     addUser(localUserStream, localUserId, null, userDisplayName, true);
   };
 
-  const HandelError = (error) => {
+  const errorHandler = (error) => {
     if (error.name === "ConstraintNotSatisfiedError") {
       const v = avContraints.video;
       errorMsg(
@@ -309,8 +309,12 @@ export const VideoChat = (props) => {
     videoElement.muted = isLocalPaticipant;
     videoElement.srcObject = stream;
 
-    isVideoEnabled = stream.getVideoTracks()[0].enabled;
-    isMute = stream.getAudioTracks()[0].enabled;
+    if (isLocalPaticipant) {
+      isVideoEnabled = stream.getVideoTracks()[0].enabled;
+
+      //isMute = stream.getAudioTracks()[0].enabled;
+      dispatch(setMicOn(true));
+    }
 
     const divElement = document.createElement("div");
     divElement.setAttribute("class", user_camera_container);
@@ -447,20 +451,23 @@ export const VideoChat = (props) => {
   };
 
   const muteByTeacher = () => {
-    isMute = localUserStream.getAudioTracks()[0].enabled = false;
+    localUserStream.getAudioTracks()[0].enabled = false;
+    dispatch(setMicOn(false));
     ccRef.current.muteClosedCaption();
-    toolbarRef.current.muteByTeacher();
   };
 
   const muteUnmute = () => {
-    if (isMute) {
-      isMute = localUserStream.getAudioTracks()[0].enabled = false;
+    const reduxIsMicOn = store.getState().video.micOn;
+    if (reduxIsMicOn) {
+      localUserStream.getAudioTracks()[0].enabled = false;
+      dispatch(setMicOn(false));
       ccRef.current.muteClosedCaption();
     } else {
-      isMute = localUserStream.getAudioTracks()[0].enabled = true;
+      localUserStream.getAudioTracks()[0].enabled = true;
+      dispatch(setMicOn(true));
       ccRef.current.unMuteClosedCaption();
     }
-    return isMute;
+    return localUserStream.getAudioTracks()[0].enabled;
   };
 
   const videoOnOff = () => {
@@ -476,12 +483,41 @@ export const VideoChat = (props) => {
     await signalRService.stopConnection();
 
     localUserPeer.destroy();
+    localUserScreenSharingPeer.destroy();
 
     dispatch(setVideoRows([]));
 
-    localUserStream.getAudioTracks()[0].stop();
-    localUserStream.getVideoTracks()[0].stop();
-    window.location = "/#/educapp/home";
+    console.log(localUserStream);
+    console.log(localUserStream.getAudioTracks());
+    console.log(localUserStream.getVideoTracks());
+    console.log(localUserStream.getAudioTracks()[0]);
+    console.log(localUserStream.getVideoTracks()[0]);
+
+    localUserStream.getAudioTracks().forEach(function (track) {
+      track.stop();
+    });
+    localUserStream.getVideoTracks().forEach(function (track) {
+      track.stop();
+    });
+
+    connections.forEach((peer) => {
+      const stream = peer.VideoElement.srcObject;
+      const tracks = stream.getTracks();
+
+      tracks.forEach(function (track) {
+        track.stop();
+      });
+
+      peer.VideoElement.srcObject = null;
+    });
+
+    connections = null;
+    localUserPeer = null;
+    localUserScreenSharingPeer = null;
+    localUserStream = null;
+    localUserScreenSharingStream = null;
+
+    //window.location = "/#/educapp/home";
   };
 
   const toggleChat = () => {
@@ -511,7 +547,7 @@ export const VideoChat = (props) => {
         userDisplayName
       );
     } catch (exception) {
-      HandelError(exception);
+      errorHandler(exception);
     }
   };
 

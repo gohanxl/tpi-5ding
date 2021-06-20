@@ -2,6 +2,7 @@ import * as types from "./video.types";
 
 const initialState = {
   rows: [],
+  micOn: true,
 };
 
 export const videoReducer = (state = initialState, action) => {
@@ -10,6 +11,11 @@ export const videoReducer = (state = initialState, action) => {
       return {
         ...state,
         rows: action.rows,
+      };
+    case types.SET_MIC_ON:
+      return {
+        ...state,
+        micOn: action.micOn,
       };
     default:
       return state;
