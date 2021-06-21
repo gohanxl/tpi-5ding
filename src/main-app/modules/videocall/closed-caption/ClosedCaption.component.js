@@ -22,12 +22,10 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     async muteClosedCaption() {
-      console.log("ACA MUTEO CC");
       await SpeechRecognition.abortListening();
       setIsMuted(true);
     },
     async unMuteClosedCaption() {
-      console.log("ACA DESMUTEO CC");
       await SpeechRecognition.startListening({ language: "es-AR" });
       setIsMuted(false);
     },
@@ -45,7 +43,6 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
 
   useEffect(() => {
     if (signalRService && signalRService.isServiceStarted) {
-      console.log(closedCaptionReceive);
       signalRService.listenReceiveClosedCaption(setClosedCaptionReceive);
     }
   }, [signalRService, isMuted]);

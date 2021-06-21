@@ -38,18 +38,20 @@ export const VideoChat = (props) => {
   const [signalRService, setSignalRService] = useState();
   let videoRows = [];
 
+  let localUserStream = null;
   let userDisplayName = name;
   let localUserPeer = null;
   let localUserId = null;
   let meetingId = meeting;
+
   let localUserScreenSharingPeer = null;
   let localUserScreenSharingId = null;
   let isScreenSharingByRemote = false;
   let isScreenSharingEnabled = false;
   let isScreenSharingByMe = false;
-  let localUserStream = null;
   let connections = [];
   let remoteConnectionIds = [];
+
   let isVideoEnabled = false;
   //let isMute = false;
   let localUserCallObject = null;
@@ -159,9 +161,9 @@ export const VideoChat = (props) => {
       peerConnection[0].CallObject.close();
 
       const reduxVideos = store.getState().video.rows;
-      //const newArrayVideo = reduxVideos.filter(div => div.getAttribute("id") !== userId);
       const index = reduxVideos.indexOf(peerConnection[0].DivElement);
-      if (index > 0) {
+      console.log(`remoteUserLeft:${index}`);
+      if (index >= 0) {
         const newArrayVideo = [...reduxVideos];
         newArrayVideo.splice(index, 1);
         dispatch(setVideoRows(newArrayVideo));
@@ -213,12 +215,13 @@ export const VideoChat = (props) => {
   };
 
   const onSuccessfullConnection = async () => {
+    await GetUserDevices();
+
     const peer = await getPeerObject();
     localUserPeer = peer;
     peer.on("open", sendNotificationOfJoining);
     peer.on("call", onCallReceive);
     peer.on("error", (err) => console.error(err));
-    await GetUserDevices();
   };
 
   const GetUserDevices = async () => {
@@ -265,9 +268,13 @@ export const VideoChat = (props) => {
   };
 
   const onCallReceive = async (call) => {
-    const stream = await navigator.mediaDevices.getUserMedia(avContraints);
+    /*const stream = await navigator.mediaDevices.getUserMedia(avContraints);
 
-    localUserStream = stream;
+    localUserStream = stream;*/
+    const stream = localUserStream;
+
+    console.log("onCallReceive:localUserStream");
+    console.log(localUserStream);
     const peerConnection = connections.filter(
       (item) => item.UserId === localUserId
     );
@@ -517,7 +524,7 @@ export const VideoChat = (props) => {
     localUserStream = null;
     localUserScreenSharingStream = null;
 
-    //window.location = "/#/educapp/home";
+    window.location = "/#/educapp/home";
   };
 
   const toggleChat = () => {
