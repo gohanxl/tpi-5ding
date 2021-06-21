@@ -1,4 +1,4 @@
-@import "../../../App.styles.scss";
+@import "../../../ui-styling/globals/colors.scss";
 
 .button-image {
   height: 100px;
@@ -7,13 +7,13 @@
 
 .button-text {
   padding-top: 0.5em;
-  color: #245e6c !important;
+  color: var(--darker-primary) !important;
 }
 
 .button-background {
   height: 11em;
   width: 11em;
-  background-color: #1eaac3;
+  background-color: var(--primary);
   border-radius: 50%;
   display: flex;
   align-items: center;
