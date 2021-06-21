@@ -53,12 +53,9 @@ export const VideoChat = (props) => {
   let remoteConnectionIds = [];
 
   let isVideoEnabled = false;
-  //let isMute = false;
   let localUserCallObject = null;
   let screenSharinUserName = null;
   let localUserScreenSharingStream = null;
-
-  // let videoRows = [];
   let videoDivs = [];
   const store = useStore();
 
@@ -156,52 +153,30 @@ export const VideoChat = (props) => {
   };
 
   const remoteUserLeft = (roomId, userId) => {
+    const reduxVideos = store.getState().video.rows;
+    reduxVideos.forEach((item) => console.log(item));
+    const filteredReduxVideos = reduxVideos.filter(
+      (item) => item.id !== userId
+    );
+    dispatch(setVideoRows(filteredReduxVideos));
+
     const peerConnection = connections.filter((item) => item.UserId === userId);
     if (peerConnection.length === 1) {
       peerConnection[0].CallObject.close();
-
-      const reduxVideos = store.getState().video.rows;
-      //const index = reduxVideos.indexOf(peerConnection[0].DivElement);
-      reduxVideos.forEach((item) => console.log(item));
-
-      console.log("userId que saco:");
-
-      const filteredReduxVideos = reduxVideos.filter((item) => {
-        console.log("item.id");
-        console.log(item.id);
-        console.log("userId");
-        console.log(userId);
-        console.log("retorno ->");
-        console.log(item.id !== userId);
-        return item.id !== userId;
-      });
-      dispatch(setVideoRows(filteredReduxVideos));
-      console.log("remoteUserLeft:redux videos despues");
-      console.log(filteredReduxVideos);
-      /*
-      console.log(`remoteUserLeft:${index}`);
-      if (index >= 0) {
-        const newArrayVideo = [...reduxVideos];
-        newArrayVideo.splice(index, 1);
-        dispatch(setVideoRows(newArrayVideo));
-        console.log(`newArrayVideo:${newArrayVideo}`);
-      }
-      */
+      connections = connections.filter((item) => item.UserId !== userId);
     } else {
-      console.log("no encontre el userId para sacarlo");
-      console.log(userId);
-      console.log("las connections son:");
-      console.log(connections);
+      console.warn("Error on connections array");
     }
   };
 
-  const onRemoteUserClosed = (roomId, userId) => {
-    const peerConnection = connections.filter((item) => item.UserId === userId);
-    if (peerConnection.length === 1) {
-      const index = connections.indexOf(peerConnection[0], 0);
-      connections = connections.splice(index, 1);
-    }
-  };
+  /*TODO: Revisar antes de borrar porque es el callback del close de peerjs (objeto peer)*/
+  // const onRemoteUserClosed = (roomId, userId) => {
+  //   const peerConnection = connections.filter((item) => item.UserId === userId);
+  //   if (peerConnection.length === 1) {
+  //     const index = connections.indexOf(peerConnection[0], 0);
+  //     connections = connections.splice(index, 1);
+  //   }
+  // };
 
   const connectToOtherUsers = (roomId, userId, displayName) => {
     if (roomId === meetingId && userId !== localUserId) {
@@ -222,7 +197,8 @@ export const VideoChat = (props) => {
           console.log("Error during receiving stream", error);
         }
       );
-      localUserCallObject.on("close", () => onRemoteUserClosed(roomId, userId));
+      /*TODO: Revisar antes de borrar porque es el callback del close de peerjs (objeto peer)*/
+      /*localUserCallObject.on("close", () => remoteUserLeft(roomId, userId));*/
     }
   };
 
@@ -234,14 +210,7 @@ export const VideoChat = (props) => {
   ) => {
     if (remoteConnectionIds.indexOf(userId) === -1) {
       remoteConnectionIds.push(userId);
-      addUser(
-        stream,
-        userId,
-        callObject,
-        displayName,
-        false,
-        "onReceiveRemoteUserStream"
-      );
+      addUser(stream, userId, callObject, displayName, false);
     }
   };
 
@@ -269,14 +238,7 @@ export const VideoChat = (props) => {
     const constraints = videoTracks[0].getConstraints();
 
     localUserStream = stream;
-    addUser(
-      localUserStream,
-      localUserId,
-      null,
-      userDisplayName,
-      true,
-      "successHandler"
-    );
+    addUser(localUserStream, localUserId, null, userDisplayName, true);
   };
 
   const errorHandler = (error) => {
@@ -306,9 +268,6 @@ export const VideoChat = (props) => {
   };
 
   const onCallReceive = async (call) => {
-    /*const stream = await navigator.mediaDevices.getUserMedia(avContraints);
-
-    localUserStream = stream;*/
     const stream = localUserStream;
 
     console.log("onCallReceive:localUserStream");
@@ -328,7 +287,7 @@ export const VideoChat = (props) => {
     if (remoteConnectionIds.indexOf(call.peer) === -1) {
       remoteConnectionIds.push(call.peer);
       signalRService.invokeGetRemoteUserDetails(call.peer);
-      addUser(stream, call.peer, call, "", false, "onStream");
+      addUser(stream, call.peer, call, "", false);
     }
   };
 
@@ -348,8 +307,7 @@ export const VideoChat = (props) => {
     userId,
     callObject,
     userName,
-    isLocalPaticipant,
-    quienLlama
+    isLocalPaticipant
   ) => {
     const videoElement = GetNewVideoElement();
     videoElement.muted = isLocalPaticipant;
@@ -357,8 +315,6 @@ export const VideoChat = (props) => {
 
     if (isLocalPaticipant) {
       isVideoEnabled = stream.getVideoTracks()[0].enabled;
-
-      //isMute = stream.getAudioTracks()[0].enabled;
       dispatch(setMicOn(true));
     }
 
@@ -382,6 +338,9 @@ export const VideoChat = (props) => {
     peerConnection.userName = userName;
     peerConnection.isLocalPaticipant = isLocalPaticipant;
     connections.push(peerConnection);
+
+    console.log("pusheo ID: ");
+    console.log(userId);
 
     videoDivs.push(divElement);
     // divideVideosInRows();
@@ -435,7 +394,7 @@ export const VideoChat = (props) => {
   //   });
 
   //   videoRows = rows;
-  //   dispatch(setVideoRows(rows));
+  //   dispatch(setVideoRows(rows)); /*TODO: Verificar si hay que dispachear aca, hay que sacarlo de arriba*/
   // };
 
   const dispatch = useDispatch();
@@ -533,12 +492,6 @@ export const VideoChat = (props) => {
 
     dispatch(setVideoRows([]));
 
-    console.log(localUserStream);
-    console.log(localUserStream.getAudioTracks());
-    console.log(localUserStream.getVideoTracks());
-    console.log(localUserStream.getAudioTracks()[0]);
-    console.log(localUserStream.getVideoTracks()[0]);
-
     localUserStream.getAudioTracks().forEach(function (track) {
       track.stop();
     });
@@ -614,11 +567,6 @@ export const VideoChat = (props) => {
       userDisplayName
     );
   };
-
-  console.log(
-    "?? ~ file: VideoChat.component.js ~ line 349 ~ divideVideosInRows ~ videoRows",
-    videoRows
-  );
 
   return (
     <div className={videochat_container}>
