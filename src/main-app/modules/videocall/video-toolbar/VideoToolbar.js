@@ -10,7 +10,11 @@ import { faComment } from "@fortawesome/free-solid-svg-icons";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { faStop } from "@fortawesome/free-solid-svg-icons";
 import { faUserFriends } from "@fortawesome/free-solid-svg-icons";
-import { toolbar, toolbar_buttons } from "./VideoToolbar.module.scss";
+import {
+  toolbar,
+  toolbar_buttons,
+  colorblind_button,
+} from "./VideoToolbar.module.scss";
 import { ParticipantListComponent } from "../participant-list/ParticipantList.component";
 
 export const VideoToolbar = forwardRef((props, ref) => {
@@ -72,14 +76,18 @@ export const VideoToolbar = forwardRef((props, ref) => {
   return (
     <div className={toolbar}>
       <button
-        className={`button ${isVideoOn ? toolbar_buttons : "is-danger"}`}
+        className={`button ${colorblind_button} ${
+          isVideoOn ? toolbar_buttons : "is-danger"
+        }`}
         id="videoOnButton"
         onClick={childVideoOnOff}
       >
         <FontAwesomeIcon icon={isVideoOn ? faVideo : faVideoSlash} />
       </button>
       <button
-        className={`button ${!isMute ? toolbar_buttons : "is-danger"}`}
+        className={`button ${colorblind_button} ${
+          !isMute ? toolbar_buttons : "is-danger"
+        }`}
         id="muteUnmuteButton"
         onClick={childMute}
       >
@@ -91,12 +99,15 @@ export const VideoToolbar = forwardRef((props, ref) => {
       {/*<button className="button is-info" onClick={toggleChat}>*/}
       {/*  <FontAwesomeIcon icon={faComment} />*/}
       {/*</button>*/}
-      <button className="button is-info" onClick={toggleParticipantModal}>
+      <button
+        className={`button ${toolbar_buttons} ${colorblind_button}`}
+        onClick={toggleParticipantModal}
+      >
         <FontAwesomeIcon icon={faUserFriends} />
       </button>
       {!isScreenShareOn && (
         <button
-          className={`button ${toolbar_buttons}`}
+          className={`button ${toolbar_buttons} ${colorblind_button}`}
           id="start_screen_share_button"
           onClick={childStartShareScreen}
         >

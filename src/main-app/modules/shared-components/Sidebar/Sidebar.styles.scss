@@ -86,6 +86,9 @@
 .menu-group-title {
   padding: 10px;
   background-color: #{var(--primary) + "29"};
+  -webkit-transition: background-color 500ms ease-in-out;
+  -ms-transition: background-color 500ms ease-in-out;
+  transition: background-color 500ms ease-in-out;
 }
 
 .menu-group-title,
