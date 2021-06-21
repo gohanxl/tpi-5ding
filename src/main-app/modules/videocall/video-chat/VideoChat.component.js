@@ -546,13 +546,11 @@ export const VideoChat = (props) => {
         </div>
         <div className={cameras_and_cc}>
           <VideoGridComponent />
-          <div className={close_caption}>
-            <ClosedCaptionComponent
-              name={userDisplayName}
-              meeting="1"
-              ref={ccRef}
-            />
-          </div>
+          <ClosedCaptionComponent
+            name={userDisplayName}
+            meeting="1"
+            ref={ccRef}
+          />
           <div id="errorMsg"></div>
         </div>
       </div>
