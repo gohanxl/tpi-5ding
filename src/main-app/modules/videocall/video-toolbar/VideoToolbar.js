@@ -10,7 +10,7 @@ import { faComment } from "@fortawesome/free-solid-svg-icons";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { faStop } from "@fortawesome/free-solid-svg-icons";
 import { faUserFriends } from "@fortawesome/free-solid-svg-icons";
-import { toolbar_buttons } from "./VideoToolbar.module.scss";
+import { toolbar, toolbar_buttons } from "./VideoToolbar.module.scss";
 import { ParticipantListComponent } from "../participant-list/ParticipantList.component";
 
 export const VideoToolbar = forwardRef((props, ref) => {
@@ -70,16 +70,16 @@ export const VideoToolbar = forwardRef((props, ref) => {
   };
 
   return (
-    <div className={toolbar_buttons}>
+    <div className={toolbar}>
       <button
-        className={`button ${isVideoOn ? "is-primary" : "is-danger"}`}
+        className={`button ${isVideoOn ? toolbar_buttons : "is-danger"}`}
         id="videoOnButton"
         onClick={childVideoOnOff}
       >
         <FontAwesomeIcon icon={isVideoOn ? faVideo : faVideoSlash} />
       </button>
       <button
-        className={`button ${!isMute ? "is-primary" : "is-danger"}`}
+        className={`button ${!isMute ? toolbar_buttons : "is-danger"}`}
         id="muteUnmuteButton"
         onClick={childMute}
       >
@@ -96,7 +96,7 @@ export const VideoToolbar = forwardRef((props, ref) => {
       </button>
       {!isScreenShareOn && (
         <button
-          className="button is-primary"
+          className={`button ${toolbar_buttons}`}
           id="start_screen_share_button"
           onClick={childStartShareScreen}
         >
