@@ -161,13 +161,37 @@ export const VideoChat = (props) => {
       peerConnection[0].CallObject.close();
 
       const reduxVideos = store.getState().video.rows;
-      const index = reduxVideos.indexOf(peerConnection[0].DivElement);
+      //const index = reduxVideos.indexOf(peerConnection[0].DivElement);
+      reduxVideos.forEach((item) => console.log(item));
+
+      console.log("userId que saco:");
+
+      const filteredReduxVideos = reduxVideos.filter((item) => {
+        console.log("item.id");
+        console.log(item.id);
+        console.log("userId");
+        console.log(userId);
+        console.log("retorno ->");
+        console.log(item.id !== userId);
+        return item.id !== userId;
+      });
+      dispatch(setVideoRows(filteredReduxVideos));
+      console.log("remoteUserLeft:redux videos despues");
+      console.log(filteredReduxVideos);
+      /*
       console.log(`remoteUserLeft:${index}`);
       if (index >= 0) {
         const newArrayVideo = [...reduxVideos];
         newArrayVideo.splice(index, 1);
         dispatch(setVideoRows(newArrayVideo));
+        console.log(`newArrayVideo:${newArrayVideo}`);
       }
+      */
+    } else {
+      console.log("no encontre el userId para sacarlo");
+      console.log(userId);
+      console.log("las connections son:");
+      console.log(connections);
     }
   };
 
@@ -210,7 +234,14 @@ export const VideoChat = (props) => {
   ) => {
     if (remoteConnectionIds.indexOf(userId) === -1) {
       remoteConnectionIds.push(userId);
-      addUser(stream, userId, callObject, displayName, false);
+      addUser(
+        stream,
+        userId,
+        callObject,
+        displayName,
+        false,
+        "onReceiveRemoteUserStream"
+      );
     }
   };
 
@@ -238,7 +269,14 @@ export const VideoChat = (props) => {
     const constraints = videoTracks[0].getConstraints();
 
     localUserStream = stream;
-    addUser(localUserStream, localUserId, null, userDisplayName, true);
+    addUser(
+      localUserStream,
+      localUserId,
+      null,
+      userDisplayName,
+      true,
+      "successHandler"
+    );
   };
 
   const errorHandler = (error) => {
@@ -290,7 +328,7 @@ export const VideoChat = (props) => {
     if (remoteConnectionIds.indexOf(call.peer) === -1) {
       remoteConnectionIds.push(call.peer);
       signalRService.invokeGetRemoteUserDetails(call.peer);
-      addUser(stream, call.peer, call, "", false);
+      addUser(stream, call.peer, call, "", false, "onStream");
     }
   };
 
@@ -310,7 +348,8 @@ export const VideoChat = (props) => {
     userId,
     callObject,
     userName,
-    isLocalPaticipant
+    isLocalPaticipant,
+    quienLlama
   ) => {
     const videoElement = GetNewVideoElement();
     videoElement.muted = isLocalPaticipant;
@@ -352,52 +391,52 @@ export const VideoChat = (props) => {
     dispatch(setVideoRows(newArrayVideo));
   };
 
-  const divideVideosInRows = () => {
-    const rows = [];
-    const videoDivsCount = videoDivs.length;
-    const initialRowsCount = 2;
-    let rowsQuantity = videoDivsCount > initialRowsCount ? initialRowsCount : 1;
-    //const maxRowsCount = 10;
-    const videoDivsCopy = [...videoDivs];
+  // const divideVideosInRows = () => {
+  //   const rows = [];
+  //   const videoDivsCount = videoDivs.length;
+  //   const initialRowsCount = 2;
+  //   let rowsQuantity = videoDivsCount > initialRowsCount ? initialRowsCount : 1;
+  //   //const maxRowsCount = 10;
+  //   const videoDivsCopy = [...videoDivs];
 
-    const camerasPerRow = Math.round(videoDivsCount / rowsQuantity);
-    const remainingCamera = videoDivsCount % rowsQuantity;
+  //   const camerasPerRow = Math.round(videoDivsCount / rowsQuantity);
+  //   const remainingCamera = videoDivsCount % rowsQuantity;
 
-    while (rowsQuantity > 0) {
-      rows.push({
-        maxCamsCount:
-          rowsQuantity === 1 && remainingCamera
-            ? remainingCamera
-            : camerasPerRow,
-      });
-      rowsQuantity--;
-    }
+  //   while (rowsQuantity > 0) {
+  //     rows.push({
+  //       maxCamsCount:
+  //         rowsQuantity === 1 && remainingCamera
+  //           ? remainingCamera
+  //           : camerasPerRow,
+  //     });
+  //     rowsQuantity--;
+  //   }
 
-    rows.forEach((row, i) => {
-      if (row.maxCamsCount === 1 && camerasPerRow > 2) {
-        rows[i - 1].maxCamsCount--;
-        row++;
-      }
-    });
+  //   rows.forEach((row, i) => {
+  //     if (row.maxCamsCount === 1 && camerasPerRow > 2) {
+  //       rows[i - 1].maxCamsCount--;
+  //       row++;
+  //     }
+  //   });
 
-    rows.forEach((row) => {
-      const divEl = document.createElement("div");
-      divEl.classList.add(cameras_row);
-      let remainingCams = row.maxCamsCount;
+  //   rows.forEach((row) => {
+  //     const divEl = document.createElement("div");
+  //     divEl.classList.add(cameras_row);
+  //     let remainingCams = row.maxCamsCount;
 
-      while (remainingCams > 0) {
-        const videoCam = videoDivsCopy.shift();
-        if (videoCam) {
-          divEl.appendChild(videoCam);
-          remainingCams--;
-        }
-      }
-      row.divElement = divEl;
-    });
+  //     while (remainingCams > 0) {
+  //       const videoCam = videoDivsCopy.shift();
+  //       if (videoCam) {
+  //         divEl.appendChild(videoCam);
+  //         remainingCams--;
+  //       }
+  //     }
+  //     row.divElement = divEl;
+  //   });
 
-    videoRows = rows;
-    dispatch(setVideoRows(rows));
-  };
+  //   videoRows = rows;
+  //   dispatch(setVideoRows(rows));
+  // };
 
   const dispatch = useDispatch();
 
