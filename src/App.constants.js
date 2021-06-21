@@ -19,11 +19,11 @@ export const standardThemeValues = [
 ];
 
 export const colorblindModeThemeValues = {
-  "--primary": "black",
-  "--secondary": "black",
-  "--darker-primary": "black",
-  "--dark-primary": "black",
-  "--light-aquamarine": "black",
-  "--aquamarine": "black",
-  "--light-blue": "black",
+  "--primary": "#00b4b2",
+  "--secondary": "#005150",
+  "--darker-primary": "#005150",
+  "--dark-primary": "#005150",
+  "--light-aquamarine": "#00b4b2",
+  "--aquamarine": "#00b4b2",
+  "--light-blue": "#00b4b2",
 };
