@@ -1,4 +1,9 @@
 /* eslint-disable react/display-name */
+import {
+  close_caption,
+  cc_shown,
+  cc_hidden,
+} from "./ClosedCaption.module.scss";
 import { SignalHandlerService } from "../services/signal-handler";
 
 import SpeechRecognition, {
@@ -6,6 +11,7 @@ import SpeechRecognition, {
 } from "react-speech-recognition";
 import React, {
   forwardRef,
+  useCallback,
   useEffect,
   useImperativeHandle,
   useState,
@@ -14,6 +20,7 @@ import React, {
 export const ClosedCaptionComponent = forwardRef((props, ref) => {
   const { name, meeting } = props;
 
+  const [isShowingCC, setShowingCC] = useState(false);
   const [closedCaptionSend, setClosedCaptionSend] = useState(null);
   const [closedCaptionReceive, setClosedCaptionReceive] = useState([]);
   const [signalRService, setSignalRService] = useState();
@@ -42,6 +49,24 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
     initSignalR();
   }, []);
 
+  const closeCaptionCallback = useCallback(
+    (name, closedCaption) => {
+      setShowingCC(true);
+      setClosedCaptionReceive(
+        closedCaptionReceive.length < 2
+          ? [...closedCaptionReceive, { name, closedCaption }]
+          : [{ name, closedCaption }]
+      );
+    },
+    [closedCaptionReceive]
+  );
+
+  useEffect(() => {
+    if (signalRService && signalRService.isServiceStarted) {
+      signalRService.listenReceiveClosedCaption(closeCaptionCallback);
+    }
+  }, [closeCaptionCallback, signalRService]);
+
   if (SpeechRecognition.browserSupportsSpeechRecognition()) {
     if (!isMuted) {
       SpeechRecognition.startListening({ language: "es-AR" });
@@ -54,11 +79,6 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
             name,
             closedCaptionSend
           );
-          setClosedCaptionReceive(
-            closedCaptionReceive.length < 2
-              ? [...closedCaptionReceive, { name, closedCaptionSend }]
-              : [{ name, closedCaptionSend }]
-          );
           setClosedCaptionSend(null);
         }
       } catch (e) {
@@ -70,13 +90,16 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
   }
 
   return (
-    closedCaptionReceive &&
-    closedCaptionReceive.map(
-      ({ name, closedCaptionSend: closedCaption }, index) => (
-        <p key={index}>
-          {name}: {closedCaption}
-        </p>
-      )
-    )
+    <div
+      className={`${close_caption} ${isShowingCC ? cc_shown : cc_hidden}`}
+      onTransitionEnd={() => setShowingCC(false)}
+    >
+      {closedCaptionReceive &&
+        closedCaptionReceive.map(({ name, closedCaption }, index) => (
+          <p key={index}>
+            {name}: {closedCaption}
+          </p>
+        ))}
+    </div>
   );
 });
