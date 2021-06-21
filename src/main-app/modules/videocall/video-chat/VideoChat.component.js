@@ -16,7 +16,6 @@ import Peer from "peerjs";
 import { SignalHandlerService } from "../services/signal-handler";
 import { VideoToolbar } from "../video-toolbar/VideoToolbar";
 import { ChatWindow } from "../ChatWindow/ChatWindow.component";
-import { ParticipantListComponent } from "../participant-list/ParticipantList.component";
 import { ClosedCaptionComponent } from "../../../modules/videocall/closed-caption/ClosedCaption.component";
 import { VideoGridComponent } from "./VideoGridComponent.component";
 import { useDispatch, useSelector, useStore } from "react-redux";
@@ -40,7 +39,6 @@ export const VideoChat = (props) => {
   const ccRef = useRef();
 
   const [signalRService, setSignalRService] = useState();
-  let videoRows = [];
 
   let localUserStream = null;
   let userDisplayName = name;
@@ -50,16 +48,13 @@ export const VideoChat = (props) => {
 
   let localUserScreenSharingPeer = null;
   let localUserScreenSharingId = null;
-  // let isScreenSharingByRemote = false;
-  // let isScreenSharingEnabled = false;
-  // let isScreenSharingByMe = false;
   let connections = [];
   let remoteConnectionIds = [];
 
   let localUserCallObject = null;
   let screenSharinUserName = null;
   let localUserScreenSharingStream = null;
-  let videoDivs = [];
+
   const store = useStore();
 
   const displayMediaOptions = { video: { cursor: "always" }, audio: false };
@@ -118,9 +113,7 @@ export const VideoChat = (props) => {
       });
     } else {
       dispatch(setScreenSharingStatus(false, false));
-      // isScreenSharingByRemote = false;
-      // isScreenSharingEnabled = false;
-      // isScreenSharingByMe = false;
+
       screenSharinUserName = "";
     }
   };
@@ -128,9 +121,6 @@ export const VideoChat = (props) => {
   const onScreenSharingStatus = (status, remoteUserName) => {
     if (status === ScreeenSharingStatus.Stopped) {
       dispatch(setScreenSharingStatus(false, false));
-      // isScreenSharingByRemote = false;
-      // isScreenSharingEnabled = false;
-      // isScreenSharingByMe = false;
       screenSharinUserName = "";
       document.getElementById("screenSharingObj").classList.add("d-none");
       stoppedSharingScreen();
@@ -158,12 +148,16 @@ export const VideoChat = (props) => {
   };
 
   const remoteUserLeft = (roomId, userId) => {
-    const reduxVideos = store.getState().video.rows;
-    reduxVideos.forEach((item) => console.log(item));
-    const filteredReduxVideos = reduxVideos.filter(
-      (item) => item.id !== userId
-    );
-    dispatch(setVideoRows(filteredReduxVideos));
+    //TODO Borrar esto cdo este todo andando
+    /** Asi refrescabamos los videos cdo alguien se iba sin video grid**/
+    // const reduxVideos = store.getState().video.rows;
+    // reduxVideos.forEach((item) => console.log(item));
+    // const filteredReduxVideos = reduxVideos.filter(
+    //   (item) => item.id !== userId
+    // );
+    // dispatch(setVideoRows(filteredReduxVideos));
+
+    divideVideosInRows(null, userId);
 
     const peerConnection = connections.filter((item) => item.UserId === userId);
     if (peerConnection.length === 1) {
@@ -344,63 +338,81 @@ export const VideoChat = (props) => {
     peerConnection.isLocalPaticipant = isLocalPaticipant;
     connections.push(peerConnection);
 
-    console.log("pusheo ID: ");
-    console.log(userId);
+    //TODO borrar esto cdo este andando todo 100 %
+    /** Esto es lo que haciamos para apendear sin rows para probar **/
+    // const reduxVideos = store.getState().video.rows;
+    // const newArrayVideo = [...reduxVideos];
+    // newArrayVideo.push(divElement);
+    // dispatch(setVideoRows(newArrayVideo));
 
-    videoDivs.push(divElement);
-    // divideVideosInRows();
-    const reduxVideos = store.getState().video.rows;
-    const newArrayVideo = [...reduxVideos];
-    newArrayVideo.push(divElement);
-    dispatch(setVideoRows(newArrayVideo));
+    divideVideosInRows(divElement, null);
   };
 
-  // const divideVideosInRows = () => {
-  //   const rows = [];
-  //   const videoDivsCount = videoDivs.length;
-  //   const initialRowsCount = 2;
-  //   let rowsQuantity = videoDivsCount > initialRowsCount ? initialRowsCount : 1;
-  //   //const maxRowsCount = 10;
-  //   const videoDivsCopy = [...videoDivs];
+  const divideVideosInRows = async (newVideoDiv, userIdToRemove) => {
+    const rows = [];
+    const reduxVideoRows = store.getState().video.rows;
+    let videoDivs = [];
+    if (Array.isArray(reduxVideoRows) && reduxVideoRows.length > 0) {
+      const arrayOfChildrenCollection = reduxVideoRows.map(
+        (row) => row.divElement.children
+      );
+      arrayOfChildrenCollection.forEach((collectionOfDivs) => {
+        Array.from(collectionOfDivs).forEach((divEl) => {
+          videoDivs.push(divEl);
+        });
+      });
+    }
 
-  //   const camerasPerRow = Math.round(videoDivsCount / rowsQuantity);
-  //   const remainingCamera = videoDivsCount % rowsQuantity;
+    if (newVideoDiv) {
+      videoDivs.push(newVideoDiv);
+    }
 
-  //   while (rowsQuantity > 0) {
-  //     rows.push({
-  //       maxCamsCount:
-  //         rowsQuantity === 1 && remainingCamera
-  //           ? remainingCamera
-  //           : camerasPerRow,
-  //     });
-  //     rowsQuantity--;
-  //   }
+    if (userIdToRemove) {
+      videoDivs = videoDivs.filter((item) => item.id !== userIdToRemove);
+    }
 
-  //   rows.forEach((row, i) => {
-  //     if (row.maxCamsCount === 1 && camerasPerRow > 2) {
-  //       rows[i - 1].maxCamsCount--;
-  //       row++;
-  //     }
-  //   });
+    const videoDivsCount = videoDivs.length;
+    const initialRowsCount = 2;
+    let rowsQuantity = videoDivsCount > initialRowsCount ? initialRowsCount : 1;
+    const videoDivsCopy = [...videoDivs];
 
-  //   rows.forEach((row) => {
-  //     const divEl = document.createElement("div");
-  //     divEl.classList.add(cameras_row);
-  //     let remainingCams = row.maxCamsCount;
+    const camerasPerRow = Math.floor(videoDivsCount / rowsQuantity);
+    const remainingCamera = videoDivsCount % rowsQuantity;
 
-  //     while (remainingCams > 0) {
-  //       const videoCam = videoDivsCopy.shift();
-  //       if (videoCam) {
-  //         divEl.appendChild(videoCam);
-  //         remainingCams--;
-  //       }
-  //     }
-  //     row.divElement = divEl;
-  //   });
+    while (rowsQuantity >= 0) {
+      rows.push({
+        maxCamsCount:
+          rowsQuantity === 0 && remainingCamera
+            ? remainingCamera
+            : camerasPerRow,
+      });
+      rowsQuantity--;
+    }
 
-  //   videoRows = rows;
-  //   dispatch(setVideoRows(rows)); /*TODO: Verificar si hay que dispachear aca, hay que sacarlo de arriba*/
-  // };
+    // rows.forEach((row, i) => {
+    //   if (row.maxCamsCount === 1 && camerasPerRow > 2) {
+    //     rows[i - 1].maxCamsCount--;
+    //     row++;
+    //   }
+    // });
+
+    rows.forEach((row) => {
+      const divEl = document.createElement("div");
+      divEl.classList.add(cameras_row);
+      let remainingCams = row.maxCamsCount;
+
+      while (remainingCams > 0) {
+        const videoCam = videoDivsCopy.shift();
+        if (videoCam) {
+          divEl.appendChild(videoCam);
+        }
+        remainingCams--;
+      }
+      row.divElement = divEl;
+    });
+
+    dispatch(setVideoRows(rows));
+  };
 
   const dispatch = useDispatch();
 
@@ -438,9 +450,6 @@ export const VideoChat = (props) => {
 
   const onScreenShareStream = (stream, call) => {
     dispatch(setScreenSharingStatus(true, false));
-    // isScreenSharingByRemote = true;
-    // isScreenSharingEnabled = true;
-    // isScreenSharingByMe = false;
 
     addScreenSharing(stream);
   };
@@ -540,9 +549,6 @@ export const VideoChat = (props) => {
       localUserScreenSharingStream = stream;
 
       dispatch(setScreenSharingStatus(false, true));
-      // isScreenSharingByMe = true;
-      // isScreenSharingEnabled = true;
-      // isScreenSharingByRemote = false;
 
       localUserScreenSharingStream.getVideoTracks()[0].onended = (event) => {
         sendOtherToScreenClosed();
@@ -567,9 +573,6 @@ export const VideoChat = (props) => {
 
   const sendOtherToScreenClosed = () => {
     dispatch(setScreenSharingStatus(false, false));
-    // isScreenSharingByMe = false;
-    // isScreenSharingEnabled = false;
-    // isScreenSharingByRemote = false;
     signalRService.invokeScreenSharingStatus(
       meetingId,
       localUserId,

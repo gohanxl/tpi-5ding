@@ -15,7 +15,7 @@ export const VideoGridComponent = (props) => {
   return (
     <div className="cameras_container" id="video-container">
       {videoRows &&
-        videoRows.map((divElement, index) => {
+        videoRows.map(({ divElement }, index) => {
           return <CameraRow key={index} element={divElement} />;
         })}
     </div>
