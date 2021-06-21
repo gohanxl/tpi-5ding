@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable react/display-name */
 import { SignalHandlerService } from "../services/signal-handler";
 
 import SpeechRecognition, {
@@ -15,19 +15,17 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
   const { name, meeting } = props;
 
   const [closedCaptionSend, setClosedCaptionSend] = useState(null);
-  const [closedCaptionReceive, setClosedCaptionReceive] = useState(null);
+  const [closedCaptionReceive, setClosedCaptionReceive] = useState([]);
   const [signalRService, setSignalRService] = useState();
   const { transcript } = useSpeechRecognition();
   const [isMuted, setIsMuted] = useState(false);
 
   useImperativeHandle(ref, () => ({
     async muteClosedCaption() {
-      console.log("ACA MUTEO CC");
       await SpeechRecognition.abortListening();
       setIsMuted(true);
     },
     async unMuteClosedCaption() {
-      console.log("ACA DESMUTEO CC");
       await SpeechRecognition.startListening({ language: "es-AR" });
       setIsMuted(false);
     },
@@ -44,22 +42,23 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
     initSignalR();
   }, []);
 
-  useEffect(() => {
-    if (signalRService && signalRService.isServiceStarted) {
-      console.log(closedCaptionReceive);
-      signalRService.listenReceiveClosedCaption(setClosedCaptionReceive);
-    }
-  }, [signalRService, isMuted]);
-
   if (SpeechRecognition.browserSupportsSpeechRecognition()) {
     if (!isMuted) {
       SpeechRecognition.startListening({ language: "es-AR" });
-
       try {
         if (transcript && transcript !== closedCaptionSend) {
           setClosedCaptionSend(transcript);
         } else if (!transcript && closedCaptionSend) {
-          signalRService.invokeSendClosedCaption(meeting, closedCaptionSend);
+          signalRService.invokeSendClosedCaption(
+            meeting,
+            name,
+            closedCaptionSend
+          );
+          setClosedCaptionReceive(
+            closedCaptionReceive.length < 2
+              ? [...closedCaptionReceive, { name, closedCaptionSend }]
+              : [{ name, closedCaptionSend }]
+          );
           setClosedCaptionSend(null);
         }
       } catch (e) {
@@ -71,8 +70,13 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
   }
 
   return (
-    <p>
-      {name}: {closedCaptionReceive}
-    </p>
+    closedCaptionReceive &&
+    closedCaptionReceive.map(
+      ({ name, closedCaptionSend: closedCaption }, index) => (
+        <p key={index}>
+          {name}: {closedCaption}
+        </p>
+      )
+    )
   );
 });
