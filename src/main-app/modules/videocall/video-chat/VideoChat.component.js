@@ -486,8 +486,8 @@ export const VideoChat = (props) => {
   };
 
   const endCall = async () => {
-    await ccRef.current.endCloseCaption();
-    await signalRService.stopConnection();
+    ccRef.current.endCloseCaption();
+    signalRService.stopConnection();
 
     localUserPeer.destroy();
     localUserScreenSharingPeer.destroy();

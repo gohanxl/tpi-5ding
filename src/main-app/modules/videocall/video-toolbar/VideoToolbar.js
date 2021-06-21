@@ -83,9 +83,6 @@ export const VideoToolbar = forwardRef((props, ref) => {
       <button className="button is-danger" id="endCallButton" onClick={endCall}>
         <FontAwesomeIcon icon={faPhoneSlash} />
       </button>
-      {/*<button className="button is-info" onClick={toggleChat}>*/}
-      {/*  <FontAwesomeIcon icon={faComment} />*/}
-      {/*</button>*/}
       <button className="button is-info" onClick={toggleParticipantModal}>
         <FontAwesomeIcon icon={faUserFriends} />
       </button>
