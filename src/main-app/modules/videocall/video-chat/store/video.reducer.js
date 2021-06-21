@@ -17,6 +17,11 @@ export const videoReducer = (state = initialState, action) => {
         ...state,
         micOn: action.micOn,
       };
+    case types.SET_VIDEO_ON:
+      return {
+        ...state,
+        videoOn: action.videoOn,
+      };
     default:
       return state;
   }

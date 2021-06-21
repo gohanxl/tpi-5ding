@@ -20,7 +20,7 @@ import { ParticipantListComponent } from "../participant-list/ParticipantList.co
 import { ClosedCaptionComponent } from "../../../modules/videocall/closed-caption/ClosedCaption.component";
 import { VideoGridComponent } from "./VideoGridComponent.component";
 import { useDispatch, useSelector, useStore } from "react-redux";
-import { setMicOn, setVideoRows } from "./store/video.actions";
+import { setMicOn, setVideoOn, setVideoRows } from "./store/video.actions";
 import { Attendance } from "../../shared-components/Attendance/components/Attendance";
 
 export const VideoChat = (props) => {
@@ -52,7 +52,6 @@ export const VideoChat = (props) => {
   let connections = [];
   let remoteConnectionIds = [];
 
-  let isVideoEnabled = false;
   let localUserCallObject = null;
   let screenSharinUserName = null;
   let localUserScreenSharingStream = null;
@@ -314,7 +313,7 @@ export const VideoChat = (props) => {
     videoElement.srcObject = stream;
 
     if (isLocalPaticipant) {
-      isVideoEnabled = stream.getVideoTracks()[0].enabled;
+      dispatch(setVideoOn(stream.getVideoTracks()[0].enabled));
       dispatch(setMicOn(true));
     }
 
@@ -476,10 +475,13 @@ export const VideoChat = (props) => {
   };
 
   const videoOnOff = () => {
+    const isVideoEnabled = store.getState().video.videoOn;
     if (isVideoEnabled) {
-      isVideoEnabled = localUserStream.getVideoTracks()[0].enabled = false;
+      localUserStream.getVideoTracks()[0].enabled = false;
+      dispatch(setVideoOn(false));
     } else {
-      isVideoEnabled = localUserStream.getVideoTracks()[0].enabled = true;
+      localUserStream.getVideoTracks()[0].enabled = true;
+      dispatch(setVideoOn(true));
     }
   };
 

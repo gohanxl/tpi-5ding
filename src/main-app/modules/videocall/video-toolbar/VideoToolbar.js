@@ -30,23 +30,18 @@ export const VideoToolbar = forwardRef((props, ref) => {
     meetingId,
   } = props;
 
-  const [isVideoOn, setIsVideoOn] = useState(true);
   const micOn = useSelector((state) => state.video.micOn);
+  const videoOn = useSelector((state) => state.video.videoOn);
   const [isScreenShareOn, setIsScreenShareOn] = useState(false);
   const [modalOpened, setModalOpened] = useState(false);
 
-  useEffect(() => {}, [micOn]);
+  useEffect(() => {}, [micOn, videoOn]);
 
   useImperativeHandle(ref, () => ({
     stopScreenShareFromBrowser() {
       setIsScreenShareOn(false);
     },
   }));
-
-  const childVideoOnOff = () => {
-    setIsVideoOn(!isVideoOn);
-    videoOnOff();
-  };
 
   const childStartShareScreen = () => {
     if (isScreenShareOn) {
@@ -72,11 +67,11 @@ export const VideoToolbar = forwardRef((props, ref) => {
   return (
     <div className={toolbar_buttons}>
       <button
-        className={`button ${isVideoOn ? "is-primary" : "is-danger"}`}
+        className={`button ${videoOn ? "is-primary" : "is-danger"}`}
         id="videoOnButton"
-        onClick={childVideoOnOff}
+        onClick={videoOnOff}
       >
-        <FontAwesomeIcon icon={isVideoOn ? faVideo : faVideoSlash} />
+        <FontAwesomeIcon icon={videoOn ? faVideo : faVideoSlash} />
       </button>
       <button
         className={`button ${micOn ? "is-primary" : "is-danger"}`}
