@@ -1,6 +1,6 @@
 @import "../../../../ui-styling/globals/colors.scss";
 
-.toolbar_buttons {
+.toolbar {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -8,7 +8,23 @@
   background-color: var(--darker-primary);
 
   button {
+    color: white;
     width: 18%;
     margin: 0;
+    border-color: var(--darker-primary);
+
+    &:focus {
+      color: white;
+    }
+
+    &:hover {
+      color: white;
+      background-color: var(--dark-primary);
+      border-color: var(--darker-primary);
+    }
   }
+}
+
+.toolbar_buttons {
+  background-color: var(--primary);
 }
