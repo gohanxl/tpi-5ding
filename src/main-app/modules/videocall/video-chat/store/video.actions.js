@@ -14,3 +14,12 @@ export const setVideoOn = (videoOn) => ({
   type: types.SET_VIDEO_ON,
   videoOn,
 });
+
+export const setScreenSharingStatus = (
+  isScreenSharingByRemote,
+  isScreenSharingByMe
+) => ({
+  type: types.SET_SCREEN_SHARING_STATUS,
+  isScreenSharingByRemote,
+  isScreenSharingByMe,
+});

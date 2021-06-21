@@ -20,7 +20,12 @@ import { ParticipantListComponent } from "../participant-list/ParticipantList.co
 import { ClosedCaptionComponent } from "../../../modules/videocall/closed-caption/ClosedCaption.component";
 import { VideoGridComponent } from "./VideoGridComponent.component";
 import { useDispatch, useSelector, useStore } from "react-redux";
-import { setMicOn, setVideoOn, setVideoRows } from "./store/video.actions";
+import {
+  setMicOn,
+  setScreenSharingStatus,
+  setVideoOn,
+  setVideoRows,
+} from "./store/video.actions";
 import { Attendance } from "../../shared-components/Attendance/components/Attendance";
 
 export const VideoChat = (props) => {
@@ -32,7 +37,6 @@ export const VideoChat = (props) => {
   const { name, uuid, meeting } = props;
 
   const user = useSelector((state) => state.user.currentUser);
-  const toolbarRef = useRef();
   const ccRef = useRef();
 
   const [signalRService, setSignalRService] = useState();
@@ -46,9 +50,9 @@ export const VideoChat = (props) => {
 
   let localUserScreenSharingPeer = null;
   let localUserScreenSharingId = null;
-  let isScreenSharingByRemote = false;
-  let isScreenSharingEnabled = false;
-  let isScreenSharingByMe = false;
+  // let isScreenSharingByRemote = false;
+  // let isScreenSharingEnabled = false;
+  // let isScreenSharingByMe = false;
   let connections = [];
   let remoteConnectionIds = [];
 
@@ -113,18 +117,20 @@ export const VideoChat = (props) => {
         }
       });
     } else {
-      isScreenSharingByRemote = false;
-      isScreenSharingEnabled = false;
-      isScreenSharingByMe = false;
+      dispatch(setScreenSharingStatus(false, false));
+      // isScreenSharingByRemote = false;
+      // isScreenSharingEnabled = false;
+      // isScreenSharingByMe = false;
       screenSharinUserName = "";
     }
   };
 
   const onScreenSharingStatus = (status, remoteUserName) => {
     if (status === ScreeenSharingStatus.Stopped) {
-      isScreenSharingByRemote = false;
-      isScreenSharingEnabled = false;
-      isScreenSharingByMe = false;
+      dispatch(setScreenSharingStatus(false, false));
+      // isScreenSharingByRemote = false;
+      // isScreenSharingEnabled = false;
+      // isScreenSharingByMe = false;
       screenSharinUserName = "";
       document.getElementById("screenSharingObj").classList.add("d-none");
       stoppedSharingScreen();
@@ -431,9 +437,10 @@ export const VideoChat = (props) => {
   };
 
   const onScreenShareStream = (stream, call) => {
-    isScreenSharingByRemote = true;
-    isScreenSharingEnabled = true;
-    isScreenSharingByMe = false;
+    dispatch(setScreenSharingStatus(true, false));
+    // isScreenSharingByRemote = true;
+    // isScreenSharingEnabled = true;
+    // isScreenSharingByMe = false;
 
     addScreenSharing(stream);
   };
@@ -532,12 +539,12 @@ export const VideoChat = (props) => {
       const stream = await mediaDevices.getDisplayMedia(displayMediaOptions);
       localUserScreenSharingStream = stream;
 
-      isScreenSharingByMe = true;
-      isScreenSharingEnabled = true;
-      isScreenSharingByRemote = false;
+      dispatch(setScreenSharingStatus(false, true));
+      // isScreenSharingByMe = true;
+      // isScreenSharingEnabled = true;
+      // isScreenSharingByRemote = false;
 
       localUserScreenSharingStream.getVideoTracks()[0].onended = (event) => {
-        toolbarRef.current.stopScreenShareFromBrowser();
         sendOtherToScreenClosed();
       };
 
@@ -559,9 +566,10 @@ export const VideoChat = (props) => {
   };
 
   const sendOtherToScreenClosed = () => {
-    isScreenSharingByMe = false;
-    isScreenSharingEnabled = false;
-    isScreenSharingByRemote = false;
+    dispatch(setScreenSharingStatus(false, false));
+    // isScreenSharingByMe = false;
+    // isScreenSharingEnabled = false;
+    // isScreenSharingByRemote = false;
     signalRService.invokeScreenSharingStatus(
       meetingId,
       localUserId,
@@ -599,7 +607,6 @@ export const VideoChat = (props) => {
           startShareScreen={startShareScreen}
           stopSharingScreen={stopSharingScreen}
           signalRService={signalRService}
-          ref={toolbarRef}
         />
         <Attendance
           classId={2}

@@ -19,7 +19,7 @@ import { toolbar_buttons } from "./VideoToolbar.module.scss";
 import { ParticipantListComponent } from "../participant-list/ParticipantList.component";
 import { useSelector } from "react-redux";
 
-export const VideoToolbar = forwardRef((props, ref) => {
+export const VideoToolbar = (props) => {
   const {
     videoOnOff,
     muteUnmute,
@@ -32,32 +32,13 @@ export const VideoToolbar = forwardRef((props, ref) => {
 
   const micOn = useSelector((state) => state.video.micOn);
   const videoOn = useSelector((state) => state.video.videoOn);
-  const [isScreenShareOn, setIsScreenShareOn] = useState(false);
+  const isScreenSharingByMe = useSelector(
+    (state) => state.video.isScreenSharingByMe
+  );
+
   const [modalOpened, setModalOpened] = useState(false);
 
-  useEffect(() => {}, [micOn, videoOn]);
-
-  useImperativeHandle(ref, () => ({
-    stopScreenShareFromBrowser() {
-      setIsScreenShareOn(false);
-    },
-  }));
-
-  const childStartShareScreen = () => {
-    if (isScreenShareOn) {
-      return;
-    }
-    setIsScreenShareOn(true);
-    startShareScreen();
-  };
-
-  const childSopShareScreen = () => {
-    if (!isScreenShareOn) {
-      return;
-    }
-    setIsScreenShareOn(false);
-    stopSharingScreen();
-  };
+  useEffect(() => {}, [micOn, videoOn, isScreenSharingByMe]);
 
   const toggleParticipantModal = () => {
     signalRService.invokeUpdateParticipants(meetingId);
@@ -86,20 +67,20 @@ export const VideoToolbar = forwardRef((props, ref) => {
       <button className="button is-info" onClick={toggleParticipantModal}>
         <FontAwesomeIcon icon={faUserFriends} />
       </button>
-      {!isScreenShareOn && (
+      {!isScreenSharingByMe && (
         <button
           className="button is-primary"
           id="start_screen_share_button"
-          onClick={childStartShareScreen}
+          onClick={startShareScreen}
         >
           <FontAwesomeIcon icon={faPlay} />
         </button>
       )}
-      {isScreenShareOn && (
+      {isScreenSharingByMe && (
         <button
           className="button is-danger"
           id="stop_screen_share_button"
-          onClick={childSopShareScreen}
+          onClick={stopSharingScreen}
         >
           <FontAwesomeIcon icon={faStop} />
         </button>
@@ -112,4 +93,4 @@ export const VideoToolbar = forwardRef((props, ref) => {
       />
     </div>
   );
-});
+};
