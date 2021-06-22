@@ -10,17 +10,17 @@ $mock-1: url(../../../assets/img/mock-1.svg);
 h1 {
   color: var(--darker-primary);
   font-size: 6em;
-  -webkit-transition: color 500ms ease-in-out;
-  -ms-transition: color 500ms ease-in-out;
-  transition: color 500ms ease-in-out;
+  -webkit-transition: color 250ms ease-in-out;
+  -ms-transition: color 250ms ease-in-out;
+  transition: color 250ms ease-in-out;
 }
 
 h3 {
   color: var(--dark-primary);
   font-size: 3em;
-  -webkit-transition: color 500ms ease-in-out;
-  -ms-transition: color 500ms ease-in-out;
-  transition: color 500ms ease-in-out;
+  -webkit-transition: color 250ms ease-in-out;
+  -ms-transition: color 250ms ease-in-out;
+  transition: color 250ms ease-in-out;
 }
 
 h4 {

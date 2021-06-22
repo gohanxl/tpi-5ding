@@ -8,9 +8,9 @@
 .button-text {
   padding-top: 0.5em;
   color: var(--darker-primary) !important;
-  -webkit-transition: color 500ms ease-in-out;
-  -ms-transition: color 500ms ease-in-out;
-  transition: color 500ms ease-in-out;
+  -webkit-transition: color 250ms ease-in-out;
+  -ms-transition: color 250ms ease-in-out;
+  transition: color 250ms ease-in-out;
 }
 
 .button-background {
@@ -22,7 +22,7 @@
   align-items: center;
   padding: 40px;
   justify-content: center;
-  -webkit-transition: background-color 500ms ease-in-out;
-  -ms-transition: background-color 500ms ease-in-out;
-  transition: background-color 500ms ease-in-out;
+  -webkit-transition: background-color 250ms ease-in-out;
+  -ms-transition: background-color 250ms ease-in-out;
+  transition: background-color 250ms ease-in-out;
 }

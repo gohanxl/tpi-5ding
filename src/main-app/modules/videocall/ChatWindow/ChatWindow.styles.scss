@@ -37,9 +37,9 @@
   flex-direction: column;
   height: 100%;
   background-color: var(--light-blue);
-  -webkit-transition: background-color 500ms ease-in-out;
-  -ms-transition: background-color 500ms ease-in-out;
-  transition: background-color 500ms ease-in-out;
+  -webkit-transition: background-color 250ms ease-in-out;
+  -ms-transition: background-color 250ms ease-in-out;
+  transition: background-color 250ms ease-in-out;
 }
 
 .chat_wrapper {
