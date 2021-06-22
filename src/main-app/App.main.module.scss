@@ -15,3 +15,13 @@
 .colorblind_switch {
   margin-left: 5px;
 }
+
+.educapp_nav__items {
+  & > a {
+    color: white;
+  }
+
+  &:hover > a {
+    color: var(--primary);
+  }
+}
