@@ -23,13 +23,15 @@
       color: white;
     }
 
-    &.colorblind_button:hover {
+    &.colorblind_button.is_danger {
+      background-color: #f03a5f;
+      border-color: #f03a5f;
+    }
+
+    &.colorblind_button.is_danger:hover {
       color: white;
-      background-color: var(--dark-primary);
-      border-color: var(--darker-primary);
-      -webkit-transition: all 250ms ease-in-out;
-      -ms-transition: all 250ms ease-in-out;
-      transition: all 250ms ease-in-out;
+      background-color: #a2253e;
+      border-color: #a2253e;
     }
   }
 }
@@ -39,4 +41,13 @@
   -webkit-transition: background-color 250ms ease-in-out;
   -ms-transition: background-color 250ms ease-in-out;
   transition: background-color 250ms ease-in-out;
+
+  &.toolbar_buttons:hover {
+    color: white;
+    background-color: var(--dark-primary);
+    border-color: var(--primary);
+    -webkit-transition: all 250ms ease-in-out;
+    -ms-transition: all 250ms ease-in-out;
+    transition: all 250ms ease-in-out;
+  }
 }
