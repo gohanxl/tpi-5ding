@@ -4,7 +4,6 @@ import {
   cc_shown,
   cc_hidden,
 } from "./ClosedCaption.module.scss";
-import { SignalHandlerService } from "../services/signal-handler";
 
 import SpeechRecognition, {
   useSpeechRecognition,
@@ -23,7 +22,6 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
   const [isShowingCC, setShowingCC] = useState(false);
   const [closedCaptionSend, setClosedCaptionSend] = useState(null);
   const [closedCaptionReceive, setClosedCaptionReceive] = useState([]);
-  // const [signalRService, setSignalRService] = useState();
   const { transcript, resetTranscript } = useSpeechRecognition();
   const [isMuted, setIsMuted] = useState(false);
 
