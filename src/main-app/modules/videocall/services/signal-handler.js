@@ -18,21 +18,27 @@ export class SignalHandlerService {
   };
 
   asyncConnection = () => {
-    this.hubConnection = new SignalR.HubConnectionBuilder()
-      .withUrl(process.env.REACT_APP_HUB_URL)
-      .build();
+    if (!this.isServiceStarted) {
+      console.log("NO HAY CONEXION! AHI CONECTO PAPA");
+      this.hubConnection = new SignalR.HubConnectionBuilder()
+        .withUrl(process.env.REACT_APP_HUB_URL)
+        .build();
 
-    return this.hubConnection
-      .start()
-      .then(() => {
-        this.isServiceStarted = true;
-        console.log("Connection established successfully!");
-        return true;
-      })
-      .catch((error) => {
-        console.error(error);
-        return false;
-      });
+      return this.hubConnection
+        .start()
+        .then(() => {
+          this.isServiceStarted = true;
+          console.log("Connection established successfully!");
+          return true;
+        })
+        .catch((error) => {
+          console.error(error);
+          return false;
+        });
+    } else {
+      console.log("YA TE CONECTASTE MASTERR!!!");
+      return true;
+    }
   };
 
   startConnection = (method) => {
@@ -95,8 +101,10 @@ export class SignalHandlerService {
       .catch((error) => console.log(error));
   };
 
+
   invokeSendClosedCaption = (roomId, name, closedCaption) => {
-    this.hubConnection.invoke("SendClosedCaption", roomId, name, closedCaption);
+    this.hubConnection.invoke("SendClosedCaption", roomId, name, closedCaption)
+      .catch((error) => console.log(error));
   };
 
   listenReceiveClosedCaption = (method) => {

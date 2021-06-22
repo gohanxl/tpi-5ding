@@ -16,11 +16,15 @@ import Peer from "peerjs";
 import { SignalHandlerService } from "../services/signal-handler";
 import { VideoToolbar } from "../video-toolbar/VideoToolbar";
 import { ChatWindow } from "../ChatWindow/ChatWindow.component";
-import { ParticipantListComponent } from "../participant-list/ParticipantList.component";
 import { ClosedCaptionComponent } from "../../../modules/videocall/closed-caption/ClosedCaption.component";
 import { VideoGridComponent } from "./VideoGridComponent.component";
 import { useDispatch, useSelector, useStore } from "react-redux";
-import { setVideoRows } from "./store/video.actions";
+import {
+  setMicOn,
+  setScreenSharingStatus,
+  setVideoOn,
+  setVideoRows,
+} from "./store/video.actions";
 import { Attendance } from "../../shared-components/Attendance/components/Attendance";
 
 export const VideoChat = (props) => {
@@ -32,32 +36,25 @@ export const VideoChat = (props) => {
   const { name, uuid, meeting } = props;
 
   const user = useSelector((state) => state.user.currentUser);
-  const toolbarRef = useRef();
   const ccRef = useRef();
 
   const [signalRService, setSignalRService] = useState();
-  let videoRows = [];
 
+  let localUserStream = null;
   let userDisplayName = name;
   let localUserPeer = null;
   let localUserId = null;
   let meetingId = meeting;
+
   let localUserScreenSharingPeer = null;
   let localUserScreenSharingId = null;
-  let isScreenSharingByRemote = false;
-  let isScreenSharingEnabled = false;
-  let isScreenSharingByMe = false;
-  let localUserStream = null;
   let connections = [];
   let remoteConnectionIds = [];
-  let isVideoEnabled = false;
-  let isMute = false;
+
   let localUserCallObject = null;
   let screenSharinUserName = null;
   let localUserScreenSharingStream = null;
 
-  // let videoRows = [];
-  let videoDivs = [];
   const store = useStore();
 
   const displayMediaOptions = { video: { cursor: "always" }, audio: false };
@@ -115,18 +112,15 @@ export const VideoChat = (props) => {
         }
       });
     } else {
-      isScreenSharingByRemote = false;
-      isScreenSharingEnabled = false;
-      isScreenSharingByMe = false;
+      dispatch(setScreenSharingStatus(false, false));
+
       screenSharinUserName = "";
     }
   };
 
   const onScreenSharingStatus = (status, remoteUserName) => {
     if (status === ScreeenSharingStatus.Stopped) {
-      isScreenSharingByRemote = false;
-      isScreenSharingEnabled = false;
-      isScreenSharingByMe = false;
+      dispatch(setScreenSharingStatus(false, false));
       screenSharinUserName = "";
       document.getElementById("screenSharingObj").classList.add("d-none");
       stoppedSharingScreen();
@@ -154,28 +148,34 @@ export const VideoChat = (props) => {
   };
 
   const remoteUserLeft = (roomId, userId) => {
+    //TODO Borrar esto cdo este todo andando
+    /** Asi refrescabamos los videos cdo alguien se iba sin video grid**/
+    // const reduxVideos = store.getState().video.rows;
+    // reduxVideos.forEach((item) => console.log(item));
+    // const filteredReduxVideos = reduxVideos.filter(
+    //   (item) => item.id !== userId
+    // );
+    // dispatch(setVideoRows(filteredReduxVideos));
+
+    divideVideosInRows(null, userId);
+
     const peerConnection = connections.filter((item) => item.UserId === userId);
     if (peerConnection.length === 1) {
       peerConnection[0].CallObject.close();
-
-      const reduxVideos = store.getState().video.rows;
-      //const newArrayVideo = reduxVideos.filter(div => div.getAttribute("id") !== userId);
-      const index = reduxVideos.indexOf(peerConnection[0].DivElement);
-      if (index > 0) {
-        const newArrayVideo = [...reduxVideos];
-        newArrayVideo.splice(index, 1);
-        dispatch(setVideoRows(newArrayVideo));
-      }
+      connections = connections.filter((item) => item.UserId !== userId);
+    } else {
+      console.warn("Error on connections array");
     }
   };
 
-  const onRemoteUserClosed = (roomId, userId) => {
-    const peerConnection = connections.filter((item) => item.UserId === userId);
-    if (peerConnection.length === 1) {
-      const index = connections.indexOf(peerConnection[0], 0);
-      connections = connections.splice(index, 1);
-    }
-  };
+  /*TODO: Revisar antes de borrar porque es el callback del close de peerjs (objeto peer)*/
+  // const onRemoteUserClosed = (roomId, userId) => {
+  //   const peerConnection = connections.filter((item) => item.UserId === userId);
+  //   if (peerConnection.length === 1) {
+  //     const index = connections.indexOf(peerConnection[0], 0);
+  //     connections = connections.splice(index, 1);
+  //   }
+  // };
 
   const connectToOtherUsers = (roomId, userId, displayName) => {
     if (roomId === meetingId && userId !== localUserId) {
@@ -196,7 +196,8 @@ export const VideoChat = (props) => {
           console.log("Error during receiving stream", error);
         }
       );
-      localUserCallObject.on("close", () => onRemoteUserClosed(roomId, userId));
+      /*TODO: Revisar antes de borrar porque es el callback del close de peerjs (objeto peer)*/
+      /*localUserCallObject.on("close", () => remoteUserLeft(roomId, userId));*/
     }
   };
 
@@ -213,24 +214,25 @@ export const VideoChat = (props) => {
   };
 
   const onSuccessfullConnection = async () => {
+    await GetUserDevices();
+
     const peer = await getPeerObject();
     localUserPeer = peer;
     peer.on("open", sendNotificationOfJoining);
     peer.on("call", onCallReceive);
     peer.on("error", (err) => console.error(err));
-    await GetUserDevices();
   };
 
   const GetUserDevices = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia(avContraints);
-      HandelSucess(stream);
+      successHandler(stream);
     } catch (exception) {
-      HandelError(exception);
+      errorHandler(exception);
     }
   };
 
-  const HandelSucess = (stream) => {
+  const successHandler = (stream) => {
     const videoTracks = stream.getVideoTracks();
     const constraints = videoTracks[0].getConstraints();
 
@@ -238,7 +240,7 @@ export const VideoChat = (props) => {
     addUser(localUserStream, localUserId, null, userDisplayName, true);
   };
 
-  const HandelError = (error) => {
+  const errorHandler = (error) => {
     if (error.name === "ConstraintNotSatisfiedError") {
       const v = avContraints.video;
       errorMsg(
@@ -265,9 +267,10 @@ export const VideoChat = (props) => {
   };
 
   const onCallReceive = async (call) => {
-    const stream = await navigator.mediaDevices.getUserMedia(avContraints);
+    const stream = localUserStream;
 
-    localUserStream = stream;
+    console.log("onCallReceive:localUserStream");
+    console.log(localUserStream);
     const peerConnection = connections.filter(
       (item) => item.UserId === localUserId
     );
@@ -309,8 +312,10 @@ export const VideoChat = (props) => {
     videoElement.muted = isLocalPaticipant;
     videoElement.srcObject = stream;
 
-    isVideoEnabled = stream.getVideoTracks()[0].enabled;
-    isMute = stream.getAudioTracks()[0].enabled;
+    if (isLocalPaticipant) {
+      dispatch(setVideoOn(stream.getVideoTracks()[0].enabled));
+      dispatch(setMicOn(true));
+    }
 
     const divElement = document.createElement("div");
     divElement.setAttribute("class", user_camera_container);
@@ -333,41 +338,63 @@ export const VideoChat = (props) => {
     peerConnection.isLocalPaticipant = isLocalPaticipant;
     connections.push(peerConnection);
 
-    videoDivs.push(divElement);
-    // divideVideosInRows();
-    const reduxVideos = store.getState().video.rows;
-    const newArrayVideo = [...reduxVideos];
-    newArrayVideo.push(divElement);
-    dispatch(setVideoRows(newArrayVideo));
+    //TODO borrar esto cdo este andando todo 100 %
+    /** Esto es lo que haciamos para apendear sin rows para probar **/
+    // const reduxVideos = store.getState().video.rows;
+    // const newArrayVideo = [...reduxVideos];
+    // newArrayVideo.push(divElement);
+    // dispatch(setVideoRows(newArrayVideo));
+
+    divideVideosInRows(divElement, null);
   };
 
-  const divideVideosInRows = () => {
+  const divideVideosInRows = async (newVideoDiv, userIdToRemove) => {
     const rows = [];
+    const reduxVideoRows = store.getState().video.rows;
+    let videoDivs = [];
+    if (Array.isArray(reduxVideoRows) && reduxVideoRows.length > 0) {
+      const arrayOfChildrenCollection = reduxVideoRows.map(
+        (row) => row.divElement.children
+      );
+      arrayOfChildrenCollection.forEach((collectionOfDivs) => {
+        Array.from(collectionOfDivs).forEach((divEl) => {
+          videoDivs.push(divEl);
+        });
+      });
+    }
+
+    if (newVideoDiv) {
+      videoDivs.push(newVideoDiv);
+    }
+
+    if (userIdToRemove) {
+      videoDivs = videoDivs.filter((item) => item.id !== userIdToRemove);
+    }
+
     const videoDivsCount = videoDivs.length;
     const initialRowsCount = 2;
     let rowsQuantity = videoDivsCount > initialRowsCount ? initialRowsCount : 1;
-    //const maxRowsCount = 10;
     const videoDivsCopy = [...videoDivs];
 
-    const camerasPerRow = Math.round(videoDivsCount / rowsQuantity);
+    const camerasPerRow = Math.floor(videoDivsCount / rowsQuantity);
     const remainingCamera = videoDivsCount % rowsQuantity;
 
-    while (rowsQuantity > 0) {
+    while (rowsQuantity >= 0) {
       rows.push({
         maxCamsCount:
-          rowsQuantity === 1 && remainingCamera
+          rowsQuantity === 0 && remainingCamera
             ? remainingCamera
             : camerasPerRow,
       });
       rowsQuantity--;
     }
 
-    rows.forEach((row, i) => {
-      if (row.maxCamsCount === 1 && camerasPerRow > 2) {
-        rows[i - 1].maxCamsCount--;
-        row++;
-      }
-    });
+    // rows.forEach((row, i) => {
+    //   if (row.maxCamsCount === 1 && camerasPerRow > 2) {
+    //     rows[i - 1].maxCamsCount--;
+    //     row++;
+    //   }
+    // });
 
     rows.forEach((row) => {
       const divEl = document.createElement("div");
@@ -378,13 +405,12 @@ export const VideoChat = (props) => {
         const videoCam = videoDivsCopy.shift();
         if (videoCam) {
           divEl.appendChild(videoCam);
-          remainingCams--;
         }
+        remainingCams--;
       }
       row.divElement = divEl;
     });
 
-    videoRows = rows;
     dispatch(setVideoRows(rows));
   };
 
@@ -423,9 +449,7 @@ export const VideoChat = (props) => {
   };
 
   const onScreenShareStream = (stream, call) => {
-    isScreenSharingByRemote = true;
-    isScreenSharingEnabled = true;
-    isScreenSharingByMe = false;
+    dispatch(setScreenSharingStatus(true, false));
 
     addScreenSharing(stream);
   };
@@ -447,40 +471,69 @@ export const VideoChat = (props) => {
   };
 
   const muteByTeacher = () => {
-    isMute = localUserStream.getAudioTracks()[0].enabled = false;
+    localUserStream.getAudioTracks()[0].enabled = false;
+    dispatch(setMicOn(false));
     ccRef.current.muteClosedCaption();
-    toolbarRef.current.muteByTeacher();
   };
 
   const muteUnmute = () => {
-    if (isMute) {
-      isMute = localUserStream.getAudioTracks()[0].enabled = false;
+    const reduxIsMicOn = store.getState().video.micOn;
+    if (reduxIsMicOn) {
+      localUserStream.getAudioTracks()[0].enabled = false;
+      dispatch(setMicOn(false));
       ccRef.current.muteClosedCaption();
     } else {
-      isMute = localUserStream.getAudioTracks()[0].enabled = true;
+      localUserStream.getAudioTracks()[0].enabled = true;
+      dispatch(setMicOn(true));
       ccRef.current.unMuteClosedCaption();
     }
-    return isMute;
+    return localUserStream.getAudioTracks()[0].enabled;
   };
 
   const videoOnOff = () => {
+    const isVideoEnabled = store.getState().video.videoOn;
     if (isVideoEnabled) {
-      isVideoEnabled = localUserStream.getVideoTracks()[0].enabled = false;
+      localUserStream.getVideoTracks()[0].enabled = false;
+      dispatch(setVideoOn(false));
     } else {
-      isVideoEnabled = localUserStream.getVideoTracks()[0].enabled = true;
+      localUserStream.getVideoTracks()[0].enabled = true;
+      dispatch(setVideoOn(true));
     }
   };
 
   const endCall = async () => {
-    await signalRService.invokeScreenSharingStatus;
+    ccRef.current.endCloseCaption();
     signalRService.stopConnection();
 
     localUserPeer.destroy();
+    localUserScreenSharingPeer.destroy();
 
     dispatch(setVideoRows([]));
 
-    localUserStream.getAudioTracks()[0].stop();
-    localUserStream.getVideoTracks()[0].stop();
+    localUserStream.getAudioTracks().forEach(function (track) {
+      track.stop();
+    });
+    localUserStream.getVideoTracks().forEach(function (track) {
+      track.stop();
+    });
+
+    connections.forEach((peer) => {
+      const stream = peer.VideoElement.srcObject;
+      const tracks = stream.getTracks();
+
+      tracks.forEach(function (track) {
+        track.stop();
+      });
+
+      peer.VideoElement.srcObject = null;
+    });
+
+    connections = null;
+    localUserPeer = null;
+    localUserScreenSharingPeer = null;
+    localUserStream = null;
+    localUserScreenSharingStream = null;
+
     window.location = "/#/educapp/home";
   };
 
@@ -495,12 +548,9 @@ export const VideoChat = (props) => {
       const stream = await mediaDevices.getDisplayMedia(displayMediaOptions);
       localUserScreenSharingStream = stream;
 
-      isScreenSharingByMe = true;
-      isScreenSharingEnabled = true;
-      isScreenSharingByRemote = false;
+      dispatch(setScreenSharingStatus(false, true));
 
       localUserScreenSharingStream.getVideoTracks()[0].onended = (event) => {
-        toolbarRef.current.stopScreenShareFromBrowser();
         sendOtherToScreenClosed();
       };
 
@@ -511,7 +561,7 @@ export const VideoChat = (props) => {
         userDisplayName
       );
     } catch (exception) {
-      HandelError(exception);
+      errorHandler(exception);
     }
   };
 
@@ -522,9 +572,7 @@ export const VideoChat = (props) => {
   };
 
   const sendOtherToScreenClosed = () => {
-    isScreenSharingByMe = false;
-    isScreenSharingEnabled = false;
-    isScreenSharingByRemote = false;
+    dispatch(setScreenSharingStatus(false, false));
     signalRService.invokeScreenSharingStatus(
       meetingId,
       localUserId,
@@ -532,11 +580,6 @@ export const VideoChat = (props) => {
       userDisplayName
     );
   };
-
-  console.log(
-    "?? ~ file: VideoChat.component.js ~ line 349 ~ divideVideosInRows ~ videoRows",
-    videoRows
-  );
 
   return (
     <div className={videochat_container}>
@@ -546,11 +589,12 @@ export const VideoChat = (props) => {
         </div>
         <div className={cameras_and_cc}>
           <VideoGridComponent />
-          <ClosedCaptionComponent
-            name={userDisplayName}
-            meeting="1"
-            ref={ccRef}
-          />
+            <ClosedCaptionComponent
+              name={userDisplayName}
+              meeting="1"
+              ref={ccRef}
+              signalRService={signalRService}
+            />
           <div id="errorMsg"></div>
         </div>
       </div>
@@ -564,7 +608,6 @@ export const VideoChat = (props) => {
           startShareScreen={startShareScreen}
           stopSharingScreen={stopSharingScreen}
           signalRService={signalRService}
-          ref={toolbarRef}
         />
         <Attendance
           classId={2}
