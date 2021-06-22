@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Sidebar } from "./modules/shared-components/Sidebar/Sidebar.component";
 import { MainAppRoutes } from "./App.main.routes";
@@ -32,6 +32,8 @@ const MainApp = () => {
   const [switchValue, setSwitchValue] = useState(
     Boolean(localStorage.getItem("color-blind"))
   );
+
+  const colorblindSwitch = useRef(null);
 
   const {
     user,
@@ -106,8 +108,6 @@ const MainApp = () => {
     return <div>Oops... {error.message}</div>;
   }
 
-  const colorblindSwitch = document.getElementById("switch");
-
   return (
     <div className={isLoading ? spinning_svg : ""}>
       {isLoading ? (
@@ -157,10 +157,11 @@ const MainApp = () => {
                         <span>Modo Daltónico</span>
                         <Switch
                           id="switch"
+                          ref={colorblindSwitch}
                           className={colorblind_switch}
                           checked={switchValue}
                           onChange={() => {
-                            colorblindSwitch.blur();
+                            colorblindSwitch.current.$inputRef.blur();
                             setSwitchValue(!switchValue);
                           }}
                           onColor="#00b4b2"
