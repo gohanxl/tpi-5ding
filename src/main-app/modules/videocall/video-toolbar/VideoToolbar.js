@@ -19,6 +19,7 @@ import {
   toolbar,
   toolbar_buttons,
   colorblind_button,
+  is_danger,
 } from "./VideoToolbar.module.scss";
 import { ParticipantListComponent } from "../participant-list/ParticipantList.component";
 import { useSelector } from "react-redux";
@@ -53,7 +54,7 @@ export const VideoToolbar = (props) => {
     <div className={toolbar}>
       <button
         className={`button ${colorblind_button} ${
-          videoOn ? toolbar_buttons : "is-danger"
+          videoOn ? toolbar_buttons : is_danger
         }`}
         id="videoOnButton"
         onClick={videoOnOff}
@@ -62,14 +63,18 @@ export const VideoToolbar = (props) => {
       </button>
       <button
         className={`button ${colorblind_button} ${
-          micOn ? toolbar_buttons : "is-danger"
+          micOn ? toolbar_buttons : is_danger
         }`}
         id="muteUnmuteButton"
         onClick={muteUnmute}
       >
         <FontAwesomeIcon icon={!micOn ? faMicrophoneSlash : faMicrophoneAlt} />
       </button>
-      <button className="button is-danger" id="endCallButton" onClick={endCall}>
+      <button
+        className={`button ${colorblind_button} ${is_danger}`}
+        id="endCallButton"
+        onClick={endCall}
+      >
         <FontAwesomeIcon icon={faPhoneSlash} />
       </button>
       {/*<button className="button is-info" onClick={toggleChat}>*/}
@@ -92,7 +97,7 @@ export const VideoToolbar = (props) => {
       )}
       {isScreenSharingByMe && (
         <button
-          className="button is-danger"
+          className={`button ${is_danger}`}
           id="stop_screen_share_button"
           onClick={stopSharingScreen}
         >
