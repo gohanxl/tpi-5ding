@@ -53,7 +53,7 @@ export const VideoToolbar = (props) => {
     <div className={toolbar}>
       <button
         className={`button ${colorblind_button} ${
-          isVideoOn ? toolbar_buttons : "is-danger"
+          videoOn ? toolbar_buttons : "is-danger"
         }`}
         id="videoOnButton"
         onClick={videoOnOff}
@@ -62,7 +62,7 @@ export const VideoToolbar = (props) => {
       </button>
       <button
         className={`button ${colorblind_button} ${
-          !isMute ? toolbar_buttons : "is-danger"
+          micOn ? toolbar_buttons : "is-danger"
         }`}
         id="muteUnmuteButton"
         onClick={muteUnmute}
