@@ -17,6 +17,7 @@ import {
   spinning_svg,
   colorblind_wrapper,
   colorblind_switch,
+  educapp_nav__items,
 } from "./App.main.module.scss";
 import Switch from "react-switch";
 import {
@@ -105,6 +106,8 @@ const MainApp = () => {
     return <div>Oops... {error.message}</div>;
   }
 
+  const colorblindSwitch = document.getElementById("switch");
+
   return (
     <div className={isLoading ? spinning_svg : ""}>
       {isLoading ? (
@@ -130,9 +133,11 @@ const MainApp = () => {
 
               {isAuthenticated ? (
                 <div className="navbar-end">
-                  <div className="navbar-item has-dropdown is-hoverable">
+                  <div
+                    className={`navbar-item has-dropdown is-hoverable ${educapp_nav__items}`}
+                  >
                     <a className="navbar-link is-arrowless">
-                      <FontAwesomeIcon color="white" size="lg" icon={faBell} />
+                      <FontAwesomeIcon size="lg" icon={faBell} />
                     </a>
                     <div className="navbar-dropdown is-right">
                       <a className="navbar-item">Ir a clases</a>
@@ -140,20 +145,25 @@ const MainApp = () => {
                       <a className="navbar-item">Entregar tarea de Historia</a>
                     </div>
                   </div>
-                  <div className="navbar-item has-dropdown is-hoverable">
+                  <div
+                    className={`navbar-item has-dropdown is-hoverable ${educapp_nav__items}`}
+                  >
                     <a className="navbar-link is-arrowless">
-                      <FontAwesomeIcon color="white" size="lg" icon={faUser} />
+                      <FontAwesomeIcon size="lg" icon={faUser} />
                     </a>
                     <div className="navbar-dropdown is-right">
                       <a className="navbar-item">Mi perfil</a>
                       <a className={`navbar-item ${colorblind_wrapper}`}>
                         <span>Modo Daltónico</span>
                         <Switch
+                          id="switch"
                           className={colorblind_switch}
                           checked={switchValue}
                           onChange={() => {
+                            colorblindSwitch.blur();
                             setSwitchValue(!switchValue);
                           }}
+                          onColor="#00b4b2"
                         />
                       </a>
                       <hr className="dropdown-divider"></hr>
