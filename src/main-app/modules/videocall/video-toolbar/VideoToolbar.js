@@ -1,5 +1,10 @@
 /* eslint-disable */
-import React, { forwardRef, useImperativeHandle, useState } from "react";
+import React, {
+  useEffect,
+  forwardRef,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMicrophoneAlt } from "@fortawesome/free-solid-svg-icons";
 import { faMicrophoneSlash } from "@fortawesome/free-solid-svg-icons";
@@ -16,8 +21,9 @@ import {
   colorblind_button,
 } from "./VideoToolbar.module.scss";
 import { ParticipantListComponent } from "../participant-list/ParticipantList.component";
+import { useSelector } from "react-redux";
 
-export const VideoToolbar = forwardRef((props, ref) => {
+export const VideoToolbar = (props) => {
   const {
     videoOnOff,
     muteUnmute,
@@ -28,45 +34,15 @@ export const VideoToolbar = forwardRef((props, ref) => {
     meetingId,
   } = props;
 
-  const [isVideoOn, setIsVideoOn] = useState(true);
-  const [isMute, setIsMute] = useState(false);
-  const [isScreenShareOn, setIsScreenShareOn] = useState(false);
+  const micOn = useSelector((state) => state.video.micOn);
+  const videoOn = useSelector((state) => state.video.videoOn);
+  const isScreenSharingByMe = useSelector(
+    (state) => state.video.isScreenSharingByMe
+  );
+
   const [modalOpened, setModalOpened] = useState(false);
 
-  useImperativeHandle(ref, () => ({
-    stopScreenShareFromBrowser() {
-      setIsScreenShareOn(false);
-    },
-    muteByTeacher() {
-      setIsMute(true);
-    },
-  }));
-
-  const childMute = () => {
-    setIsMute(!isMute);
-    muteUnmute();
-  };
-
-  const childVideoOnOff = () => {
-    setIsVideoOn(!isVideoOn);
-    videoOnOff();
-  };
-
-  const childStartShareScreen = () => {
-    if (isScreenShareOn) {
-      return;
-    }
-    setIsScreenShareOn(true);
-    startShareScreen();
-  };
-
-  const childSopShareScreen = () => {
-    if (!isScreenShareOn) {
-      return;
-    }
-    setIsScreenShareOn(false);
-    stopSharingScreen();
-  };
+  useEffect(() => {}, [micOn, videoOn, isScreenSharingByMe]);
 
   const toggleParticipantModal = () => {
     signalRService.invokeUpdateParticipants(meetingId);
@@ -80,18 +56,18 @@ export const VideoToolbar = forwardRef((props, ref) => {
           isVideoOn ? toolbar_buttons : "is-danger"
         }`}
         id="videoOnButton"
-        onClick={childVideoOnOff}
+        onClick={videoOnOff}
       >
-        <FontAwesomeIcon icon={isVideoOn ? faVideo : faVideoSlash} />
+        <FontAwesomeIcon icon={videoOn ? faVideo : faVideoSlash} />
       </button>
       <button
         className={`button ${colorblind_button} ${
           !isMute ? toolbar_buttons : "is-danger"
         }`}
         id="muteUnmuteButton"
-        onClick={childMute}
+        onClick={muteUnmute}
       >
-        <FontAwesomeIcon icon={isMute ? faMicrophoneSlash : faMicrophoneAlt} />
+        <FontAwesomeIcon icon={!micOn ? faMicrophoneSlash : faMicrophoneAlt} />
       </button>
       <button className="button is-danger" id="endCallButton" onClick={endCall}>
         <FontAwesomeIcon icon={faPhoneSlash} />
@@ -105,20 +81,20 @@ export const VideoToolbar = forwardRef((props, ref) => {
       >
         <FontAwesomeIcon icon={faUserFriends} />
       </button>
-      {!isScreenShareOn && (
+      {!isScreenSharingByMe && (
         <button
           className={`button ${toolbar_buttons} ${colorblind_button}`}
           id="start_screen_share_button"
-          onClick={childStartShareScreen}
+          onClick={startShareScreen}
         >
           <FontAwesomeIcon icon={faPlay} />
         </button>
       )}
-      {isScreenShareOn && (
+      {isScreenSharingByMe && (
         <button
           className="button is-danger"
           id="stop_screen_share_button"
-          onClick={childSopShareScreen}
+          onClick={stopSharingScreen}
         >
           <FontAwesomeIcon icon={faStop} />
         </button>
@@ -131,4 +107,4 @@ export const VideoToolbar = forwardRef((props, ref) => {
       />
     </div>
   );
-});
+};
