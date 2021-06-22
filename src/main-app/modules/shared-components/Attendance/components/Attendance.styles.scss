@@ -1,3 +1,16 @@
-.attendance_button{
+.attendance_button {
   width: 100%;
+  color: white;
+  border: none;
+  border-radius: 0px;
+  background-color: var(--darker-primary);
+  -webkit-transition: opacity 500ms ease-in-out;
+  -ms-transition: opacity 500ms ease-in-out;
+  transition: opacity 500ms ease-in-out;
+
+  &:hover {
+    color: white;
+    background-color: var(--darker-primary);
+    opacity: 0.8;
+  }
 }
