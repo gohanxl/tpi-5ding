@@ -7,7 +7,7 @@ import subjectSvg from "../../../../assets/img/education/015-list.svg";
 import classSvg from "../../../../assets/img/education/005-school bell.svg";
 import { useSelector } from "react-redux";
 
-export const Dashboard = () => {
+export const Dashboard = ({ isTeacher }) => {
   const user = useSelector((state) => state.user.currentUser);
 
   return (
@@ -30,7 +30,7 @@ export const Dashboard = () => {
             <Button
               image={classSvg}
               title="ENTRAR A CLASE"
-              route="/educapp/teacher/call"
+              route={`/educapp/${isTeacher ? "teacher" : "student"}/call`}
             />
           </div>
           <div className="level-item">
