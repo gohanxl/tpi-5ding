@@ -1,50 +1,75 @@
+import {
+  faCalendarAlt,
+  faEnvelope,
+  faHome,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
+import { slide as Menu } from "react-burger-menu";
 import { useHistory } from "react-router";
 import "./Sidebar.styles.scss";
 
-export const Sidebar = ({ currentRole }) => {
+export const Sidebar = () => {
   const history = useHistory();
+
+  let isMenuOpen = function (state) {
+    return state.isOpen;
+  };
+
   const subjects = [
     { id: 1, name: "Lengua" },
     { id: 2, name: "Matemática" },
     { id: 3, name: "Ciencias Naturales" },
   ];
 
+  const goToPage = (event, page) => {
+    event.preventDefault();
+    history.push(page);
+    isMenuOpen = false;
+  };
+
   return (
-    <aside className="sidebar-menu menu">
-      <ul className="menu-list">
-        <li>
+    <div className="sidebar-menu">
+      <Menu isOpen={isMenuOpen(false)}>
+        <a
+          id="home"
+          className="menu-item"
+          href="#dashboard"
+          onClick={(e) => goToPage(e, "/educapp/home")}
+        >
+          <FontAwesomeIcon icon={faHome} className="mr-3" />
+          Dashboard
+        </a>
+        <a
+          id="home"
+          className="menu-item"
+          href="#calendario"
+          onClick={(e) => goToPage(e, "/educapp/home")}
+        >
+          <FontAwesomeIcon icon={faCalendarAlt} className="mr-3" />
+          Calendario
+        </a>
+        <a
+          id="home"
+          className="menu-item"
+          href="#mensajes"
+          onClick={(e) => goToPage(e, "/educapp/home")}
+        >
+          <FontAwesomeIcon icon={faEnvelope} className="mr-3" />
+          Mensajes
+        </a>
+        <p className="menu-group-title">Materias</p>
+        {subjects.map(({ id, name }) => (
           <a
-            className="is-active"
-            onClick={() => history.push(`/educapp/dashboard/${currentRole}`)}
+            key={id}
+            className="menu-item assignature"
+            href={"#materia-" + id}
+            onClick={(e) => goToPage(e, "/educapp/student/assignature/" + id)}
           >
-            Dashboard
+            {name}
           </a>
-        </li>
-        <li>
-          <a onClick={() => history.push("/educapp/student")}>Student</a>
-        </li>
-        <li>
-          <a onClick={() => history.push("/educapp/teacher")}>Profesor</a>
-        </li>
-      </ul>
-      <ul className="menu-list">
-        <li>
-          <p>Materias</p>
-          <ul>
-            {subjects.map(({ id, name }) => (
-              <li
-                key={id}
-                onClick={() =>
-                  history.push("/educapp/student/assignature/" + id)
-                }
-              >
-                <a>{name}</a>
-              </li>
-            ))}
-          </ul>
-        </li>
-      </ul>
-    </aside>
+        ))}
+      </Menu>
+    </div>
   );
 };

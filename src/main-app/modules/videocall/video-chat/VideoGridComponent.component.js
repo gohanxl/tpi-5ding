@@ -6,8 +6,6 @@ import { useSelector } from "react-redux";
 export const VideoGridComponent = (props) => {
   const videoRows = useSelector((state) => state.video.rows);
 
-  console.log(videoRows);
-
   useEffect(() => {}, [videoRows]);
 
   const CameraRow = ({ element }) => {

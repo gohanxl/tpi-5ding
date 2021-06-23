@@ -72,10 +72,6 @@ const MainApp = () => {
     return <div>Oops... {error.message}</div>;
   }
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
   const routesRoleConfig = user
     ? roleAccessibilty.getRoutesByRoles(user[rolesUrl])
     : {};
@@ -153,9 +149,13 @@ const MainApp = () => {
           </header>
           <div className="App is-flex">
             <div>
-              <Sidebar currentRole={currentRole} />
+              <Sidebar />
             </div>
-            <div className={`app-container`}>
+            <div
+              className={`app-container ${
+                !shouldHideFooter ? "" : " hide-footer"
+              }`}
+            >
               <div className="app-content">
                 {isAuthenticated && (
                   <MainAppRoutes
