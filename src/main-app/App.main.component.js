@@ -64,19 +64,19 @@ const MainApp = () => {
     }
   }, [dispatch, getAccessTokenSilently, isAuthenticated, user]);
 
-  const shouldHideFooter =
-    window.location.hash.includes("dashboard") ||
-    window.location.hash.includes("call");
-
-  if (error) {
-    return <div>Oops... {error.message}</div>;
-  }
-
   const routesRoleConfig = user
     ? roleAccessibilty.getRoutesByRoles(user[rolesUrl])
     : {};
 
   const currentRole = user ? user[rolesUrl][0].toLowerCase() : "";
+
+  const shouldHideFooter =
+    window.location.hash.includes("dashboard") ||
+    window.location.hash.includes("call");
+
+  if (error) {
+    return <div>Ups... Falló Auth0</div>;
+  }
 
   return (
     <div className={isLoading ? spinning_svg : ""}>
@@ -102,26 +102,26 @@ const MainApp = () => {
               </div>
 
               {isAuthenticated ? (
-                <div class="navbar-end">
-                  <div class="navbar-item has-dropdown is-hoverable">
-                    <a class="navbar-link is-arrowless">
+                <div className="navbar-end">
+                  <div className="navbar-item has-dropdown is-hoverable">
+                    <a className="navbar-link is-arrowless">
                       <FontAwesomeIcon color="white" size="lg" icon={faBell} />
                     </a>
-                    <div class="navbar-dropdown is-right">
-                      <a class="navbar-item">Ir a clases</a>
-                      <a class="navbar-item">Examen de lengua</a>
-                      <a class="navbar-item">Entregar tarea de Historia</a>
+                    <div className="navbar-dropdown is-right">
+                      <a className="navbar-item">Ir a clases</a>
+                      <a className="navbar-item">Examen de lengua</a>
+                      <a className="navbar-item">Entregar tarea de Historia</a>
                     </div>
                   </div>
-                  <div class="navbar-item has-dropdown is-hoverable">
-                    <a class="navbar-link is-arrowless">
+                  <div className="navbar-item has-dropdown is-hoverable">
+                    <a className="navbar-link is-arrowless">
                       <FontAwesomeIcon color="white" size="lg" icon={faUser} />
                     </a>
-                    <div class="navbar-dropdown is-right">
-                      <a class="navbar-item">Mi perfil</a>
-                      <hr class="dropdown-divider"></hr>
+                    <div className="navbar-dropdown is-right">
+                      <a className="navbar-item">Mi perfil</a>
+                      <hr className="dropdown-divider"></hr>
                       <a
-                        class="navbar-item"
+                        className="navbar-item"
                         onClick={() =>
                           logout({ returnTo: window.location.origin })
                         }
@@ -132,8 +132,8 @@ const MainApp = () => {
                   </div>
                 </div>
               ) : (
-                <div class="navbar-end">
-                  <div class="navbar-item">
+                <div className="navbar-end">
+                  <div className="navbar-item">
                     <button
                       className="btn btn-warning"
                       onClick={() =>
