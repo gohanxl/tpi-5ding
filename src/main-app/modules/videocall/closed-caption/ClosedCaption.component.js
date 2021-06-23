@@ -1,9 +1,5 @@
 /* eslint-disable react/display-name */
-import {
-  close_caption,
-  cc_shown,
-  cc_hidden,
-} from "./ClosedCaption.module.scss";
+import { close_caption } from "./ClosedCaption.module.scss";
 
 import SpeechRecognition, {
   useSpeechRecognition,
@@ -19,7 +15,6 @@ import React, {
 export const ClosedCaptionComponent = forwardRef((props, ref) => {
   const { name, meeting, signalRService } = props;
 
-  const [isShowingCC, setShowingCC] = useState(false);
   const [closedCaptionSend, setClosedCaptionSend] = useState(null);
   const [closedCaptionReceive, setClosedCaptionReceive] = useState([]);
   const { transcript, resetTranscript } = useSpeechRecognition();
@@ -48,7 +43,6 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
 
   const closeCaptionCallback = useCallback(
     (name, closedCaption) => {
-      setShowingCC(true);
       setClosedCaptionReceive(
         closedCaptionReceive.length < 2
           ? [...closedCaptionReceive, { name, closedCaption }]
@@ -87,10 +81,7 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
   }
 
   return (
-    <div
-      className={`${close_caption} ${isShowingCC ? cc_shown : cc_hidden}`}
-      onTransitionEnd={() => setShowingCC(false)}
-    >
+    <div className={`${close_caption}`}>
       {closedCaptionReceive &&
         closedCaptionReceive.map(({ name, closedCaption }, index) => (
           <p key={index}>
