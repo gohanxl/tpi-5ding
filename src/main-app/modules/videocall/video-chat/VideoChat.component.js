@@ -179,6 +179,8 @@ export const VideoChat = (props) => {
 
   const connectToOtherUsers = (roomId, userId, displayName) => {
     if (roomId === meetingId && userId !== localUserId) {
+      console.log("usuario: " + localUserId);
+      console.log("llama a: " + userId);
       localUserCallObject = localUserPeer.call(userId, localUserStream);
     }
 
@@ -466,6 +468,35 @@ export const VideoChat = (props) => {
       path: process.env.REACT_APP_PEERJS_PATH,
       host: process.env.REACT_APP_PEERJS_HOST,
       port: process.env.REACT_APP_PEERJS_PORT,
+      config: {
+        iceServers: [
+          {
+            url: "turn:turn.anyfirewall.com:443?transport=tcp",
+            credential: "webrtc",
+            username: "webrtc",
+          },
+          {
+            url: "turn:numb.viagenie.ca",
+            credential: "muazkh",
+            username: "webrtc@live.com",
+          },
+          {
+            url: "turn:192.158.29.39:3478?transport=udp",
+            credential: "JZEOEt2V3Qb0y27GRntt2u2PAYA=",
+            username: "28224511:1379330808",
+          },
+          {
+            url: "turn:192.158.29.39:3478?transport=tcp",
+            credential: "JZEOEt2V3Qb0y27GRntt2u2PAYA=",
+            username: "28224511:1379330808",
+          },
+          {
+            url: "turn:turn.bistri.com:80",
+            credential: "homeo",
+            username: "homeo",
+          },
+        ],
+      },
       debug: 0,
     });
   };
@@ -589,12 +620,12 @@ export const VideoChat = (props) => {
         </div>
         <div className={cameras_and_cc}>
           <VideoGridComponent />
-            <ClosedCaptionComponent
-              name={userDisplayName}
-              meeting="1"
-              ref={ccRef}
-              signalRService={signalRService}
-            />
+          <ClosedCaptionComponent
+            name={userDisplayName}
+            meeting="1"
+            ref={ccRef}
+            signalRService={signalRService}
+          />
           <div id="errorMsg"></div>
         </div>
       </div>

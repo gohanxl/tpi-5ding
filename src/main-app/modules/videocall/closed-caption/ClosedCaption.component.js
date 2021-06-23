@@ -1,4 +1,4 @@
-/* eslint-disable react/display-name */
+/* eslint-disable */
 import {
   close_caption,
   cc_shown,
@@ -88,8 +88,8 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
 
   return (
     <div
-      className={`${close_caption} ${isShowingCC ? cc_shown : cc_hidden}`}
-      onTransitionEnd={() => setShowingCC(false)}
+      className={`${close_caption} `}
+      // onTransitionEnd={() => setShowingCC(false)}
     >
       {closedCaptionReceive &&
         closedCaptionReceive.map(({ name, closedCaption }, index) => (
