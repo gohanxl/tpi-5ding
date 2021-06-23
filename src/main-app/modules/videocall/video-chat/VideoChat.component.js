@@ -616,7 +616,7 @@ export const VideoChat = (props) => {
 
   setInterval(() => {
     const deadUserIds = connections
-      .filter((conn) => conn.CallObject.open)
+      .filter((conn) => (conn.CallObject ? conn.CallObject.open : true))
       .map((conn) => conn.UserId);
     deadUserIds.forEach((userId) => remoteUserLeft(meetingId, userId));
   }, 5000);
