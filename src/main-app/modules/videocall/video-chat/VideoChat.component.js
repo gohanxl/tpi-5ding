@@ -612,6 +612,13 @@ export const VideoChat = (props) => {
     );
   };
 
+  setInterval(() => {
+    const deadUserIds = connections
+      .filter((conn) => conn.CallObject.open)
+      .map((conn) => conn.UserId);
+    deadUserIds.forEach((userId) => remoteUserLeft(meetingId, userId));
+  }, 5000);
+
   return (
     <div className={videochat_container}>
       <div className={cameras_and_screen}>
