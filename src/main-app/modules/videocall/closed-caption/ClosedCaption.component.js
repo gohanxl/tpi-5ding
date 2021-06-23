@@ -22,10 +22,12 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     async muteClosedCaption() {
+      //ACA MUTEO CC
       await SpeechRecognition.abortListening();
       setIsMuted(true);
     },
     async unMuteClosedCaption() {
+      //ACA DESMUTEO CC
       await SpeechRecognition.startListening({ language: "es-AR" });
       setIsMuted(false);
     },
