@@ -193,7 +193,7 @@ export const VideoChat = (props) => {
             displayName
           ),
         (error) => {
-          console.log("Error during receiving stream", error);
+          console.error("Error during receiving stream", error);
         }
       );
       /*TODO: Revisar antes de borrar porque es el callback del close de peerjs (objeto peer)*/
@@ -249,13 +249,12 @@ export const VideoChat = (props) => {
       );
     } else if (error.name === "PermissionDeniedError") {
       errorMsg(
-        "Permissions have not been granted to use your camera and " +
-          "microphone, you need to allow the page access to your devices in " +
-          "order for the demo to work.",
+        "Permissions have not been granted to use your camera and microphone" +
+          "you need to allow the page access to your devices in order for the demo to work.",
         error
       );
     }
-    errorMsg(`getUserMedia error: ${error.name}`, error);
+    errorMsg(`Ups, no encontramos la cámara`, "");
   };
 
   const errorMsg = (msg, error) => {
