@@ -4,13 +4,13 @@ import { routes } from "./App.constants";
 import { Loader } from "./main-app/modules/shared-components/Loader/Loader.component";
 import { ComingSoonComponent } from "./main-app/views/ComingSoon/ComingSoon.component";
 
-const LandingPageComponent = lazy(() =>
-  import("./landing-page/LandingPage.component")
-);
+// const LandingPageComponent = lazy(() =>
+//   import("./landing-page/LandingPage.component")
+// );
 const MainAppComponent = lazy(() => import("./main-app/App.main.component"));
 
 export const Routes = () => {
-  const { landingPage, mainApp } = routes;
+  const { mainApp } = routes;
 
   if (screen.width <= 800) {
     return <ComingSoonComponent />;
@@ -19,14 +19,14 @@ export const Routes = () => {
     <>
       <Suspense fallback={<Loader />}>
         <Switch>
-          <Route
+          {/* <Route
             key="landing-page"
             path={landingPage}
             exact
             component={LandingPageComponent}
-          />
+          /> */}
           <Route key="main-app" path={mainApp} component={MainAppComponent} />
-          <Redirect exact from="/educapp" to="/educapp/" />
+          <Redirect exact from="*" to="/educapp/" />
         </Switch>
       </Suspense>
     </>
