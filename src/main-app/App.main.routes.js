@@ -17,6 +17,7 @@ export const MainAppRoutes = ({ routesRoleConfig, currentRole }) => {
         <Route key={routeProps.path} {...routeProps} />
       ))}
       <Route key="dashboard" path={dashboardRoute} component={HomeContainer} />
+      <Redirect exact from="/#/educapp" to={dashboardRoute} />
       <Redirect to={dashboardRoute} component={HomeContainer} />
     </Switch>
   );
