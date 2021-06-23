@@ -383,6 +383,8 @@ export const VideoChat = (props) => {
       rowsQuantity = 5;
     } else if (videoDivsCount > 20 && videoDivsCount <= 24) {
       rowsQuantity = 6;
+    } else if (videoDivsCount > 24) {
+      rowsQuantity = 7;
     }
 
     const videoDivsCopy = [...videoDivs];
