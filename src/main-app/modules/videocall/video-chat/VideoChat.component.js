@@ -55,6 +55,8 @@ export const VideoChat = (props) => {
   let screenSharinUserName = null;
   let localUserScreenSharingStream = null;
 
+  const intervalId = useRef(null);
+
   const store = useStore();
 
   const displayMediaOptions = { video: { cursor: "always" }, audio: false };
@@ -79,7 +81,21 @@ export const VideoChat = (props) => {
   useEffect(() => {
     if (signalRService && signalRService.isServiceStarted) {
       onUserDisplayNameReceived(name);
+      intervalId.current = setInterval(() => {
+        if (connections) {
+          const deadUserIds = connections
+            .filter((conn) => {
+              if (conn.CallObject) {
+                return !conn.CallObject.open;
+              }
+              return false;
+            })
+            .map((conn) => conn.UserId);
+          deadUserIds.forEach((userId) => remoteUserLeft(meetingId, userId));
+        }
+      }, 10000);
     }
+    return () => clearInterval(intervalId.current);
   }, [signalRService]);
 
   const onUserDisplayNameReceived = async (userName) => {
@@ -157,7 +173,7 @@ export const VideoChat = (props) => {
     // );
     // dispatch(setVideoRows(filteredReduxVideos));
 
-    divideVideosInRows(null, userId);
+    divideVideosInRows(null, userId, false);
 
     const peerConnection = connections.filter((item) => item.UserId === userId);
     if (peerConnection.length === 1) {
@@ -345,14 +361,22 @@ export const VideoChat = (props) => {
     // newArrayVideo.push(divElement);
     // dispatch(setVideoRows(newArrayVideo));
 
-    divideVideosInRows(divElement, null);
+    divideVideosInRows(divElement, null, isLocalPaticipant);
   };
 
-  const divideVideosInRows = async (newVideoDiv, userIdToRemove) => {
+  const divideVideosInRows = async (
+    newVideoDiv,
+    userIdToRemove,
+    isLocalPaticipant
+  ) => {
     const rows = [];
     const reduxVideoRows = store.getState().video.rows;
     let videoDivs = [];
-    if (Array.isArray(reduxVideoRows) && reduxVideoRows.length > 0) {
+    if (
+      Array.isArray(reduxVideoRows) &&
+      reduxVideoRows.length > 0 &&
+      !isLocalPaticipant
+    ) {
       const arrayOfChildrenCollection = reduxVideoRows.map(
         (row) => row.divElement.children
       );
@@ -483,7 +507,6 @@ export const VideoChat = (props) => {
 
   const onScreenShareStream = (stream, call) => {
     dispatch(setScreenSharingStatus(true, false));
-
     addScreenSharing(stream);
   };
 
@@ -613,13 +636,6 @@ export const VideoChat = (props) => {
       userDisplayName
     );
   };
-
-  setInterval(() => {
-    const deadUserIds = connections
-      .filter((conn) => (conn.CallObject ? conn.CallObject.open : true))
-      .map((conn) => conn.UserId);
-    deadUserIds.forEach((userId) => remoteUserLeft(meetingId, userId));
-  }, 5000);
 
   return (
     <div className={videochat_container}>
