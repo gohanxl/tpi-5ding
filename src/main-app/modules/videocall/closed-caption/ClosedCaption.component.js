@@ -75,7 +75,7 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
   }
 
   return (
-    <div className={`${close_caption}`}>
+    <div className={`${closedCaptionReceive.length ? close_caption : ""}`}>
       {closedCaptionReceive &&
         closedCaptionReceive.map(({ name, closedCaption }, index) => (
           <p key={index}>
