@@ -35,12 +35,6 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
     },
   }));
 
-  useEffect(() => {
-    if (signalRService) {
-      signalRService.startConnection(null);
-    }
-  }, [signalRService]);
-
   const closeCaptionCallback = useCallback(
     (name, closedCaption) => {
       setClosedCaptionReceive(

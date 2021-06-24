@@ -6,7 +6,10 @@ import React, {
   useState,
 } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMicrophoneAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faClosedCaptioning,
+  faMicrophoneAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import { faMicrophoneSlash } from "@fortawesome/free-solid-svg-icons";
 import { faVideo } from "@fortawesome/free-solid-svg-icons";
 import { faVideoSlash } from "@fortawesome/free-solid-svg-icons";
@@ -24,6 +27,8 @@ export const VideoToolbar = (props) => {
     videoOnOff,
     muteUnmute,
     endCall,
+    closedCaption,
+    setClosedCaption,
     signalRService,
     startShareScreen,
     stopSharingScreen,
@@ -61,6 +66,15 @@ export const VideoToolbar = (props) => {
       >
         <FontAwesomeIcon icon={!micOn ? faMicrophoneSlash : faMicrophoneAlt} />
       </button>
+
+      <button
+        className={`button ${closedCaption ? "is-primary" : "is-danger"}`}
+        id="videoOnButton"
+        onClick={() => setClosedCaption(!closedCaption)}
+      >
+        <FontAwesomeIcon icon={faClosedCaptioning} />
+      </button>
+
       <button className="button is-danger" id="endCallButton" onClick={endCall}>
         <FontAwesomeIcon icon={faPhoneSlash} />
       </button>
