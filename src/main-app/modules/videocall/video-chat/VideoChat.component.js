@@ -39,7 +39,6 @@ export const VideoChat = (props) => {
   const ccRef = useRef();
 
   const [signalRService, setSignalRService] = useState();
-  const [closedCaption, setClosedCaption] = useState(false);
 
   let localUserStream = null;
   let userDisplayName = name;
@@ -530,7 +529,9 @@ export const VideoChat = (props) => {
   const muteByTeacher = () => {
     localUserStream.getAudioTracks()[0].enabled = false;
     dispatch(setMicOn(false));
-    ccRef.current.muteClosedCaption();
+    if (ccRef && ccRef.current) {
+      ccRef.current.muteClosedCaption();
+    }
   };
 
   const muteUnmute = () => {
@@ -538,11 +539,15 @@ export const VideoChat = (props) => {
     if (reduxIsMicOn) {
       localUserStream.getAudioTracks()[0].enabled = false;
       dispatch(setMicOn(false));
-      ccRef.current.muteClosedCaption();
+      if (ccRef && ccRef.current) {
+        ccRef.current.muteClosedCaption();
+      }
     } else {
       localUserStream.getAudioTracks()[0].enabled = true;
       dispatch(setMicOn(true));
-      ccRef.current.unMuteClosedCaption();
+      if (ccRef && ccRef.current) {
+        ccRef.current.unMuteClosedCaption();
+      }
     }
     return localUserStream.getAudioTracks()[0].enabled;
   };
@@ -558,14 +563,10 @@ export const VideoChat = (props) => {
     }
   };
 
-  const ccOnOff = () => {
-    const isCcEnabled = store.getState().video.ccOn;
-    if (isCcEnabled) {
-    }
-  };
-
   const endCall = async () => {
-    ccRef.current.endCloseCaption();
+    if (ccRef && ccRef.current) {
+      ccRef.current.endCloseCaption();
+    }
     signalRService.stopConnection();
 
     localUserPeer.destroy();
@@ -651,15 +652,12 @@ export const VideoChat = (props) => {
           <video className="d-none" id="screenSharingObj" autoPlay />
         </div>
         <div className={cameras_and_cc}>
-          <VideoGridComponent />
-          {closedCaption && (
-            <ClosedCaptionComponent
-              name={userDisplayName}
-              meeting="1"
-              ref={ccRef}
-              signalRService={signalRService}
-            />
-          )}
+          <VideoGridComponent
+            name={userDisplayName}
+            meeting="1"
+            ccRef={ccRef}
+            signalRService={signalRService}
+          />
           <div id="errorMsg"></div>
         </div>
       </div>
@@ -668,8 +666,6 @@ export const VideoChat = (props) => {
           meetingId={meetingId}
           muteUnmute={muteUnmute}
           videoOnOff={videoOnOff}
-          closedCaption={closedCaption}
-          setClosedCaption={setClosedCaption}
           endCall={endCall}
           toggleChat={toggleChat}
           startShareScreen={startShareScreen}

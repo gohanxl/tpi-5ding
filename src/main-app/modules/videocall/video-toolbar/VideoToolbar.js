@@ -20,7 +20,8 @@ import { faStop } from "@fortawesome/free-solid-svg-icons";
 import { faUserFriends } from "@fortawesome/free-solid-svg-icons";
 import { toolbar_buttons } from "./VideoToolbar.module.scss";
 import { ParticipantListComponent } from "../participant-list/ParticipantList.component";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setCcOn } from "../video-chat/store/video.actions";
 
 export const VideoToolbar = (props) => {
   const {
@@ -37,18 +38,21 @@ export const VideoToolbar = (props) => {
 
   const micOn = useSelector((state) => state.video.micOn);
   const videoOn = useSelector((state) => state.video.videoOn);
+  const ccOn = useSelector((state) => state.video.ccOn);
   const isScreenSharingByMe = useSelector(
     (state) => state.video.isScreenSharingByMe
   );
 
   const [modalOpened, setModalOpened] = useState(false);
 
-  useEffect(() => {}, [micOn, videoOn, isScreenSharingByMe]);
+  useEffect(() => {}, [micOn, videoOn, isScreenSharingByMe, ccOn]);
 
   const toggleParticipantModal = () => {
     signalRService.invokeUpdateParticipants(meetingId);
     setModalOpened((prevOpened) => !prevOpened);
   };
+
+  const dispatch = useDispatch();
 
   return (
     <div className={toolbar_buttons}>
@@ -68,9 +72,9 @@ export const VideoToolbar = (props) => {
       </button>
 
       <button
-        className={`button ${closedCaption ? "is-primary" : "is-danger"}`}
+        className={`button ${ccOn ? "is-primary" : "is-danger"}`}
         id="videoOnButton"
-        onClick={() => setClosedCaption(!closedCaption)}
+        onClick={() => dispatch(setCcOn(!ccOn))}
       >
         <FontAwesomeIcon icon={faClosedCaptioning} />
       </button>
