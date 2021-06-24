@@ -15,6 +15,11 @@ export const setVideoOn = (videoOn) => ({
   videoOn,
 });
 
+export const setCcOn = (ccOn) => ({
+  type: types.SET_CC_ON,
+  ccOn,
+});
+
 export const setScreenSharingStatus = (
   isScreenSharingByRemote,
   isScreenSharingByMe

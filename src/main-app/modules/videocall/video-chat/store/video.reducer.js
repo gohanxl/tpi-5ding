@@ -4,6 +4,7 @@ const initialState = {
   rows: [],
   micOn: true,
   videoOn: true,
+  ccOn: false,
   isScreenSharingByRemote: false,
   isScreenSharingByMe: false,
 };
@@ -24,6 +25,11 @@ export const videoReducer = (state = initialState, action) => {
       return {
         ...state,
         videoOn: action.videoOn,
+      };
+    case types.SET_CC_ON:
+      return {
+        ...state,
+        ccOn: action.ccOn,
       };
     case types.SET_SCREEN_SHARING_STATUS:
       return {

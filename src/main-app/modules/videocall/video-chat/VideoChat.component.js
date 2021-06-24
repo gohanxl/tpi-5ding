@@ -529,7 +529,9 @@ export const VideoChat = (props) => {
   const muteByTeacher = () => {
     localUserStream.getAudioTracks()[0].enabled = false;
     dispatch(setMicOn(false));
-    ccRef.current.muteClosedCaption();
+    if (ccRef && ccRef.current) {
+      ccRef.current.muteClosedCaption();
+    }
   };
 
   const muteUnmute = () => {
@@ -537,11 +539,15 @@ export const VideoChat = (props) => {
     if (reduxIsMicOn) {
       localUserStream.getAudioTracks()[0].enabled = false;
       dispatch(setMicOn(false));
-      ccRef.current.muteClosedCaption();
+      if (ccRef && ccRef.current) {
+        ccRef.current.muteClosedCaption();
+      }
     } else {
       localUserStream.getAudioTracks()[0].enabled = true;
       dispatch(setMicOn(true));
-      ccRef.current.unMuteClosedCaption();
+      if (ccRef && ccRef.current) {
+        ccRef.current.unMuteClosedCaption();
+      }
     }
     return localUserStream.getAudioTracks()[0].enabled;
   };
@@ -558,7 +564,9 @@ export const VideoChat = (props) => {
   };
 
   const endCall = async () => {
-    ccRef.current.endCloseCaption();
+    if (ccRef && ccRef.current) {
+      ccRef.current.endCloseCaption();
+    }
     signalRService.stopConnection();
 
     localUserPeer.destroy();
@@ -644,11 +652,10 @@ export const VideoChat = (props) => {
           <video className="d-none" id="screenSharingObj" autoPlay />
         </div>
         <div className={cameras_and_cc}>
-          <VideoGridComponent />
-          <ClosedCaptionComponent
+          <VideoGridComponent
             name={userDisplayName}
             meeting="1"
-            ref={ccRef}
+            ccRef={ccRef}
             signalRService={signalRService}
           />
           <div id="errorMsg"></div>
