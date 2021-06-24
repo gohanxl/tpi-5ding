@@ -55,6 +55,8 @@ export const VideoChat = (props) => {
   let screenSharinUserName = null;
   let localUserScreenSharingStream = null;
 
+  const intervalId = useRef(null);
+
   const store = useStore();
 
   const displayMediaOptions = { video: { cursor: "always" }, audio: false };
@@ -79,7 +81,21 @@ export const VideoChat = (props) => {
   useEffect(() => {
     if (signalRService && signalRService.isServiceStarted) {
       onUserDisplayNameReceived(name);
+      intervalId.current = setInterval(() => {
+        if (connections) {
+          const deadUserIds = connections
+            .filter((conn) => {
+              if (conn.CallObject) {
+                return !conn.CallObject.open;
+              }
+              return false;
+            })
+            .map((conn) => conn.UserId);
+          deadUserIds.forEach((userId) => remoteUserLeft(meetingId, userId));
+        }
+      }, 10000);
     }
+    return () => clearInterval(intervalId.current);
   }, [signalRService]);
 
   const onUserDisplayNameReceived = async (userName) => {
@@ -157,7 +173,7 @@ export const VideoChat = (props) => {
     // );
     // dispatch(setVideoRows(filteredReduxVideos));
 
-    divideVideosInRows(null, userId);
+    divideVideosInRows(null, userId, false);
 
     const peerConnection = connections.filter((item) => item.UserId === userId);
     if (peerConnection.length === 1) {
@@ -345,14 +361,22 @@ export const VideoChat = (props) => {
     // newArrayVideo.push(divElement);
     // dispatch(setVideoRows(newArrayVideo));
 
-    divideVideosInRows(divElement, null);
+    divideVideosInRows(divElement, null, isLocalPaticipant);
   };
 
-  const divideVideosInRows = async (newVideoDiv, userIdToRemove) => {
+  const divideVideosInRows = async (
+    newVideoDiv,
+    userIdToRemove,
+    isLocalPaticipant
+  ) => {
     const rows = [];
     const reduxVideoRows = store.getState().video.rows;
     let videoDivs = [];
-    if (Array.isArray(reduxVideoRows) && reduxVideoRows.length > 0) {
+    if (
+      Array.isArray(reduxVideoRows) &&
+      reduxVideoRows.length > 0 &&
+      !isLocalPaticipant
+    ) {
       const arrayOfChildrenCollection = reduxVideoRows.map(
         (row) => row.divElement.children
       );
@@ -371,30 +395,63 @@ export const VideoChat = (props) => {
       videoDivs = videoDivs.filter((item) => item.id !== userIdToRemove);
     }
 
-    const videoDivsCount = videoDivs.length;
-    const initialRowsCount = 2;
-    let rowsQuantity = videoDivsCount > initialRowsCount ? initialRowsCount : 1;
-    const videoDivsCopy = [...videoDivs];
-
-    const camerasPerRow = Math.floor(videoDivsCount / rowsQuantity);
-    const remainingCamera = videoDivsCount % rowsQuantity;
-
-    while (rowsQuantity >= 0) {
-      rows.push({
-        maxCamsCount:
-          rowsQuantity === 0 && remainingCamera
-            ? remainingCamera
-            : camerasPerRow,
-      });
-      rowsQuantity--;
+    const videoDivsCount = videoDivs.length; //Supongamos que hay 14 divs
+    let rowsQuantity = 1;
+    if (videoDivsCount > 2 && videoDivsCount <= 8) {
+      rowsQuantity = 2;
+    } else if (videoDivsCount > 8 && videoDivsCount <= 12) {
+      rowsQuantity = 3;
+    } else if (videoDivsCount > 12 && videoDivsCount <= 16) {
+      rowsQuantity = 4; // Al haber 14 entra aca
+    } else if (videoDivsCount > 16 && videoDivsCount <= 20) {
+      rowsQuantity = 5;
+    } else if (videoDivsCount > 20 && videoDivsCount <= 24) {
+      rowsQuantity = 6;
+    } else if (videoDivsCount > 24) {
+      rowsQuantity = 7;
     }
 
-    // rows.forEach((row, i) => {
-    //   if (row.maxCamsCount === 1 && camerasPerRow > 2) {
-    //     rows[i - 1].maxCamsCount--;
-    //     row++;
-    //   }
-    // });
+    const videoDivsCopy = [...videoDivs];
+
+    const camerasPerRow = Math.floor(
+      videoDivsCount / rowsQuantity
+    ); /* 14 / 4 = 3 cameras per row */
+    console.log("Cameras per row:");
+    console.log(camerasPerRow); // 3
+    let remainingCamera = videoDivsCount % rowsQuantity;
+    console.log("remainingCamera:");
+    console.log(remainingCamera); // 2
+    console.log("Total divs:");
+    console.log(videoDivsCount);
+
+    //fila 4 -> 3
+    //fila 3 -> 3
+    //fila 2 -> 3
+    //fila 1 -> 3
+    for (let i = 0; i < rowsQuantity; i++) {
+      rows.push({
+        maxCamsCount: camerasPerRow,
+      });
+    }
+
+    //remainingCamera es 2 por lo tanto va a dar dos vueltas al while
+    while (remainingCamera > 0) {
+      //cada iteracion del while recorro el array de rows, si encuentro un elemento q no tiene el max cams, le meto 1
+      //y hago break para salir del for y volver al while, asi hasta distribuir las remaining cameras
+      for (let i = 0; i < rows.length; i++) {
+        if (rows[i].maxCamsCount < 4) {
+          rows[i].maxCamsCount = rows[i].maxCamsCount + 1;
+          break;
+        }
+      }
+      remainingCamera--;
+    }
+
+    //al salir del while:
+    //fila 4 -> 4
+    //fila 3 -> 4
+    //fila 2 -> 3
+    //fila 1 -> 3
 
     rows.forEach((row) => {
       const divEl = document.createElement("div");
@@ -450,7 +507,6 @@ export const VideoChat = (props) => {
 
   const onScreenShareStream = (stream, call) => {
     dispatch(setScreenSharingStatus(true, false));
-
     addScreenSharing(stream);
   };
 
@@ -589,12 +645,12 @@ export const VideoChat = (props) => {
         </div>
         <div className={cameras_and_cc}>
           <VideoGridComponent />
-            <ClosedCaptionComponent
-              name={userDisplayName}
-              meeting="1"
-              ref={ccRef}
-              signalRService={signalRService}
-            />
+          <ClosedCaptionComponent
+            name={userDisplayName}
+            meeting="1"
+            ref={ccRef}
+            signalRService={signalRService}
+          />
           <div id="errorMsg"></div>
         </div>
       </div>
