@@ -9,7 +9,9 @@ export const CallViewRenderer = ({ currentUser }) => {
 
   useEffect(() => {
     if (currentUser && currentUser.dbUser) {
-      setUserName(currentUser.dbUser.Nombre);
+      setUserName(
+        currentUser.dbUser.Nombre + " " + currentUser.dbUser.Apellido
+      );
     }
   }, [currentUser]);
 
