@@ -26,6 +26,7 @@ import {
   setVideoRows,
 } from "./store/video.actions";
 import { Attendance } from "../../shared-components/Attendance/components/Attendance";
+// import { v4 } from "uuid";
 
 export const VideoChat = (props) => {
   const ScreeenSharingStatus = {
@@ -173,6 +174,7 @@ export const VideoChat = (props) => {
     // );
     // dispatch(setVideoRows(filteredReduxVideos));
 
+    // divideVideosInRows(null, userId, false, null);
     divideVideosInRows(null, userId, false);
 
     const peerConnection = connections.filter((item) => item.UserId === userId);
@@ -335,7 +337,7 @@ export const VideoChat = (props) => {
 
     const divElement = document.createElement("div");
     divElement.setAttribute("class", user_camera_container);
-    divElement.setAttribute("id", userId);
+    divElement.setAttribute("id", isLocalPaticipant ? "my_video" : userId);
 
     const spanElement = document.createElement("span");
     spanElement.innerText = `${userName}`;
@@ -361,6 +363,7 @@ export const VideoChat = (props) => {
     // newArrayVideo.push(divElement);
     // dispatch(setVideoRows(newArrayVideo));
 
+    // divideVideosInRows(divElement, null, isLocalPaticipant, stream);
     divideVideosInRows(divElement, null, isLocalPaticipant);
   };
 
@@ -368,6 +371,7 @@ export const VideoChat = (props) => {
     newVideoDiv,
     userIdToRemove,
     isLocalPaticipant
+    // stream
   ) => {
     const rows = [];
     const reduxVideoRows = store.getState().video.rows;
@@ -389,6 +393,12 @@ export const VideoChat = (props) => {
 
     if (newVideoDiv) {
       videoDivs.push(newVideoDiv);
+      // for (let i = 0; i < 4; i++) {
+      //   let clone = newVideoDiv.cloneNode(true);
+      //   clone.id = v4();
+      //   clone.childNodes[1].srcObject = stream;
+      //   videoDivs.push(clone);
+      // }
     }
 
     if (userIdToRemove) {
