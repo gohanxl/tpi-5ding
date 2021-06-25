@@ -18,21 +18,27 @@ export class SignalHandlerService {
   };
 
   asyncConnection = () => {
-    this.hubConnection = new SignalR.HubConnectionBuilder()
-      .withUrl("https://localhost:5001/SanvaadConnection")
-      .build();
+    if (!this.isServiceStarted) {
+      console.log("NO HAY CONEXION! AHI CONECTO PAPA");
+      this.hubConnection = new SignalR.HubConnectionBuilder()
+        .withUrl(process.env.REACT_APP_HUB_URL)
+        .build();
 
-    return this.hubConnection
-      .start()
-      .then(() => {
-        this.isServiceStarted = true;
-        console.log("Connection established successfully!");
-        return true;
-      })
-      .catch((error) => {
-        console.error(error);
-        return false;
-      });
+      return this.hubConnection
+        .start()
+        .then(() => {
+          this.isServiceStarted = true;
+          console.log("Connection established successfully!");
+          return true;
+        })
+        .catch((error) => {
+          console.error(error);
+          return false;
+        });
+    } else {
+      console.log("YA TE CONECTASTE MASTERR!!!");
+      return true;
+    }
   };
 
   startConnection = (method) => {
@@ -42,7 +48,7 @@ export class SignalHandlerService {
       }
     } else {
       this.hubConnection = new SignalR.HubConnectionBuilder()
-        .withUrl("https://localhost:5001/SanvaadConnection")
+        .withUrl(process.env.REACT_APP_HUB_URL)
         .build();
 
       this.hubConnection
@@ -90,19 +96,21 @@ export class SignalHandlerService {
     this.hubConnection
       .invoke("SendMessageToAll", roomId, data)
       .then(() => {
-        console.log("Data broadcasted successfully!");
+        console.log("Chat Message broadcasted successfully!");
       })
       .catch((error) => console.log(error));
   };
 
-  invokeSendClosedCaption = (roomId, closedCaption) => {
-    this.hubConnection.invoke("SendClosedCaption", roomId, closedCaption);
+
+  invokeSendClosedCaption = (roomId, name, closedCaption) => {
+    this.hubConnection.invoke("SendClosedCaption", roomId, name, closedCaption)
+      .catch((error) => console.log(error));
   };
 
   listenReceiveClosedCaption = (method) => {
-    this.hubConnection.on("ReceiveClosedCaption", (data) => {
+    this.hubConnection.on("ReceiveClosedCaption", (name, closedCaption) => {
       if (method !== null) {
-        method(data);
+        method(name, closedCaption);
       }
     });
   };
@@ -119,7 +127,7 @@ export class SignalHandlerService {
     return this.hubConnection
       .invoke("JoinedRoom", roomId, userId, displayName)
       .then(() => {
-        console.log("Data broadcasted successfully!");
+        console.log("Joined Room broadcasted successfully!");
       })
       .catch((error) => console.log(error));
   };
@@ -130,6 +138,17 @@ export class SignalHandlerService {
         method(roomId, userId);
       }
     });
+  };
+
+  listenUpdateParticipants = (method) => {
+    this.hubConnection.on(
+      "UpdateParticipants",
+      (roomId, userId, displayName) => {
+        if (method !== null) {
+          method(roomId, userId, displayName);
+        }
+      }
+    );
   };
 
   listenGetSelfDetails = (method) => {
@@ -164,7 +183,7 @@ export class SignalHandlerService {
     this.hubConnection
       .invoke("GetRemoteUser", userId)
       .then(() => {
-        console.log("Data broadcasted successfully!");
+        console.log("Get remote user details successfully!");
       })
       .catch((error) => console.log(error));
   };
@@ -181,7 +200,7 @@ export class SignalHandlerService {
     this.hubConnection
       .invoke("PaticipantsList", roomId)
       .then(() => {
-        console.log("Data broadcasted successfully!");
+        console.log("Get participants list successfully!");
       })
       .catch((error) => console.log(error));
   };
@@ -190,7 +209,7 @@ export class SignalHandlerService {
     this.hubConnection
       .invoke("AddScreenSharingModality", roomId, userId, screenSharingCallId)
       .then(() => {
-        console.log("Data broadcasted successfully!");
+        console.log("Connected sharescreen peer successfully!");
       })
       .catch((error) => console.log(error));
   };
@@ -218,7 +237,105 @@ export class SignalHandlerService {
     this.hubConnection
       .invoke("ScreenSharingStatus", roomId, userId, status, userName)
       .then(() => {
-        console.log("Data broadcasted successfully!");
+        console.log("Share screen broadcasted successfully!");
+      })
+      .catch((error) => console.log(error));
+  };
+
+  invokeCheckAttendance = (classId, userId, meetingId) => {
+    this.hubConnection
+      .invoke("CheckAttendance", classId, userId, meetingId)
+      .then(() => {
+        console.log("Asked for attendance broadcasted successfully!");
+      })
+      .catch((error) => console.log(error));
+  };
+
+  listenAskForAttendance = (method) => {
+    this.hubConnection.on("AskForAttendance", (cronogramaId) => {
+      if (method !== null) {
+        method(cronogramaId);
+      }
+    });
+  };
+
+  invokeIAmPresent = (cronogramaId, userId, roomId) => {
+    this.hubConnection
+      .invoke("IAmPresent", cronogramaId, userId, roomId)
+      .then(() => {
+        console.log("I am present broadcasted successfully!");
+      })
+      .catch((error) => console.log(error));
+  };
+
+  invokeRemoveParticipant = (roomId, userId) => {
+    this.hubConnection
+      .invoke("RemoveParticipant", roomId, userId)
+      .then(() => {
+        console.log(`Removed participant ${userId} broadcasted successfully!`);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  listenIAmExpelled = (method) => {
+    this.hubConnection.on("IAmExpelled", () => {
+      if (method !== null) {
+        method();
+      }
+    });
+  };
+
+  invokeMuteParticipant = (roomId, userId) => {
+    this.hubConnection
+      .invoke("MuteParticipant", roomId, userId)
+      .then(() => {
+        console.log(`Mute participant ${userId} broadcasted successfully!`);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  listenIAmMuted = (method) => {
+    this.hubConnection.on("IAmMuted", () => {
+      if (method !== null) {
+        method();
+      }
+    });
+  };
+
+  invokeGetSelfUid = () => {
+    this.hubConnection
+      .invoke("GetSelfUid")
+      .then(() => {
+        console.log("Trying to get self uid successfully!");
+      })
+      .catch((error) => console.log(error));
+  };
+
+  listenGetSelfUid = (method) => {
+    this.hubConnection.on("GetSelfUid", (uid) => {
+      if (method !== null) {
+        method(uid);
+        console.log("Received get self uid and method executed.", uid);
+      } else {
+        console.log("Received get self uid and method not executed.", uid);
+      }
+    });
+  };
+
+  invokeMuteAllParticipant = (roomId) => {
+    this.hubConnection
+      .invoke("MuteAllParticipant", roomId)
+      .then(() => {
+        console.log("Mute all participants broadcast successfully!");
+      })
+      .catch((error) => console.log(error));
+  };
+
+  invokeUpdateParticipants = (roomId) => {
+    this.hubConnection
+      .invoke("UpdateParticipants", roomId)
+      .then(() => {
+        console.log("Get participants list successfully!");
       })
       .catch((error) => console.log(error));
   };

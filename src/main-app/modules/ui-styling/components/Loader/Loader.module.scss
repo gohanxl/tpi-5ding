@@ -1,0 +1,25 @@
+#loading_logo {
+  height: 100px;
+  animation: spin 2s linear infinite;
+}
+
+.st0 {
+  fill: #47b3ca;
+}
+
+.st1 {
+  fill: #1d4d57;
+}
+
+.st2 {
+  fill: #f1dc16;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}

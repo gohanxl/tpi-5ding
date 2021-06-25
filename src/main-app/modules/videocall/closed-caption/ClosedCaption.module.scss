@@ -1,0 +1,18 @@
+.cc_shown {
+  opacity: 1;
+  transition: all 250ms linear;
+}
+
+.cc_hidden {
+  opacity: 0;
+  transition: all 250ms linear 4s;
+}
+
+.close_caption {
+  position: absolute;
+  top: 80%;
+  background-color: #000000c2;
+  padding: 10px;
+  font-size: 24px;
+  color: rgb(245, 244, 69);
+}

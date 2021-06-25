@@ -1,57 +1,87 @@
-import { SignalHandlerService } from "../services/signal-handler";
+/* eslint-disable react/display-name */
+import { close_caption } from "./ClosedCaption.module.scss";
 
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
-import React, { useEffect, useState } from "react";
+import React, {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 
-export const ClosedCaptionComponent = (props) => {
-  const { name, meeting } = props;
+export const ClosedCaptionComponent = forwardRef((props, ref) => {
+  const { name, meeting, signalRService } = props;
 
   const [closedCaptionSend, setClosedCaptionSend] = useState(null);
-  const [closedCaptionReceive, setClosedCaptionReceive] = useState(null);
-  const [signalRService, setSignalRService] = useState();
-  const { transcript } = useSpeechRecognition();
+  const [closedCaptionReceive, setClosedCaptionReceive] = useState([]);
+  const { transcript, resetTranscript } = useSpeechRecognition();
+  const [isMuted, setIsMuted] = useState(false);
 
-  useEffect(() => {
-    async function initSignalR() {
-      const signalRServ = SignalHandlerService.getInstance();
-      const isConnected = await signalRServ.asyncConnection();
-      console.log("SignalRHub Connected: " + isConnected);
-      setSignalRService(signalRServ);
-    }
+  useImperativeHandle(ref, () => ({
+    async muteClosedCaption() {
+      await SpeechRecognition.abortListening();
+      setIsMuted(true);
+    },
+    async unMuteClosedCaption() {
+      await SpeechRecognition.startListening({ language: "es-AR" });
+      setIsMuted(false);
+    },
+    async endCloseCaption() {
+      await SpeechRecognition.abortListening();
+      await resetTranscript();
+    },
+  }));
 
-    initSignalR();
-  }, []);
+  const closeCaptionCallback = useCallback(
+    (name, closedCaption) => {
+      setClosedCaptionReceive(
+        closedCaptionReceive.length < 2
+          ? [...closedCaptionReceive, { name, closedCaption }]
+          : [{ name, closedCaption }]
+      );
+    },
+    [closedCaptionReceive]
+  );
 
   useEffect(() => {
     if (signalRService && signalRService.isServiceStarted) {
-      console.log(closedCaptionReceive);
-      signalRService.listenReceiveClosedCaption(setClosedCaptionReceive);
+      signalRService.listenReceiveClosedCaption(closeCaptionCallback);
     }
-  }, [signalRService]);
+  }, [closeCaptionCallback, signalRService]);
 
   if (SpeechRecognition.browserSupportsSpeechRecognition()) {
-    SpeechRecognition.startListening({ language: "es-AR" });
-    try {
-      if (transcript && transcript !== closedCaptionSend) {
-        setClosedCaptionSend(transcript);
-      } else if (!transcript && closedCaptionSend) {
-        signalRService.invokeSendClosedCaption(meeting, closedCaptionSend);
-        setClosedCaptionSend(null);
+    if (!isMuted) {
+      SpeechRecognition.startListening({ language: "es-AR" });
+      try {
+        if (transcript && transcript !== closedCaptionSend) {
+          setClosedCaptionSend(transcript);
+        } else if (!transcript && closedCaptionSend) {
+          signalRService.invokeSendClosedCaption(
+            meeting,
+            name,
+            closedCaptionSend
+          );
+          setClosedCaptionSend(null);
+        }
+      } catch (e) {
+        console.error(e);
       }
-    } catch (e) {
-      console.error(e);
     }
   } else {
-    // TODO: Fallback behaviour
-    // https://github.com/JamesBrill/react-speech-recognition/blob/HEAD/docs/POLYFILLS.md
-    console.exception("browser not support speech recognition");
+    console.error("browser not support speech recognition");
   }
 
   return (
-    <p>
-      {name}: {closedCaptionReceive}
-    </p>
+    <div className={`${closedCaptionReceive.length ? close_caption : ""}`}>
+      {closedCaptionReceive &&
+        closedCaptionReceive.map(({ name, closedCaption }, index) => (
+          <p key={index}>
+            {name}: {closedCaption}
+          </p>
+        ))}
+    </div>
   );
-};
+});
