@@ -16,7 +16,7 @@ const browserHistory = createBrowserHistory();
 
 const onRedirectCallback = (appState) => {
   browserHistory.push(
-    appState && appState.returnTo ? appState.returnTo : window.location.pathname
+    appState && appState.returnTo ? appState.returnTo : "/#/educapp"
   );
 };
 

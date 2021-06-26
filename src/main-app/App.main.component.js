@@ -52,15 +52,12 @@ const MainApp = () => {
             });
         })
         .catch((err) => console.error(err));
+      setHideFooter(
+        window.location.hash == "#/educapp/home" ||
+          window.location.hash == "#/educapp/teacher/call"
+      );
     }
   }, [isAuthenticated]);
-
-  useEffect(() => {
-    setHideFooter(
-      window.location.hash == "#/educapp/home" ||
-        window.location.hash == "#/educapp/teacher/call"
-    );
-  }, []);
 
   if (error) {
     return <div>Oops... {error.message}</div>;
