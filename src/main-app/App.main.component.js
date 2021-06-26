@@ -53,7 +53,7 @@ const MainApp = () => {
         })
         .catch((err) => console.error(err));
     }
-  }, [dispatch, getAccessTokenSilently, isAuthenticated, user]);
+  }, [isAuthenticated]);
 
   useEffect(() => {
     setHideFooter(
