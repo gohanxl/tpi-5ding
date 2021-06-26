@@ -26,7 +26,7 @@ export const VideoGridComponent = ({
     );
     root.style.setProperty(
       "--chat_toolbar_height",
-      window.screen.height * 0.7 + "px"
+      window.screen.height * 0.715 + "px"
     );
   }, [videoRows, ccOn]);
 
