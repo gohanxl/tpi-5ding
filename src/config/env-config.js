@@ -7,9 +7,8 @@ const {
 export const env_config = {
   domain: REACT_APP_AUTH0_DOMAIN,
   clientId: REACT_APP_AUTH0_CLIENT_ID,
-  // redirectUri: window.location.origin,
-  // redirectUri: "https://educapp.net.ar/#/educapp",
-  redirectUri: "http://localhost:3000/#/educapp",
+  redirectUri: "https://www.app.educapp.net.ar/#/educapp/home",
+  // redirectUri: "http://localhost:3000/#/educapp",
   audience: REACT_APP_AUTH0_AUDIENCE,
 };
 
