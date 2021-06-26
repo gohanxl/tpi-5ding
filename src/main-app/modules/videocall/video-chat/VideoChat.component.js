@@ -1,6 +1,6 @@
 /* eslint-disable */
 import {
-  cameras_container,
+  video_display,
   user_camera_container,
   user_name,
   videochat_container,
@@ -311,7 +311,7 @@ export const VideoChat = (props) => {
   const GetNewVideoElement = () => {
     const videoElement = document.createElement("video");
     videoElement.setAttribute("playsinline", "");
-    videoElement.setAttribute("class", "video-display");
+    videoElement.setAttribute("class", video_display);
     videoElement.autoplay = true;
     videoElement.addEventListener("contextmenu", function (event) {
       event.preventDefault();
