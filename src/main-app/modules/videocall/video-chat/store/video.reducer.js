@@ -9,6 +9,7 @@ const initialState = {
   isScreenSharingByMe: false,
   localUserStream: null,
   userDisplayName: "",
+  localUserPeer: null,
 };
 
 export const videoReducer = (state = initialState, action) => {
@@ -42,6 +43,11 @@ export const videoReducer = (state = initialState, action) => {
       return {
         ...state,
         userDisplayName: action.userDisplayName,
+      };
+    case types.SET_LOCAL_USER_PEER:
+      return {
+        ...state,
+        localUserPeer: action.localUserPeer,
       };
     case types.SET_SCREEN_SHARING_STATUS:
       return {

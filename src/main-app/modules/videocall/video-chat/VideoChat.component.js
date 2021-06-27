@@ -20,6 +20,7 @@ import { ClosedCaptionComponent } from "../../../modules/videocall/closed-captio
 import { VideoGridComponent } from "./VideoGridComponent.component";
 import { useDispatch, useSelector, useStore } from "react-redux";
 import {
+  setLocalUserPeer,
   setLocalUserStream,
   setMicOn,
   setScreenSharingStatus,
@@ -46,7 +47,7 @@ export const VideoChat = (props) => {
 
   // let localUserStream = null;
   let userDisplayName = name; //no need for redux here
-  let localUserPeer = null;
+  // let localUserPeer = null;
   let localUserId = null;
   let meetingId = meeting;
 
@@ -99,6 +100,14 @@ export const VideoChat = (props) => {
     }
     return () => clearInterval(intervalId.current);
   }, [signalRService]);
+
+  const getLocalUserStream = () => {
+    return store.getState().video.localUserStream;
+  };
+
+  const getLocalUserPeer = () => {
+    return store.getState().video.localUserPeer;
+  };
 
   const onUserDisplayNameReceived = async (userName) => {
     userDisplayName = userName;
@@ -196,13 +205,13 @@ export const VideoChat = (props) => {
   //   }
   // };
 
-  const getLocalUserStream = () => {
-    return store.getState().video.localUserStream;
-  };
-
   const connectToOtherUsers = (roomId, userId, displayName) => {
     if (roomId === meetingId && userId !== localUserId) {
-      localUserCallObject = localUserPeer.call(userId, getLocalUserStream());
+      // localUserCallObject = localUserPeer.call(userId, getLocalUserStream());
+      localUserCallObject = getLocalUserPeer().call(
+        userId,
+        getLocalUserStream()
+      );
     }
 
     if (localUserCallObject) {
@@ -240,7 +249,8 @@ export const VideoChat = (props) => {
     await GetUserDevices();
 
     const peer = await getPeerObject();
-    localUserPeer = peer;
+    // localUserPeer = peer;
+    dispatch(setLocalUserPeer(peer));
     peer.on("open", sendNotificationOfJoining);
     peer.on("call", onCallReceive);
     peer.on("error", (err) => console.error(err));
@@ -586,7 +596,7 @@ export const VideoChat = (props) => {
     }
     signalRService.stopConnection();
 
-    localUserPeer.destroy();
+    getLocalUserPeer().destroy();
     localUserScreenSharingPeer.destroy();
 
     dispatch(setVideoRows([]));
@@ -614,7 +624,7 @@ export const VideoChat = (props) => {
     });
 
     connections = null;
-    localUserPeer = null;
+    dispatch(setLocalUserPeer(null));
     localUserScreenSharingPeer = null;
     dispatch(setLocalUserStream(null));
     localUserScreenSharingStream = null;

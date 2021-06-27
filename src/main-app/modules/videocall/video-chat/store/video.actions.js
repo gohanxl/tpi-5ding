@@ -30,6 +30,11 @@ export const setUserDisplayName = (userDisplayName) => ({
   userDisplayName,
 });
 
+export const setLocalUserPeer = (localUserPeer) => ({
+  type: types.SET_LOCAL_USER_PEER,
+  localUserPeer,
+});
+
 export const setScreenSharingStatus = (
   isScreenSharingByRemote,
   isScreenSharingByMe
