@@ -13,6 +13,7 @@ const initialState = {
   localUserId: null,
   localUserScreenSharingPeer: null,
   connections: [],
+  remoteConnectionIds: [],
 };
 
 export const videoReducer = (state = initialState, action) => {
@@ -71,6 +72,11 @@ export const videoReducer = (state = initialState, action) => {
       return {
         ...state,
         connections: action.connections,
+      };
+    case types.SET_REMOTE_CONNECTIONS_ID:
+      return {
+        ...state,
+        remoteConnectionIds: action.remoteConnectionIds,
       };
     case types.SET_SCREEN_SHARING_STATUS:
       return {

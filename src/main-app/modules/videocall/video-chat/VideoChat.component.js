@@ -26,6 +26,7 @@ import {
   setLocalUserScreenSharingPeer,
   setLocalUserStream,
   setMicOn,
+  setRemoteConnectionIds,
   setScreenSharingStatus,
   setVideoOn,
   setVideoRows,
@@ -57,7 +58,7 @@ export const VideoChat = (props) => {
   // let localUserScreenSharingPeer = null;
   // let localUserScreenSharingId = null;
   // let connections = [];
-  let remoteConnectionIds = [];
+  // let remoteConnectionIds = [];
 
   let localUserCallObject = null;
   let screenSharinUserName = null;
@@ -123,6 +124,10 @@ export const VideoChat = (props) => {
 
   const getConnections = () => {
     return store.getState().video.connections;
+  };
+
+  const getRemoteConnectionIds = () => {
+    return store.getState().video.remoteConnectionIds;
   };
 
   const onUserDisplayNameReceived = async (userName) => {
@@ -262,8 +267,10 @@ export const VideoChat = (props) => {
     callObject,
     displayName
   ) => {
-    if (remoteConnectionIds.indexOf(userId) === -1) {
-      remoteConnectionIds.push(userId);
+    if (getRemoteConnectionIds().indexOf(userId) === -1) {
+      const newRemoteConnectionIds = [...getRemoteConnectionIds()];
+      newRemoteConnectionIds.push(userId);
+      dispatch(setRemoteConnectionIds(newRemoteConnectionIds));
       addUser(stream, userId, callObject, displayName, false);
     }
   };
@@ -341,8 +348,10 @@ export const VideoChat = (props) => {
   };
 
   const onStream = (stream, call) => {
-    if (remoteConnectionIds.indexOf(call.peer) === -1) {
-      remoteConnectionIds.push(call.peer);
+    if (getRemoteConnectionIds().indexOf(call.peer) === -1) {
+      const newRemoteConnectionIds = [...getRemoteConnectionIds()];
+      newRemoteConnectionIds.push(call.peer);
+      dispatch(setRemoteConnectionIds(newRemoteConnectionIds));
       signalRService.invokeGetRemoteUserDetails(call.peer);
       addUser(stream, call.peer, call, "", false);
     }

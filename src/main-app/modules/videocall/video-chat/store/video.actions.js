@@ -1,4 +1,5 @@
 import * as types from "./video.types";
+import { SET_REMOTE_CONNECTIONS_ID } from "./video.types";
 
 export const setVideoRows = (rows) => ({
   type: types.SET_VIDEO_ROWS,
@@ -53,6 +54,11 @@ export const setLocalUserScreenSharingId = (localUserScreenSharingId) => ({
 export const setConnections = (connections) => ({
   type: types.SET_CONNECTIONS,
   connections,
+});
+
+export const setRemoteConnectionIds = (remoteConnectionIds) => ({
+  type: types.SET_REMOTE_CONNECTIONS_ID,
+  remoteConnectionIds,
 });
 
 export const setScreenSharingStatus = (
