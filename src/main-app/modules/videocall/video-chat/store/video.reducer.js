@@ -11,6 +11,7 @@ const initialState = {
   userDisplayName: "",
   localUserPeer: null,
   localUserId: null,
+  localUserScreenSharingPeer: null,
 };
 
 export const videoReducer = (state = initialState, action) => {
@@ -54,6 +55,16 @@ export const videoReducer = (state = initialState, action) => {
       return {
         ...state,
         localUserId: action.localUserId,
+      };
+    case types.SET_LOCAL_USER_SCREEN_SHARING_PEER:
+      return {
+        ...state,
+        localUserScreenSharingPeer: action.localUserScreenSharingPeer,
+      };
+    case types.SET_LOCAL_USER_SCREEN_SHARING_ID:
+      return {
+        ...state,
+        localUserScreenSharingId: action.localUserScreenSharingId,
       };
     case types.SET_SCREEN_SHARING_STATUS:
       return {

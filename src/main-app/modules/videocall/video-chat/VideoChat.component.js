@@ -21,6 +21,8 @@ import { useDispatch, useSelector, useStore } from "react-redux";
 import {
   setLocalUserId,
   setLocalUserPeer,
+  setLocalUserScreenSharingId,
+  setLocalUserScreenSharingPeer,
   setLocalUserStream,
   setMicOn,
   setScreenSharingStatus,
@@ -51,8 +53,8 @@ export const VideoChat = (props) => {
   // let localUserId = null;
   let meetingId = meeting;
 
-  let localUserScreenSharingPeer = null;
-  let localUserScreenSharingId = null;
+  // let localUserScreenSharingPeer = null;
+  // let localUserScreenSharingId = null;
   let connections = [];
   let remoteConnectionIds = [];
 
@@ -113,6 +115,10 @@ export const VideoChat = (props) => {
     return store.getState().video.localUserId;
   };
 
+  const getLocalUserScreenSharingPeer = () => {
+    return store.getState().video.localUserScreenSharingPeer;
+  };
+
   const onUserDisplayNameReceived = async (userName) => {
     userDisplayName = userName;
     signalRService.startConnection(onSuccessfullConnection);
@@ -132,7 +138,7 @@ export const VideoChat = (props) => {
       userIds.forEach((element) => {
         try {
           if (element !== getLocalUserId()) {
-            localUserScreenSharingPeer.call(
+            getLocalUserScreenSharingPeer().call(
               element,
               localUserScreenSharingStream
             );
@@ -513,7 +519,8 @@ export const VideoChat = (props) => {
 
   const createScreenSharingPeerObject = (id) => {
     const localScreenPeer = getPeerObject();
-    localUserScreenSharingPeer = localScreenPeer;
+    // localUserScreenSharingPeer = localScreenPeer;
+    dispatch(setLocalUserScreenSharingPeer(localScreenPeer));
     localScreenPeer.on("open", (screenSharingCallId) =>
       sendNotificationOfAddSharingModality(screenSharingCallId, id)
     );
@@ -524,7 +531,8 @@ export const VideoChat = (props) => {
     screenSharingCallId,
     userId
   ) => {
-    localUserScreenSharingId = screenSharingCallId;
+    // localUserScreenSharingId = screenSharingCallId;
+    dispatch(setLocalUserScreenSharingId(screenSharingCallId));
     signalRService.invokeAddScreenSharingModality(
       meetingId,
       userId,
@@ -602,7 +610,7 @@ export const VideoChat = (props) => {
     signalRService.stopConnection();
 
     getLocalUserPeer().destroy();
-    localUserScreenSharingPeer.destroy();
+    getLocalUserScreenSharingPeer().destroy();
 
     dispatch(setVideoRows([]));
 
@@ -630,7 +638,7 @@ export const VideoChat = (props) => {
 
     connections = null;
     dispatch(setLocalUserPeer(null));
-    localUserScreenSharingPeer = null;
+    dispatch(setLocalUserScreenSharingPeer(null));
     dispatch(setLocalUserStream(null));
     localUserScreenSharingStream = null;
 
