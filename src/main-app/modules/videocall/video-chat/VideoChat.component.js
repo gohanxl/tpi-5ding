@@ -24,6 +24,7 @@ import {
   setLocalUserPeer,
   setLocalUserScreenSharingId,
   setLocalUserScreenSharingPeer,
+  setLocalUserScreenSharingStream,
   setLocalUserStream,
   setMicOn,
   setRemoteConnectionIds,
@@ -61,8 +62,8 @@ export const VideoChat = (props) => {
   // let remoteConnectionIds = [];
 
   // let localUserCallObject = null; // NO need for redux here I think
-  let screenSharinUserName = null;
-  let localUserScreenSharingStream = null;
+  let screenSharinUserName = ""; // No need for redux here
+  // let localUserScreenSharingStream = null;
 
   const intervalId = useRef(null);
 
@@ -130,6 +131,10 @@ export const VideoChat = (props) => {
     return store.getState().video.remoteConnectionIds;
   };
 
+  const getLocalUserScreenSharingStream = () => {
+    return store.getState().video.localUserScreenSharingStream;
+  };
+
   const onUserDisplayNameReceived = async (userName) => {
     userDisplayName = userName;
     signalRService.startConnection(onSuccessfullConnection);
@@ -151,7 +156,7 @@ export const VideoChat = (props) => {
           if (element !== getLocalUserId()) {
             getLocalUserScreenSharingPeer().call(
               element,
-              localUserScreenSharingStream
+              getLocalUserScreenSharingStream()
             );
             screenSharinUserName = "You";
           }
@@ -660,11 +665,11 @@ export const VideoChat = (props) => {
       peer.VideoElement.srcObject = null;
     });
 
-    dispatch(setConnections(null));
+    dispatch(setConnections([]));
     dispatch(setLocalUserPeer(null));
     dispatch(setLocalUserScreenSharingPeer(null));
     dispatch(setLocalUserStream(null));
-    localUserScreenSharingStream = null;
+    dispatch(setLocalUserScreenSharingStream(null));
 
     window.location = "/#/educapp/home";
   };
@@ -678,11 +683,14 @@ export const VideoChat = (props) => {
     try {
       const mediaDevices = navigator.mediaDevices;
       const stream = await mediaDevices.getDisplayMedia(displayMediaOptions);
-      localUserScreenSharingStream = stream;
+      // localUserScreenSharingStream = stream;
+      dispatch(setLocalUserScreenSharingStream(stream));
 
       dispatch(setScreenSharingStatus(false, true));
 
-      localUserScreenSharingStream.getVideoTracks()[0].onended = (event) => {
+      getLocalUserScreenSharingStream().getVideoTracks()[0].onended = (
+        event
+      ) => {
         sendOtherToScreenClosed();
       };
 
@@ -698,7 +706,7 @@ export const VideoChat = (props) => {
   };
 
   const stopSharingScreen = () => {
-    const tracks = localUserScreenSharingStream.getTracks();
+    const tracks = getLocalUserScreenSharingStream().getTracks();
     tracks.forEach((track) => track.stop());
     sendOtherToScreenClosed();
   };

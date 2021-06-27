@@ -60,6 +60,13 @@ export const setRemoteConnectionIds = (remoteConnectionIds) => ({
   remoteConnectionIds,
 });
 
+export const setLocalUserScreenSharingStream = (
+  localUserScreenSharingStream
+) => ({
+  type: types.SET_LOCAL_USER_SCREEN_SHARING_STREAM,
+  localUserScreenSharingStream,
+});
+
 export const setScreenSharingStatus = (
   isScreenSharingByRemote,
   isScreenSharingByMe
