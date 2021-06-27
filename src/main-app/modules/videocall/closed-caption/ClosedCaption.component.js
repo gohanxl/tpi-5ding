@@ -58,7 +58,12 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
     signalRService.listenReceiveClosedCaption(pushReceivedCC);
   }
 
-  if (!isMuted && results.length) {
+  if (
+    !isMuted &&
+    results.length &&
+    signalRService &&
+    signalRService.isServiceStarted
+  ) {
     signalRService.invokeSendClosedCaption(meeting, name, results.pop());
   }
 
