@@ -20,6 +20,16 @@ export const setCcOn = (ccOn) => ({
   ccOn,
 });
 
+export const setLocalUserStream = (localUserStream) => ({
+  type: types.SET_LOCAL_USER_STREAM,
+  localUserStream,
+});
+
+export const setUserDisplayName = (userDisplayName) => ({
+  type: types.SET_USER_DISPLAY_NAME,
+  userDisplayName,
+});
+
 export const setScreenSharingStatus = (
   isScreenSharingByRemote,
   isScreenSharingByMe

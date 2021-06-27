@@ -7,6 +7,8 @@ const initialState = {
   ccOn: false,
   isScreenSharingByRemote: false,
   isScreenSharingByMe: false,
+  localUserStream: null,
+  userDisplayName: "",
 };
 
 export const videoReducer = (state = initialState, action) => {
@@ -30,6 +32,16 @@ export const videoReducer = (state = initialState, action) => {
       return {
         ...state,
         ccOn: action.ccOn,
+      };
+    case types.SET_LOCAL_USER_STREAM:
+      return {
+        ...state,
+        localUserStream: action.localUserStream,
+      };
+    case types.SET_USER_DISPLAY_NAME:
+      return {
+        ...state,
+        userDisplayName: action.userDisplayName,
       };
     case types.SET_SCREEN_SHARING_STATUS:
       return {

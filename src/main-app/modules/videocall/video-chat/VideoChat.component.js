@@ -20,12 +20,14 @@ import { ClosedCaptionComponent } from "../../../modules/videocall/closed-captio
 import { VideoGridComponent } from "./VideoGridComponent.component";
 import { useDispatch, useSelector, useStore } from "react-redux";
 import {
+  setLocalUserStream,
   setMicOn,
   setScreenSharingStatus,
   setVideoOn,
   setVideoRows,
 } from "./store/video.actions";
 import { Attendance } from "../../shared-components/Attendance/components/Attendance";
+import { set } from "husky";
 // import { v4 } from "uuid";
 
 export const VideoChat = (props) => {
@@ -38,11 +40,12 @@ export const VideoChat = (props) => {
 
   const user = useSelector((state) => state.user.currentUser);
   const ccRef = useRef();
+  const store = useStore();
 
   const [signalRService, setSignalRService] = useState();
 
-  let localUserStream = null;
-  let userDisplayName = name;
+  // let localUserStream = null;
+  let userDisplayName = name; //no need for redux here
   let localUserPeer = null;
   let localUserId = null;
   let meetingId = meeting;
@@ -57,8 +60,6 @@ export const VideoChat = (props) => {
   let localUserScreenSharingStream = null;
 
   const intervalId = useRef(null);
-
-  const store = useStore();
 
   const displayMediaOptions = { video: { cursor: "always" }, audio: false };
 
@@ -195,9 +196,13 @@ export const VideoChat = (props) => {
   //   }
   // };
 
+  const getLocalUserStream = () => {
+    return store.getState().video.localUserStream;
+  };
+
   const connectToOtherUsers = (roomId, userId, displayName) => {
     if (roomId === meetingId && userId !== localUserId) {
-      localUserCallObject = localUserPeer.call(userId, localUserStream);
+      localUserCallObject = localUserPeer.call(userId, getLocalUserStream());
     }
 
     if (localUserCallObject) {
@@ -254,8 +259,10 @@ export const VideoChat = (props) => {
     const videoTracks = stream.getVideoTracks();
     const constraints = videoTracks[0].getConstraints();
 
-    localUserStream = stream;
-    addUser(localUserStream, localUserId, null, userDisplayName, true);
+    // localUserStream = stream;
+    dispatch(setLocalUserStream(stream));
+    //TODO ojo mando stream pero tal vez lo tenga q buscar adentro de redux
+    addUser(stream, localUserId, null, userDisplayName, true);
   };
 
   const errorHandler = (error) => {
@@ -285,15 +292,15 @@ export const VideoChat = (props) => {
   };
 
   const onCallReceive = async (call) => {
-    const stream = localUserStream;
+    const stream = getLocalUserStream();
 
     console.log("onCallReceive:localUserStream");
-    console.log(localUserStream);
+    console.log(stream);
     const peerConnection = connections.filter(
       (item) => item.UserId === localUserId
     );
     if (peerConnection.length === 1) {
-      peerConnection[0].VideoElement.srcObject = localUserStream;
+      peerConnection[0].VideoElement.srcObject = stream; //localUserStream;
     }
 
     call.answer(stream);
@@ -537,7 +544,7 @@ export const VideoChat = (props) => {
   };
 
   const muteByTeacher = () => {
-    localUserStream.getAudioTracks()[0].enabled = false;
+    getLocalUserStream().getAudioTracks()[0].enabled = false;
     dispatch(setMicOn(false));
     if (ccRef && ccRef.current) {
       ccRef.current.muteClosedCaption();
@@ -547,28 +554,28 @@ export const VideoChat = (props) => {
   const muteUnmute = () => {
     const reduxIsMicOn = store.getState().video.micOn;
     if (reduxIsMicOn) {
-      localUserStream.getAudioTracks()[0].enabled = false;
+      getLocalUserStream().getAudioTracks()[0].enabled = false;
       dispatch(setMicOn(false));
       if (ccRef && ccRef.current) {
         ccRef.current.muteClosedCaption();
       }
     } else {
-      localUserStream.getAudioTracks()[0].enabled = true;
+      getLocalUserStream().getAudioTracks()[0].enabled = true;
       dispatch(setMicOn(true));
       if (ccRef && ccRef.current) {
         ccRef.current.unMuteClosedCaption();
       }
     }
-    return localUserStream.getAudioTracks()[0].enabled;
+    return getLocalUserStream().getAudioTracks()[0].enabled;
   };
 
   const videoOnOff = () => {
     const isVideoEnabled = store.getState().video.videoOn;
     if (isVideoEnabled) {
-      localUserStream.getVideoTracks()[0].enabled = false;
+      getLocalUserStream().getVideoTracks()[0].enabled = false;
       dispatch(setVideoOn(false));
     } else {
-      localUserStream.getVideoTracks()[0].enabled = true;
+      getLocalUserStream().getVideoTracks()[0].enabled = true;
       dispatch(setVideoOn(true));
     }
   };
@@ -584,12 +591,16 @@ export const VideoChat = (props) => {
 
     dispatch(setVideoRows([]));
 
-    localUserStream.getAudioTracks().forEach(function (track) {
-      track.stop();
-    });
-    localUserStream.getVideoTracks().forEach(function (track) {
-      track.stop();
-    });
+    getLocalUserStream()
+      .getAudioTracks()
+      .forEach(function (track) {
+        track.stop();
+      });
+    getLocalUserStream()
+      .getVideoTracks()
+      .forEach(function (track) {
+        track.stop();
+      });
 
     connections.forEach((peer) => {
       const stream = peer.VideoElement.srcObject;
@@ -605,7 +616,7 @@ export const VideoChat = (props) => {
     connections = null;
     localUserPeer = null;
     localUserScreenSharingPeer = null;
-    localUserStream = null;
+    dispatch(setLocalUserStream(null));
     localUserScreenSharingStream = null;
 
     window.location = "/#/educapp/home";
