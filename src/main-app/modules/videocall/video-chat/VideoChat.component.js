@@ -19,6 +19,7 @@ import { ChatWindow } from "../ChatWindow/ChatWindow.component";
 import { VideoGridComponent } from "./VideoGridComponent.component";
 import { useDispatch, useSelector, useStore } from "react-redux";
 import {
+  setConnections,
   setLocalUserId,
   setLocalUserPeer,
   setLocalUserScreenSharingId,
@@ -55,7 +56,7 @@ export const VideoChat = (props) => {
 
   // let localUserScreenSharingPeer = null;
   // let localUserScreenSharingId = null;
-  let connections = [];
+  // let connections = [];
   let remoteConnectionIds = [];
 
   let localUserCallObject = null;
@@ -87,6 +88,7 @@ export const VideoChat = (props) => {
     if (signalRService && signalRService.isServiceStarted) {
       onUserDisplayNameReceived(name);
       intervalId.current = setInterval(() => {
+        let connections = getConnections();
         if (connections) {
           const deadUserIds = connections
             .filter((conn) => {
@@ -117,6 +119,10 @@ export const VideoChat = (props) => {
 
   const getLocalUserScreenSharingPeer = () => {
     return store.getState().video.localUserScreenSharingPeer;
+  };
+
+  const getConnections = () => {
+    return store.getState().video.connections;
   };
 
   const onUserDisplayNameReceived = async (userName) => {
@@ -178,7 +184,9 @@ export const VideoChat = (props) => {
   };
 
   const onRemoteUserDetails = (userName, userId) => {
-    const peerConnection = connections.filter((item) => item.UserId === userId);
+    const peerConnection = getConnections().filter(
+      (item) => item.UserId === userId
+    );
     if (peerConnection.length === 1) {
       peerConnection[0].DivElement.childNodes[0].textContent = userName;
     }
@@ -197,10 +205,15 @@ export const VideoChat = (props) => {
     // divideVideosInRows(null, userId, false, null);
     divideVideosInRows(null, userId, false);
 
-    const peerConnection = connections.filter((item) => item.UserId === userId);
+    const peerConnection = getConnections().filter(
+      (item) => item.UserId === userId
+    );
     if (peerConnection.length === 1) {
       peerConnection[0].CallObject.close();
-      connections = connections.filter((item) => item.UserId !== userId);
+      const connections = getConnections().filter(
+        (item) => item.UserId !== userId
+      );
+      dispatch(setConnections(connections));
     } else {
       console.warn("Error on connections array");
     }
@@ -316,7 +329,7 @@ export const VideoChat = (props) => {
 
     console.log("onCallReceive:localUserStream");
     console.log(stream);
-    const peerConnection = connections.filter(
+    const peerConnection = getConnections().filter(
       (item) => item.UserId === getLocalUserId()
     );
     if (peerConnection.length === 1) {
@@ -381,7 +394,9 @@ export const VideoChat = (props) => {
     peerConnection.DivElement = divElement;
     peerConnection.userName = userName;
     peerConnection.isLocalPaticipant = isLocalPaticipant;
-    connections.push(peerConnection);
+    let newConnections = [...getConnections()];
+    newConnections.push(peerConnection);
+    dispatch(setConnections(newConnections));
 
     //TODO borrar esto cdo este andando todo 100 %
     /** Esto es lo que haciamos para apendear sin rows para probar **/
@@ -625,7 +640,7 @@ export const VideoChat = (props) => {
         track.stop();
       });
 
-    connections.forEach((peer) => {
+    getConnections().forEach((peer) => {
       const stream = peer.VideoElement.srcObject;
       const tracks = stream.getTracks();
 
@@ -636,7 +651,7 @@ export const VideoChat = (props) => {
       peer.VideoElement.srcObject = null;
     });
 
-    connections = null;
+    dispatch(setConnections(null));
     dispatch(setLocalUserPeer(null));
     dispatch(setLocalUserScreenSharingPeer(null));
     dispatch(setLocalUserStream(null));
