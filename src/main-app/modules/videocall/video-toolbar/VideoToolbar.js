@@ -114,7 +114,7 @@ export const VideoToolbar = (props) => {
       )}
       {isScreenSharingByMe && (
         <button
-          className={`button ${is_danger}`}
+          className={`button ${toolbar_buttons} ${colorblind_button} ${is_danger}`}
           id="stop_screen_share_button"
           onClick={stopSharingScreen}
         >
