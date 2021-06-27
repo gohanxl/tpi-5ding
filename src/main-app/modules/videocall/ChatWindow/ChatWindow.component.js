@@ -46,7 +46,6 @@ export const ChatWindow = (props) => {
 
   const pushMessage = (message) => {
     message.time = Date.now();
-    console.log(message.time);
     const updatedChat = [...latestChat.current];
     updatedChat.push(message);
     setMessages(updatedChat);

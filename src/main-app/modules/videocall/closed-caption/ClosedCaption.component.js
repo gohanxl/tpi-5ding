@@ -25,7 +25,6 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
 
   useEffect(() => {
     async function initClosedCaption() {
-      console.log("ENTRE AL USE EFFECT DE SIGNAL R!!!!!!");
       await signalRService.startConnection(null);
       await signalRService.listenReceiveClosedCaption(pushReceivedCC);
     }
@@ -36,9 +35,8 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
 
   useEffect(() => {
     if (!isRecording) {
-      console.log("PASO POR ACA XQ SE APAGO RECORDING!!!");
       startSpeechToText().catch((e) => {
-        console.log(e);
+        console.error(e);
       });
     }
   }, [isRecording]);
@@ -61,8 +59,6 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
   }));
 
   const pushReceivedCC = (name, closedCaption) => {
-    console.log("ACABO DE RECIBIR CC:");
-    console.log(closedCaption);
     setClosedCaptionReceive(
       closedCaptionReceive.length < 3
         ? [...closedCaptionReceive, { name, closedCaption }]
@@ -76,14 +72,9 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
     signalRService &&
     signalRService.isServiceStarted
   ) {
-    console.log("VOY A MANDAR ESTO:");
     const mensaje = results.pop();
-    console.log(mensaje);
     signalRService.invokeSendClosedCaption(meeting, name, mensaje);
   }
-
-  console.log("RERENDER AQUI!!!!!");
-  console.log(isRecording);
 
   return (
     <div className={`${closedCaptionReceive.length ? close_caption : ""}`}>

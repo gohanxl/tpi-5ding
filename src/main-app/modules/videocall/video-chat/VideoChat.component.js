@@ -49,20 +49,10 @@ export const VideoChat = (props) => {
 
   const [signalRService, setSignalRService] = useState();
 
-  // let localUserStream = null;
   let userDisplayName = name; //no need for redux here
-  // let localUserPeer = null;
-  // let localUserId = null;
   let meetingId = meeting;
 
-  // let localUserScreenSharingPeer = null;
-  // let localUserScreenSharingId = null;
-  // let connections = [];
-  // let remoteConnectionIds = [];
-
-  // let localUserCallObject = null; // NO need for redux here I think
   let screenSharinUserName = ""; // No need for redux here
-  // let localUserScreenSharingStream = null;
 
   const intervalId = useRef(null);
 
@@ -77,7 +67,6 @@ export const VideoChat = (props) => {
     async function initSignalR() {
       const signalRServ = await SignalHandlerService.getInstance();
       const isConnected = await signalRServ.asyncConnection();
-      console.log("SignalRHub Connected: " + isConnected);
       setSignalRService(signalRServ);
     }
     if (user && user.dbUser) {
@@ -202,15 +191,6 @@ export const VideoChat = (props) => {
   };
 
   const remoteUserLeft = (roomId, userId) => {
-    //TODO Borrar esto cdo este todo andando
-    /** Asi refrescabamos los videos cdo alguien se iba sin video grid**/
-    // const reduxVideos = store.getState().video.rows;
-    // reduxVideos.forEach((item) => console.log(item));
-    // const filteredReduxVideos = reduxVideos.filter(
-    //   (item) => item.id !== userId
-    // );
-    // dispatch(setVideoRows(filteredReduxVideos));
-
     // divideVideosInRows(null, userId, false, null);
     divideVideosInRows(null, userId, false);
 
@@ -228,20 +208,10 @@ export const VideoChat = (props) => {
     }
   };
 
-  /*TODO: Revisar antes de borrar porque es el callback del close de peerjs (objeto peer)*/
-  // const onRemoteUserClosed = (roomId, userId) => {
-  //   const peerConnection = connections.filter((item) => item.UserId === userId);
-  //   if (peerConnection.length === 1) {
-  //     const index = connections.indexOf(peerConnection[0], 0);
-  //     connections = connections.splice(index, 1);
-  //   }
-  // };
-
   const connectToOtherUsers = (roomId, userId, displayName) => {
     let localUserCallObject;
 
     if (roomId === meetingId && userId !== getLocalUserId()) {
-      // localUserCallObject = localUserPeer.call(userId, getLocalUserStream());
       localUserCallObject = getLocalUserPeer().call(
         userId,
         getLocalUserStream()
@@ -259,7 +229,7 @@ export const VideoChat = (props) => {
             displayName
           ),
         (error) => {
-          console.log("Error during receiving stream", error);
+          console.error("Error during receiving stream", error);
         }
       );
     }
@@ -281,9 +251,7 @@ export const VideoChat = (props) => {
 
   const onSuccessfullConnection = async () => {
     await GetUserDevices();
-
     const peer = await getPeerObject();
-    // localUserPeer = peer;
     dispatch(setLocalUserPeer(peer));
     peer.on("open", sendNotificationOfJoining);
     peer.on("call", onCallReceive);
@@ -302,10 +270,7 @@ export const VideoChat = (props) => {
   const successHandler = (stream) => {
     const videoTracks = stream.getVideoTracks();
     const constraints = videoTracks[0].getConstraints();
-
-    // localUserStream = stream;
     dispatch(setLocalUserStream(stream));
-    //TODO ojo mando stream pero tal vez lo tenga q buscar adentro de redux
     addUser(stream, getLocalUserId(), null, userDisplayName, true);
   };
 
@@ -337,14 +302,11 @@ export const VideoChat = (props) => {
 
   const onCallReceive = async (call) => {
     const stream = getLocalUserStream();
-
-    console.log("onCallReceive:localUserStream");
-    console.log(stream);
     const peerConnection = getConnections().filter(
       (item) => item.UserId === getLocalUserId()
     );
     if (peerConnection.length === 1) {
-      peerConnection[0].VideoElement.srcObject = stream; //localUserStream;
+      peerConnection[0].VideoElement.srcObject = stream;
     }
 
     call.answer(stream);
@@ -411,13 +373,6 @@ export const VideoChat = (props) => {
     newConnections.push(peerConnection);
     dispatch(setConnections(newConnections));
 
-    //TODO borrar esto cdo este andando todo 100 %
-    /** Esto es lo que haciamos para apendear sin rows para probar **/
-    // const reduxVideos = store.getState().video.rows;
-    // const newArrayVideo = [...reduxVideos];
-    // newArrayVideo.push(divElement);
-    // dispatch(setVideoRows(newArrayVideo));
-
     // divideVideosInRows(divElement, null, isLocalPaticipant, stream);
     divideVideosInRows(divElement, null, isLocalPaticipant);
   };
@@ -460,7 +415,7 @@ export const VideoChat = (props) => {
       videoDivs = videoDivs.filter((item) => item.id !== userIdToRemove);
     }
 
-    const videoDivsCount = videoDivs.length; //Supongamos que hay 14 divs
+    const videoDivsCount = videoDivs.length;
     let rowsQuantity = 1;
     if (videoDivsCount > 2 && videoDivsCount <= 8) {
       rowsQuantity = 2;
@@ -531,7 +486,6 @@ export const VideoChat = (props) => {
   const dispatch = useDispatch();
 
   const sendNotificationOfJoining = (id) => {
-    // localUserId = id;
     dispatch(setLocalUserId(id));
     signalRService.invokeJoinedRoom(meetingId, id, userDisplayName);
     createScreenSharingPeerObject(id);
@@ -539,7 +493,6 @@ export const VideoChat = (props) => {
 
   const createScreenSharingPeerObject = (id) => {
     const localScreenPeer = getPeerObject();
-    // localUserScreenSharingPeer = localScreenPeer;
     dispatch(setLocalUserScreenSharingPeer(localScreenPeer));
     localScreenPeer.on("open", (screenSharingCallId) =>
       sendNotificationOfAddSharingModality(screenSharingCallId, id)
@@ -551,7 +504,6 @@ export const VideoChat = (props) => {
     screenSharingCallId,
     userId
   ) => {
-    // localUserScreenSharingId = screenSharingCallId;
     dispatch(setLocalUserScreenSharingId(screenSharingCallId));
     signalRService.invokeAddScreenSharingModality(
       meetingId,

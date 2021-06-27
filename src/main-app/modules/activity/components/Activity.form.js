@@ -56,7 +56,6 @@ export const ActivityForm = (props) => {
       activityService
         .createActivity(user.token, reqBody)
         .then((res) => {
-          console.log(res.data);
           const actividadId = res.data.Actividad.Id;
           let formData = new FormData();
           let file = document.querySelector("#activityFile");
@@ -70,7 +69,6 @@ export const ActivityForm = (props) => {
               SUBTIPO_CONSIGNAS
             )
             .then((res) => {
-              console.log("Uploaded file successfully.");
               console.log(res.data);
             })
             .catch((err) => console.error(err));

@@ -33,7 +33,6 @@ export const Attendance = (props) => {
     attendanceService
       .absentStudents(user.token, classId)
       .then((res) => {
-        console.log(res.data);
         signalRService.invokeCheckAttendance(
           classId,
           user.dbUser.Id,
