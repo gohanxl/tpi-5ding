@@ -54,10 +54,11 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
     );
   };
 
-  signalRService.listenReceiveClosedCaption(pushReceivedCC);
+  if (signalRService && signalRService.isServiceStarted) {
+    signalRService.listenReceiveClosedCaption(pushReceivedCC);
+  }
 
   if (!isMuted && results.length) {
-    console.log(results);
     signalRService.invokeSendClosedCaption(meeting, name, results.pop());
   }
 
