@@ -16,7 +16,7 @@ export const CallViewRenderer = ({ currentUser }) => {
   }, [currentUser]);
 
   return (
-    <section>
+    <section style={{ height: "100%" }}>
       <VideoChat name={userName} uuid={uuid} meeting="1" />
     </section>
   );

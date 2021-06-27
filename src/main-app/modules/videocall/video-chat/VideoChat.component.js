@@ -26,7 +26,7 @@ import {
   setVideoRows,
 } from "./store/video.actions";
 import { Attendance } from "../../shared-components/Attendance/components/Attendance";
-// import { v4 } from "uuid";
+//import { v4 } from "uuid";
 
 export const VideoChat = (props) => {
   const ScreeenSharingStatus = {
@@ -174,7 +174,7 @@ export const VideoChat = (props) => {
     // );
     // dispatch(setVideoRows(filteredReduxVideos));
 
-    // divideVideosInRows(null, userId, false, null);
+    //divideVideosInRows(null, userId, false, null);
     divideVideosInRows(null, userId, false);
 
     const peerConnection = connections.filter((item) => item.UserId === userId);
@@ -370,8 +370,8 @@ export const VideoChat = (props) => {
   const divideVideosInRows = async (
     newVideoDiv,
     userIdToRemove,
-    isLocalPaticipant
-    // stream
+    isLocalPaticipant,
+    stream
   ) => {
     const rows = [];
     const reduxVideoRows = store.getState().video.rows;
@@ -393,7 +393,7 @@ export const VideoChat = (props) => {
 
     if (newVideoDiv) {
       videoDivs.push(newVideoDiv);
-      // for (let i = 0; i < 4; i++) {
+      // for (let i = 0; i < 8; i++) {
       //   let clone = newVideoDiv.cloneNode(true);
       //   clone.id = v4();
       //   clone.childNodes[1].srcObject = stream;
@@ -423,21 +423,12 @@ export const VideoChat = (props) => {
 
     const videoDivsCopy = [...videoDivs];
 
-    const camerasPerRow = Math.floor(
-      videoDivsCount / rowsQuantity
-    ); /* 14 / 4 = 3 cameras per row */
-    console.log("Cameras per row:");
-    console.log(camerasPerRow); // 3
-    let remainingCamera = videoDivsCount % rowsQuantity;
-    console.log("remainingCamera:");
-    console.log(remainingCamera); // 2
-    console.log("Total divs:");
-    console.log(videoDivsCount);
+    const camerasPerRow = Math.floor(videoDivsCount / rowsQuantity);
+    let remainingCameras =
+      videoDivsCount % rowsQuantity > 0
+        ? videoDivsCount - camerasPerRow * rowsQuantity
+        : 0;
 
-    //fila 4 -> 3
-    //fila 3 -> 3
-    //fila 2 -> 3
-    //fila 1 -> 3
     for (let i = 0; i < rowsQuantity; i++) {
       rows.push({
         maxCamsCount: camerasPerRow,
@@ -445,23 +436,25 @@ export const VideoChat = (props) => {
     }
 
     //remainingCamera es 2 por lo tanto va a dar dos vueltas al while
-    while (remainingCamera > 0) {
+    let limitCamerasPerRow = 4;
+    let someRowsReachedLimit = rows.some(
+      (row) => row.maxCamsCount >= limitCamerasPerRow
+    );
+    if (remainingCameras > 0 && someRowsReachedLimit) {
+      limitCamerasPerRow = camerasPerRow + 2;
+    }
+
+    while (remainingCameras > 0) {
       //cada iteracion del while recorro el array de rows, si encuentro un elemento q no tiene el max cams, le meto 1
       //y hago break para salir del for y volver al while, asi hasta distribuir las remaining cameras
       for (let i = 0; i < rows.length; i++) {
-        if (rows[i].maxCamsCount < 4) {
-          rows[i].maxCamsCount = rows[i].maxCamsCount + 1;
+        if (rows[i].maxCamsCount < limitCamerasPerRow) {
+          rows[i].maxCamsCount = rows[i].maxCamsCount + 2;
           break;
         }
       }
-      remainingCamera--;
+      remainingCameras--;
     }
-
-    //al salir del while:
-    //fila 4 -> 4
-    //fila 3 -> 4
-    //fila 2 -> 3
-    //fila 1 -> 3
 
     rows.forEach((row) => {
       const divEl = document.createElement("div");
@@ -661,7 +654,7 @@ export const VideoChat = (props) => {
         <div className="screenSharingContainer" id="screenSharing-container">
           <video className="d-none" id="screenSharingObj" autoPlay />
         </div>
-        <div className={cameras_and_cc}>
+        <div className={cameras_and_cc} id="video-grid-container">
           <VideoGridComponent
             name={userDisplayName}
             meeting="1"

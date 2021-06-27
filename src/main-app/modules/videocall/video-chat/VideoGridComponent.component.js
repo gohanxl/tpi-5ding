@@ -16,18 +16,13 @@ export const VideoGridComponent = ({
 
   useEffect(() => {
     let root = document.documentElement;
-    root.style.setProperty(
-      "--user_camera-height",
-      window.screen.height * 0.22 + "px"
-    );
-    root.style.setProperty(
-      "--user_camera-width",
-      window.screen.width * 0.15 + "px"
-    );
-    root.style.setProperty(
-      "--chat_toolbar_height",
-      window.screen.height * 0.715 + "px"
-    );
+    let gridContainer = document.getElementById("video-grid-container");
+    let gridContainerHeight = gridContainer.clientHeight;
+
+    let rowsCount = videoRows.length;
+    let camerasMaxHeight = (gridContainerHeight / rowsCount) * 0.8;
+
+    root.style.setProperty("--user_camera_max-height", camerasMaxHeight + "px");
   }, [videoRows, ccOn]);
 
   const CameraRow = ({ element }) => {

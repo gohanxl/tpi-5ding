@@ -1,3 +1,10 @@
+@import "../../../../App.styles.scss";
+
+:root {
+  --user_camera-width: 500px;
+  --user_camera_max-height: 350px;
+}
+
 video {
   width: 100%;
   height: fit-content;
@@ -10,6 +17,7 @@ video {
 }
 
 .cameras_and_screen {
+  background-color: #171717;
   position: relative;
   height: 100%;
   flex: 4;
@@ -30,23 +38,17 @@ video {
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: center;
-}
-
-:root {
-  --user_camera-width: 500px;
-  --user_camera-height: 350px;
-  --chat_toolbar_height: 300px;
+  padding: 10px 0;
 }
 
 .user_camera_container {
   position: relative;
-  margin: 10px;
+  margin: 0 10px;
   overflow: hidden;
   border-radius: 10px;
   display: flex;
   align-items: center;
-  width: var(--user_camera-width);
-  height: var(--user_camera-height);
+  max-height: var(--user_camera_max-height);
 }
 
 .user_name {
@@ -60,7 +62,7 @@ video {
 }
 
 .chat_window {
-  height: 88%;
+  height: 100%;
 }
 
 .cameras_and_cc {
@@ -72,15 +74,14 @@ video {
 }
 
 .toolbar_and_chat {
-  height: var(--chat_toolbar_height);
+  height: $app-container-height;
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
-.video_display {
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  position: absolute;
-  top:0;
-}
+// .video_display {
+//   border-top-left-radius: 10px;
+//   border-top-right-radius: 10px;
+//   top:0;
+// }
