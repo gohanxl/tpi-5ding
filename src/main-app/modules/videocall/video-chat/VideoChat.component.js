@@ -16,10 +16,10 @@ import Peer from "peerjs";
 import { SignalHandlerService } from "../services/signal-handler";
 import { VideoToolbar } from "../video-toolbar/VideoToolbar";
 import { ChatWindow } from "../ChatWindow/ChatWindow.component";
-import { ClosedCaptionComponent } from "../../../modules/videocall/closed-caption/ClosedCaption.component";
 import { VideoGridComponent } from "./VideoGridComponent.component";
 import { useDispatch, useSelector, useStore } from "react-redux";
 import {
+  setLocalUserId,
   setLocalUserPeer,
   setLocalUserStream,
   setMicOn,
@@ -48,7 +48,7 @@ export const VideoChat = (props) => {
   // let localUserStream = null;
   let userDisplayName = name; //no need for redux here
   // let localUserPeer = null;
-  let localUserId = null;
+  // let localUserId = null;
   let meetingId = meeting;
 
   let localUserScreenSharingPeer = null;
@@ -109,6 +109,10 @@ export const VideoChat = (props) => {
     return store.getState().video.localUserPeer;
   };
 
+  const getLocalUserId = () => {
+    return store.getState().video.localUserId;
+  };
+
   const onUserDisplayNameReceived = async (userName) => {
     userDisplayName = userName;
     signalRService.startConnection(onSuccessfullConnection);
@@ -127,7 +131,7 @@ export const VideoChat = (props) => {
     if (userIds.length > 0 && status === ScreeenSharingStatus.Started) {
       userIds.forEach((element) => {
         try {
-          if (element !== localUserId) {
+          if (element !== getLocalUserId()) {
             localUserScreenSharingPeer.call(
               element,
               localUserScreenSharingStream
@@ -206,7 +210,7 @@ export const VideoChat = (props) => {
   // };
 
   const connectToOtherUsers = (roomId, userId, displayName) => {
-    if (roomId === meetingId && userId !== localUserId) {
+    if (roomId === meetingId && userId !== getLocalUserId()) {
       // localUserCallObject = localUserPeer.call(userId, getLocalUserStream());
       localUserCallObject = getLocalUserPeer().call(
         userId,
@@ -272,7 +276,7 @@ export const VideoChat = (props) => {
     // localUserStream = stream;
     dispatch(setLocalUserStream(stream));
     //TODO ojo mando stream pero tal vez lo tenga q buscar adentro de redux
-    addUser(stream, localUserId, null, userDisplayName, true);
+    addUser(stream, getLocalUserId(), null, userDisplayName, true);
   };
 
   const errorHandler = (error) => {
@@ -307,7 +311,7 @@ export const VideoChat = (props) => {
     console.log("onCallReceive:localUserStream");
     console.log(stream);
     const peerConnection = connections.filter(
-      (item) => item.UserId === localUserId
+      (item) => item.UserId === getLocalUserId()
     );
     if (peerConnection.length === 1) {
       peerConnection[0].VideoElement.srcObject = stream; //localUserStream;
@@ -501,7 +505,8 @@ export const VideoChat = (props) => {
   const dispatch = useDispatch();
 
   const sendNotificationOfJoining = (id) => {
-    localUserId = id;
+    // localUserId = id;
+    dispatch(setLocalUserId(id));
     signalRService.invokeJoinedRoom(meetingId, id, userDisplayName);
     createScreenSharingPeerObject(id);
   };
@@ -651,7 +656,7 @@ export const VideoChat = (props) => {
 
       signalRService.invokeScreenSharingStatus(
         meetingId,
-        localUserId,
+        getLocalUserId(),
         ScreeenSharingStatus.Started,
         userDisplayName
       );
@@ -670,7 +675,7 @@ export const VideoChat = (props) => {
     dispatch(setScreenSharingStatus(false, false));
     signalRService.invokeScreenSharingStatus(
       meetingId,
-      localUserId,
+      getLocalUserId(),
       ScreeenSharingStatus.Stopped,
       userDisplayName
     );

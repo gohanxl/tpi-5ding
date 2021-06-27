@@ -35,6 +35,11 @@ export const setLocalUserPeer = (localUserPeer) => ({
   localUserPeer,
 });
 
+export const setLocalUserId = (localUserId) => ({
+  type: types.SETL_LOCAL_USER_ID,
+  localUserId,
+});
+
 export const setScreenSharingStatus = (
   isScreenSharingByRemote,
   isScreenSharingByMe
