@@ -5,7 +5,7 @@ import { Home } from "./modules/home-page/Home.component.js";
 export const LandingPageRoutes = () => {
   return (
     <Switch>
-      <Route key="pepe" path="/" component={Home} />
+      <Route key="landing-page" path="/" component={Home} />
     </Switch>
   );
 };

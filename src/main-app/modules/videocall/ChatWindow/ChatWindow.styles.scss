@@ -35,8 +35,11 @@
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  background-color: #b8e3ec;
   height: 100%;
+  background-color: var(--light-blue);
+  -webkit-transition: background-color 250ms ease-in-out;
+  -ms-transition: background-color 250ms ease-in-out;
+  transition: background-color 250ms ease-in-out;
 }
 
 .chat_wrapper {

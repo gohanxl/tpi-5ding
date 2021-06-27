@@ -65,10 +65,7 @@ export const Attendance = (props) => {
   return (
     <div>
       {isTeacher() && (
-        <button
-          className="button is-info attendance_button"
-          onClick={checkAttendance}
-        >
+        <button className="button attendance_button" onClick={checkAttendance}>
           Tomar Lista
         </button>
       )}

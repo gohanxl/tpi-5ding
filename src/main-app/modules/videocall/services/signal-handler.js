@@ -101,9 +101,9 @@ export class SignalHandlerService {
       .catch((error) => console.log(error));
   };
 
-
   invokeSendClosedCaption = (roomId, name, closedCaption) => {
-    this.hubConnection.invoke("SendClosedCaption", roomId, name, closedCaption)
+    this.hubConnection
+      .invoke("SendClosedCaption", roomId, name, closedCaption)
       .catch((error) => console.log(error));
   };
 
