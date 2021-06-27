@@ -20,7 +20,7 @@
 }
 
 .main__message_container {
-  padding: 22px 12px;
+  //padding: 22px 12px;
   display: flex;
 }
 
@@ -43,7 +43,7 @@
 }
 
 .chat_wrapper {
-  height: 100%;
+  flex: 1;
   overflow: auto;
 
   &::-webkit-scrollbar {
