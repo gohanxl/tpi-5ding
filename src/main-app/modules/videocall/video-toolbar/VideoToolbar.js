@@ -14,7 +14,6 @@ import { faMicrophoneSlash } from "@fortawesome/free-solid-svg-icons";
 import { faVideo } from "@fortawesome/free-solid-svg-icons";
 import { faVideoSlash } from "@fortawesome/free-solid-svg-icons";
 import { faPhoneSlash } from "@fortawesome/free-solid-svg-icons";
-import { faComment } from "@fortawesome/free-solid-svg-icons";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { faStop } from "@fortawesome/free-solid-svg-icons";
 import { faUserFriends } from "@fortawesome/free-solid-svg-icons";
@@ -81,7 +80,9 @@ export const VideoToolbar = (props) => {
       </button>
 
       <button
-        className={`button ${ccOn ? "is-primary" : "is-danger"}`}
+        className={`button ${colorblind_button} ${
+          ccOn ? toolbar_buttons : is_danger
+        }`}
         id="videoOnButton"
         onClick={() => dispatch(setCcOn(!ccOn))}
       >
@@ -93,6 +94,8 @@ export const VideoToolbar = (props) => {
         id="endCallButton"
         onClick={endCall}
       >
+        <FontAwesomeIcon icon={faPhoneSlash} />
+      </button>
 
       <button
         className={`button ${toolbar_buttons} ${colorblind_button}`}
