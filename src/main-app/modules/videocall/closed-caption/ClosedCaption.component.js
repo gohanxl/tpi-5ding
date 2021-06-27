@@ -9,6 +9,7 @@ import React, {
   useImperativeHandle,
   useState,
 } from "react";
+import { SignalHandlerService } from "../services/signal-handler";
 
 export const ClosedCaptionComponent = forwardRef((props, ref) => {
   const { name, meeting, signalRService } = props;
@@ -19,18 +20,31 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
   const { error, isRecording, results, startSpeechToText, stopSpeechToText } =
     useSpeechToText({
       continuous: true,
-      timeout: 10000,
       speechRecognitionProperties: { lang: "es-AR", interimResults: false },
     });
 
-  if (error)
-    return <p>Web Speech API no esta disponible en este navegador 🤷‍</p>;
+  useEffect(() => {
+    async function initClosedCaption() {
+      console.log("ENTRE AL USE EFFECT DE SIGNAL R!!!!!!");
+      await signalRService.startConnection(null);
+      await signalRService.listenReceiveClosedCaption(pushReceivedCC);
+    }
+    if (signalRService) {
+      initClosedCaption();
+    }
+  }, [signalRService]);
 
   useEffect(() => {
-    startSpeechToText().catch((e) => {
-      console.log(e);
-    });
-  }, []);
+    if (!isRecording) {
+      console.log("PASO POR ACA XQ SE APAGO RECORDING!!!");
+      startSpeechToText().catch((e) => {
+        console.log(e);
+      });
+    }
+  }, [isRecording]);
+
+  if (error)
+    return <p>Web Speech API no esta disponible en este navegador 🤷‍</p>;
 
   useImperativeHandle(ref, () => ({
     async muteClosedCaption() {
@@ -47,6 +61,8 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
   }));
 
   const pushReceivedCC = (name, closedCaption) => {
+    console.log("ACABO DE RECIBIR CC:");
+    console.log(closedCaption);
     setClosedCaptionReceive(
       closedCaptionReceive.length < 3
         ? [...closedCaptionReceive, { name, closedCaption }]
@@ -54,18 +70,20 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
     );
   };
 
-  if (signalRService && signalRService.isServiceStarted) {
-    signalRService.listenReceiveClosedCaption(pushReceivedCC);
-  }
-
   if (
     !isMuted &&
     results.length &&
     signalRService &&
     signalRService.isServiceStarted
   ) {
-    signalRService.invokeSendClosedCaption(meeting, name, results.pop());
+    console.log("VOY A MANDAR ESTO:");
+    const mensaje = results.pop();
+    console.log(mensaje);
+    signalRService.invokeSendClosedCaption(meeting, name, mensaje);
   }
+
+  console.log("RERENDER AQUI!!!!!");
+  console.log(isRecording);
 
   return (
     <div className={`${closedCaptionReceive.length ? close_caption : ""}`}>
