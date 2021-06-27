@@ -161,7 +161,15 @@ const MainApp = () => {
                           className={colorblind_switch}
                           checked={switchValue}
                           onChange={() => {
-                            colorblindSwitch.current.$inputRef.blur();
+                            if (colorblindSwitch.current.$inputRef) {
+                              colorblindSwitch.current.$inputRef.blur();
+                            } else if (colorblindSwitch.current.H) {
+                              colorblindSwitch.current.H.blur();
+                            } else {
+                              console.error(
+                                "Blind mode not working in production!!"
+                              );
+                            }
                             setSwitchValue(!switchValue);
                           }}
                           onColor="#00b4b2"
