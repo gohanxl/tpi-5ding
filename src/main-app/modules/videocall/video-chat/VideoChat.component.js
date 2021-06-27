@@ -60,7 +60,7 @@ export const VideoChat = (props) => {
   // let connections = [];
   // let remoteConnectionIds = [];
 
-  let localUserCallObject = null;
+  // let localUserCallObject = null; // NO need for redux here I think
   let screenSharinUserName = null;
   let localUserScreenSharingStream = null;
 
@@ -234,6 +234,8 @@ export const VideoChat = (props) => {
   // };
 
   const connectToOtherUsers = (roomId, userId, displayName) => {
+    let localUserCallObject;
+
     if (roomId === meetingId && userId !== getLocalUserId()) {
       // localUserCallObject = localUserPeer.call(userId, getLocalUserStream());
       localUserCallObject = getLocalUserPeer().call(
@@ -256,8 +258,6 @@ export const VideoChat = (props) => {
           console.log("Error during receiving stream", error);
         }
       );
-      /*TODO: Revisar antes de borrar porque es el callback del close de peerjs (objeto peer)*/
-      /*localUserCallObject.on("close", () => remoteUserLeft(roomId, userId));*/
     }
   };
 

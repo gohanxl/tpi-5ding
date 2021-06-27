@@ -1,5 +1,4 @@
 import * as types from "./video.types";
-import { SET_REMOTE_CONNECTIONS_ID } from "./video.types";
 
 export const setVideoRows = (rows) => ({
   type: types.SET_VIDEO_ROWS,
