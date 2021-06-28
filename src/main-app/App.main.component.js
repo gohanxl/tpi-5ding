@@ -30,7 +30,7 @@ const MainApp = () => {
   const dispatch = useDispatch();
   const [hideFooter, setHideFooter] = useState(true);
   const [switchValue, setSwitchValue] = useState(
-    Boolean(localStorage.getItem("color-blind"))
+    JSON.parse(localStorage.getItem("color-blind") || false)
   );
 
   const colorblindSwitch = useRef(null);
@@ -84,13 +84,13 @@ const MainApp = () => {
             colorblindModeThemeValues[rootStyles[index]]
           );
         });
-        localStorage.setItem("color-blind", "true");
+        localStorage.setItem("color-blind", JSON.stringify(true));
         dispatch(setIsColorBlind(true));
       } else {
         rootStyles.forEach((rootStyle, index) => {
           root.style.setProperty(rootStyle, standardThemeValues[index]);
         });
-        localStorage.setItem("color-blind", "false");
+        localStorage.setItem("color-blind", JSON.stringify(false));
         dispatch(setIsColorBlind(false));
       }
     },
