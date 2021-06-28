@@ -1,4 +1,4 @@
-@import "../../../../App.styles.scss";
+@import "../../../../ui-styling/globals/colors.scss";
 
 .sidebar-menu {
   width: 50px;
@@ -85,7 +85,10 @@
 
 .menu-group-title {
   padding: 10px;
-  background-color: #{$edu-primary + "29"};
+  background-color: #{var(--primary) + "29"};
+  -webkit-transition: background-color 250ms ease-in-out;
+  -ms-transition: background-color 250ms ease-in-out;
+  transition: background-color 250ms ease-in-out;
 }
 
 .menu-group-title,

@@ -1,3 +1,8 @@
+:root {
+  --user_camera-width: 500px;
+  --user_camera_max-height: 350px;
+}
+
 video {
   width: 100%;
   height: fit-content;
@@ -10,6 +15,7 @@ video {
 }
 
 .cameras_and_screen {
+  background-color: #171717;
   position: relative;
   height: 100%;
   flex: 4;
@@ -30,16 +36,18 @@ video {
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: center;
+  padding: 10px 0;
 }
 
 .user_camera_container {
   position: relative;
-  width: fit-content;
-  margin: 10px;
+  border: solid 2px #2f2f2f;
+  margin: 0 10px;
   overflow: hidden;
   border-radius: 10px;
   display: flex;
   align-items: center;
+  max-height: var(--user_camera_max-height);
 }
 
 .user_name {
@@ -48,12 +56,13 @@ video {
   left: 0;
   width: 100%;
   background-color: #2727279c;
-  padding: 10px;
+  padding: 0.4em;
   color: white;
 }
 
 .chat_window {
   height: 100%;
+  overflow: hidden;
 }
 
 .cameras_and_cc {
@@ -68,5 +77,10 @@ video {
   height: 100%;
   display: flex;
   flex-direction: column;
-  flex: 1;
 }
+
+// .video_display {
+//   border-top-left-radius: 10px;
+//   border-top-right-radius: 10px;
+//   top:0;
+// }

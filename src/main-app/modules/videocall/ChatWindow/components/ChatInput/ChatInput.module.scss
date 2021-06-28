@@ -1,5 +1,7 @@
 .chat_input {
   padding: 10px;
+  position: relative;
+  bottom: 0;
 }
 
 .chat_input__wrapper {
@@ -11,6 +13,9 @@
 }
 
 .chat_button {
-  background-color: #b8e3ec;
+  background-color: var(--light-blue);
   border: none;
+  -webkit-transition: background-color 250ms ease-in-out;
+  -ms-transition: background-color 250ms ease-in-out;
+  transition: background-color 250ms ease-in-out;
 }

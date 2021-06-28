@@ -1,14 +1,53 @@
-@import "../../../../App.styles.scss";
+@import "../../../../ui-styling/globals/colors.scss";
 
-.toolbar_buttons {
+.toolbar {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   padding: 10px;
-  background-color: $edu-darker-primary;
+  background-color: var(--darker-primary);
+  -webkit-transition: background-color 250ms ease-in-out;
+  -ms-transition: background-color 250ms ease-in-out;
+  transition: background-color 250ms ease-in-out;
 
   button {
-    width: 18%;
+    color: white;
+    width: 15%;
     margin: 0;
+    border-color: var(--darker-primary);
+    -webkit-transition: all 250ms ease-in-out;
+    -ms-transition: all 250ms ease-in-out;
+    transition: all 250ms ease-in-out;
+
+    &.colorblind_button:focus {
+      color: white;
+    }
+
+    &.colorblind_button.is_danger {
+      background-color: #f03a5f;
+      border-color: #f03a5f;
+    }
+
+    &.colorblind_button.is_danger:hover {
+      color: white;
+      background-color: #a2253e;
+      border-color: #a2253e;
+    }
+  }
+}
+
+.toolbar_buttons {
+  background-color: var(--primary);
+  -webkit-transition: background-color 250ms ease-in-out;
+  -ms-transition: background-color 250ms ease-in-out;
+  transition: background-color 250ms ease-in-out;
+
+  &.toolbar_buttons:hover {
+    color: white;
+    background-color: var(--dark-primary);
+    border-color: var(--primary);
+    -webkit-transition: all 250ms ease-in-out;
+    -ms-transition: all 250ms ease-in-out;
+    transition: all 250ms ease-in-out;
   }
 }

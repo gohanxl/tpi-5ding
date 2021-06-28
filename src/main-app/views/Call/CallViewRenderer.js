@@ -2,14 +2,20 @@
 import React, { useEffect, useState } from "react";
 import { VideoChat } from "../../modules/videocall/video-chat/VideoChat.component";
 import { v4 } from "uuid";
+import { useDispatch } from "react-redux";
+import { setUserDisplayName } from "../../modules/videocall/video-chat/store/video.actions";
 
 export const CallViewRenderer = ({ currentUser }) => {
   const uuid = v4();
   const [userName, setUserName] = useState();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (currentUser && currentUser.dbUser) {
-      setUserName(currentUser.dbUser.Nombre);
+      const userName =
+        currentUser.dbUser.Nombre + " " + currentUser.dbUser.Apellido;
+      dispatch(setUserDisplayName(userName));
+      setUserName(userName);
     }
   }, [currentUser]);
 

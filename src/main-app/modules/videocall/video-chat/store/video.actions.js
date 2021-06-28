@@ -15,6 +15,58 @@ export const setVideoOn = (videoOn) => ({
   videoOn,
 });
 
+export const setCcOn = (ccOn) => ({
+  type: types.SET_CC_ON,
+  ccOn,
+});
+
+export const setLocalUserStream = (localUserStream) => ({
+  type: types.SET_LOCAL_USER_STREAM,
+  localUserStream,
+});
+
+export const setUserDisplayName = (userDisplayName) => ({
+  type: types.SET_USER_DISPLAY_NAME,
+  userDisplayName,
+});
+
+export const setLocalUserPeer = (localUserPeer) => ({
+  type: types.SET_LOCAL_USER_PEER,
+  localUserPeer,
+});
+
+export const setLocalUserId = (localUserId) => ({
+  type: types.SETL_LOCAL_USER_ID,
+  localUserId,
+});
+
+export const setLocalUserScreenSharingPeer = (localUserScreenSharingPeer) => ({
+  type: types.SET_LOCAL_USER_SCREEN_SHARING_PEER,
+  localUserScreenSharingPeer,
+});
+
+export const setLocalUserScreenSharingId = (localUserScreenSharingId) => ({
+  type: types.SET_LOCAL_USER_SCREEN_SHARING_ID,
+  localUserScreenSharingId,
+});
+
+export const setConnections = (connections) => ({
+  type: types.SET_CONNECTIONS,
+  connections,
+});
+
+export const setRemoteConnectionIds = (remoteConnectionIds) => ({
+  type: types.SET_REMOTE_CONNECTIONS_ID,
+  remoteConnectionIds,
+});
+
+export const setLocalUserScreenSharingStream = (
+  localUserScreenSharingStream
+) => ({
+  type: types.SET_LOCAL_USER_SCREEN_SHARING_STREAM,
+  localUserScreenSharingStream,
+});
+
 export const setScreenSharingStatus = (
   isScreenSharingByRemote,
   isScreenSharingByMe
