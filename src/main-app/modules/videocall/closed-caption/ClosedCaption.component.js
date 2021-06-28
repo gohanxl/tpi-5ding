@@ -1,77 +1,79 @@
-/* eslint-disable react/display-name */
+/* eslint-disable */
 import { close_caption } from "./ClosedCaption.module.scss";
 
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from "react-speech-recognition";
+import useSpeechToText from "react-hook-speech-to-text";
+
 import React, {
   forwardRef,
-  useCallback,
   useEffect,
   useImperativeHandle,
   useState,
 } from "react";
+import { SignalHandlerService } from "../services/signal-handler";
 
 export const ClosedCaptionComponent = forwardRef((props, ref) => {
   const { name, meeting, signalRService } = props;
 
-  const [closedCaptionSend, setClosedCaptionSend] = useState(null);
   const [closedCaptionReceive, setClosedCaptionReceive] = useState([]);
-  const { transcript, resetTranscript } = useSpeechRecognition();
   const [isMuted, setIsMuted] = useState(false);
+
+  const { error, isRecording, results, startSpeechToText, stopSpeechToText } =
+    useSpeechToText({
+      continuous: true,
+      speechRecognitionProperties: { lang: "es-AR", interimResults: false },
+    });
+
+  useEffect(() => {
+    async function initClosedCaption() {
+      await signalRService.startConnection(null);
+      await signalRService.listenReceiveClosedCaption(pushReceivedCC);
+    }
+    if (signalRService) {
+      initClosedCaption();
+    }
+  }, [signalRService]);
+
+  useEffect(() => {
+    if (!isRecording) {
+      startSpeechToText().catch((e) => {
+        console.error(e);
+      });
+    }
+  }, [isRecording]);
+
+  if (error)
+    return <p>Web Speech API no esta disponible en este navegador 🤷‍</p>;
 
   useImperativeHandle(ref, () => ({
     async muteClosedCaption() {
-      await SpeechRecognition.abortListening();
+      stopSpeechToText();
       setIsMuted(true);
     },
     async unMuteClosedCaption() {
-      await SpeechRecognition.startListening({ language: "es-AR" });
+      await startSpeechToText();
       setIsMuted(false);
     },
     async endCloseCaption() {
-      await SpeechRecognition.abortListening();
-      await resetTranscript();
+      stopSpeechToText();
     },
   }));
 
-  const closeCaptionCallback = useCallback(
-    (name, closedCaption) => {
-      setClosedCaptionReceive(
-        closedCaptionReceive.length < 2
-          ? [...closedCaptionReceive, { name, closedCaption }]
-          : [{ name, closedCaption }]
-      );
-    },
-    [closedCaptionReceive]
-  );
+  const pushReceivedCC = (name, closedCaption) => {
+    setClosedCaptionReceive(
+      closedCaptionReceive.length < 3
+        ? [...closedCaptionReceive, { name, closedCaption }]
+        : [{ name, closedCaption }]
+    );
+  };
 
-  useEffect(() => {
-    if (signalRService && signalRService.isServiceStarted) {
-      signalRService.listenReceiveClosedCaption(closeCaptionCallback);
-    }
-  }, [closeCaptionCallback, signalRService]);
-
-  if (SpeechRecognition.browserSupportsSpeechRecognition()) {
-    if (!isMuted) {
-      SpeechRecognition.startListening({ language: "es-AR" });
-      try {
-        if (transcript && transcript !== closedCaptionSend) {
-          setClosedCaptionSend(transcript);
-        } else if (!transcript && closedCaptionSend) {
-          signalRService.invokeSendClosedCaption(
-            meeting,
-            name,
-            closedCaptionSend
-          );
-          setClosedCaptionSend(null);
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    }
-  } else {
-    console.error("browser not support speech recognition");
+  if (
+    !isMuted &&
+    results.length &&
+    signalRService &&
+    signalRService.isServiceStarted
+  ) {
+    const mensaje = results.pop();
+    signalRService.invokeSendClosedCaption(meeting, name, mensaje);
   }
 
   return (

@@ -19,7 +19,6 @@ export class SignalHandlerService {
 
   asyncConnection = () => {
     if (!this.isServiceStarted) {
-      console.log("NO HAY CONEXION! AHI CONECTO PAPA");
       this.hubConnection = new SignalR.HubConnectionBuilder()
         .withUrl(process.env.REACT_APP_HUB_URL)
         .build();
@@ -36,7 +35,6 @@ export class SignalHandlerService {
           return false;
         });
     } else {
-      console.log("YA TE CONECTASTE MASTERR!!!");
       return true;
     }
   };
@@ -60,7 +58,7 @@ export class SignalHandlerService {
           }
           console.log("Connection established successfully!");
         })
-        .catch((error) => console.log(error));
+        .catch((error) => console.error(error));
     }
   };
 
@@ -101,9 +99,9 @@ export class SignalHandlerService {
       .catch((error) => console.log(error));
   };
 
-
   invokeSendClosedCaption = (roomId, name, closedCaption) => {
-    this.hubConnection.invoke("SendClosedCaption", roomId, name, closedCaption)
+    this.hubConnection
+      .invoke("SendClosedCaption", roomId, name, closedCaption)
       .catch((error) => console.log(error));
   };
 

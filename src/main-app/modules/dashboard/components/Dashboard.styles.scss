@@ -1,8 +1,6 @@
-@import "../../../../App.styles.scss";
-$dashboard-1: url(../../../../assets/img/dashboard-background.svg);
+@import "../../../../ui-styling/globals/colors.scss";
 
 .dashboard-container {
-  background-image: $dashboard-1;
   background-size: 50%;
   background-repeat: no-repeat;
   background-position: right top;
@@ -20,9 +18,15 @@ $dashboard-1: url(../../../../assets/img/dashboard-background.svg);
 }
 
 .dashboard-greeting {
-  color: $edu-dark-primary !important;
+  color: var(--dark-primary) !important;
+  -webkit-transition: color 250ms ease-in-out;
+  -ms-transition: color 250ms ease-in-out;
+  transition: color 250ms ease-in-out;
 }
 
 .dashboard-name {
-  color: $edu-darker-primary !important;
+  color: var(--darker-primary) !important;
+  -webkit-transition: color 250ms ease-in-out;
+  -ms-transition: color 250ms ease-in-out;
+  transition: color 250ms ease-in-out;
 }

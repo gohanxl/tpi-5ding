@@ -27,7 +27,6 @@ export const ParticipantListComponent = (props) => {
   }, [props]);
 
   const onReceiveGetSelfUid = (uid) => {
-    console.log(`Recibi este uid: ${uid}`);
     setMyUid(uid);
   };
 

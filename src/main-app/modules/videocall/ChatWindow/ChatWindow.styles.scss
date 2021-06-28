@@ -20,7 +20,7 @@
 }
 
 .main__message_container {
-  padding: 22px 12px;
+  //padding: 22px 12px;
   display: flex;
 }
 
@@ -35,12 +35,15 @@
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  background-color: #b8e3ec;
   height: 100%;
+  background-color: var(--light-blue);
+  -webkit-transition: background-color 250ms ease-in-out;
+  -ms-transition: background-color 250ms ease-in-out;
+  transition: background-color 250ms ease-in-out;
 }
 
 .chat_wrapper {
-  height: 100%;
+  flex: 1;
   overflow: auto;
 
   &::-webkit-scrollbar {

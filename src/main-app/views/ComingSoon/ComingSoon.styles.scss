@@ -1,5 +1,7 @@
-@import "../../../App.styles.scss";
+@import "../../../ui-styling/globals/colors.scss";
+
 $dashboard-1: url(../../../assets/img/dashboard-background.svg);
+
 .coming_soon_container {
   background-image: $dashboard-1;
   background-repeat: no-repeat;
