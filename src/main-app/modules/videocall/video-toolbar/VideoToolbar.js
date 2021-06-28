@@ -14,11 +14,15 @@ import { faMicrophoneSlash } from "@fortawesome/free-solid-svg-icons";
 import { faVideo } from "@fortawesome/free-solid-svg-icons";
 import { faVideoSlash } from "@fortawesome/free-solid-svg-icons";
 import { faPhoneSlash } from "@fortawesome/free-solid-svg-icons";
-import { faComment } from "@fortawesome/free-solid-svg-icons";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { faStop } from "@fortawesome/free-solid-svg-icons";
 import { faUserFriends } from "@fortawesome/free-solid-svg-icons";
-import { toolbar_buttons } from "./VideoToolbar.module.scss";
+import {
+  toolbar,
+  toolbar_buttons,
+  colorblind_button,
+  is_danger,
+} from "./VideoToolbar.module.scss";
 import { ParticipantListComponent } from "../participant-list/ParticipantList.component";
 import { useDispatch, useSelector } from "react-redux";
 import { setCcOn } from "../video-chat/store/video.actions";
@@ -55,16 +59,20 @@ export const VideoToolbar = (props) => {
   const dispatch = useDispatch();
 
   return (
-    <div className={toolbar_buttons}>
+    <div className={toolbar}>
       <button
-        className={`button ${videoOn ? "is-primary" : "is-danger"}`}
+        className={`button ${colorblind_button} ${
+          videoOn ? toolbar_buttons : is_danger
+        }`}
         id="videoOnButton"
         onClick={videoOnOff}
       >
         <FontAwesomeIcon icon={videoOn ? faVideo : faVideoSlash} />
       </button>
       <button
-        className={`button ${micOn ? "is-primary" : "is-danger"}`}
+        className={`button ${colorblind_button} ${
+          micOn ? toolbar_buttons : is_danger
+        }`}
         id="muteUnmuteButton"
         onClick={muteUnmute}
       >
@@ -72,22 +80,32 @@ export const VideoToolbar = (props) => {
       </button>
 
       <button
-        className={`button ${ccOn ? "is-primary" : "is-danger"}`}
+        className={`button ${colorblind_button} ${
+          ccOn ? toolbar_buttons : is_danger
+        }`}
         id="videoOnButton"
         onClick={() => dispatch(setCcOn(!ccOn))}
       >
         <FontAwesomeIcon icon={faClosedCaptioning} />
       </button>
 
-      <button className="button is-danger" id="endCallButton" onClick={endCall}>
+      <button
+        className={`button ${colorblind_button} ${is_danger}`}
+        id="endCallButton"
+        onClick={endCall}
+      >
         <FontAwesomeIcon icon={faPhoneSlash} />
       </button>
-      <button className="button is-info" onClick={toggleParticipantModal}>
+
+      <button
+        className={`button ${toolbar_buttons} ${colorblind_button}`}
+        onClick={toggleParticipantModal}
+      >
         <FontAwesomeIcon icon={faUserFriends} />
       </button>
       {!isScreenSharingByMe && (
         <button
-          className="button is-primary"
+          className={`button ${toolbar_buttons} ${colorblind_button}`}
           id="start_screen_share_button"
           onClick={startShareScreen}
         >
@@ -96,7 +114,7 @@ export const VideoToolbar = (props) => {
       )}
       {isScreenSharingByMe && (
         <button
-          className="button is-danger"
+          className={`button ${toolbar_buttons} ${colorblind_button} ${is_danger}`}
           id="stop_screen_share_button"
           onClick={stopSharingScreen}
         >

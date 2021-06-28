@@ -33,7 +33,6 @@ export const Attendance = (props) => {
     attendanceService
       .absentStudents(user.token, classId)
       .then((res) => {
-        console.log(res.data);
         signalRService.invokeCheckAttendance(
           classId,
           user.dbUser.Id,
@@ -65,10 +64,7 @@ export const Attendance = (props) => {
   return (
     <div>
       {isTeacher() && (
-        <button
-          className="button is-info attendance_button"
-          onClick={checkAttendance}
-        >
+        <button className="button attendance_button" onClick={checkAttendance}>
           Tomar Lista
         </button>
       )}

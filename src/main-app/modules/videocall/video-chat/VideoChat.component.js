@@ -1,6 +1,6 @@
 /* eslint-disable */
 import {
-  cameras_container,
+  video_display,
   user_camera_container,
   user_name,
   videochat_container,
@@ -16,17 +16,24 @@ import Peer from "peerjs";
 import { SignalHandlerService } from "../services/signal-handler";
 import { VideoToolbar } from "../video-toolbar/VideoToolbar";
 import { ChatWindow } from "../ChatWindow/ChatWindow.component";
-import { ClosedCaptionComponent } from "../../../modules/videocall/closed-caption/ClosedCaption.component";
 import { VideoGridComponent } from "./VideoGridComponent.component";
 import { useDispatch, useSelector, useStore } from "react-redux";
 import {
+  setConnections,
+  setLocalUserId,
+  setLocalUserPeer,
+  setLocalUserScreenSharingId,
+  setLocalUserScreenSharingPeer,
+  setLocalUserScreenSharingStream,
+  setLocalUserStream,
   setMicOn,
+  setRemoteConnectionIds,
   setScreenSharingStatus,
   setVideoOn,
   setVideoRows,
 } from "./store/video.actions";
 import { Attendance } from "../../shared-components/Attendance/components/Attendance";
-// import { v4 } from "uuid";
+//import { v4 } from "uuid";
 
 export const VideoChat = (props) => {
   const ScreeenSharingStatus = {
@@ -38,27 +45,16 @@ export const VideoChat = (props) => {
 
   const user = useSelector((state) => state.user.currentUser);
   const ccRef = useRef();
+  const store = useStore();
 
   const [signalRService, setSignalRService] = useState();
 
-  let localUserStream = null;
-  let userDisplayName = name;
-  let localUserPeer = null;
-  let localUserId = null;
+  let userDisplayName = name; //no need for redux here
   let meetingId = meeting;
 
-  let localUserScreenSharingPeer = null;
-  let localUserScreenSharingId = null;
-  let connections = [];
-  let remoteConnectionIds = [];
-
-  let localUserCallObject = null;
-  let screenSharinUserName = null;
-  let localUserScreenSharingStream = null;
+  let screenSharinUserName = ""; // No need for redux here
 
   const intervalId = useRef(null);
-
-  const store = useStore();
 
   const displayMediaOptions = { video: { cursor: "always" }, audio: false };
 
@@ -71,7 +67,6 @@ export const VideoChat = (props) => {
     async function initSignalR() {
       const signalRServ = await SignalHandlerService.getInstance();
       const isConnected = await signalRServ.asyncConnection();
-      console.log("SignalRHub Connected: " + isConnected);
       setSignalRService(signalRServ);
     }
     if (user && user.dbUser) {
@@ -83,6 +78,7 @@ export const VideoChat = (props) => {
     if (signalRService && signalRService.isServiceStarted) {
       onUserDisplayNameReceived(name);
       intervalId.current = setInterval(() => {
+        let connections = getConnections();
         if (connections) {
           const deadUserIds = connections
             .filter((conn) => {
@@ -98,6 +94,34 @@ export const VideoChat = (props) => {
     }
     return () => clearInterval(intervalId.current);
   }, [signalRService]);
+
+  const getLocalUserStream = () => {
+    return store.getState().video.localUserStream;
+  };
+
+  const getLocalUserPeer = () => {
+    return store.getState().video.localUserPeer;
+  };
+
+  const getLocalUserId = () => {
+    return store.getState().video.localUserId;
+  };
+
+  const getLocalUserScreenSharingPeer = () => {
+    return store.getState().video.localUserScreenSharingPeer;
+  };
+
+  const getConnections = () => {
+    return store.getState().video.connections;
+  };
+
+  const getRemoteConnectionIds = () => {
+    return store.getState().video.remoteConnectionIds;
+  };
+
+  const getLocalUserScreenSharingStream = () => {
+    return store.getState().video.localUserScreenSharingStream;
+  };
 
   const onUserDisplayNameReceived = async (userName) => {
     userDisplayName = userName;
@@ -117,10 +141,10 @@ export const VideoChat = (props) => {
     if (userIds.length > 0 && status === ScreeenSharingStatus.Started) {
       userIds.forEach((element) => {
         try {
-          if (element !== localUserId) {
-            localUserScreenSharingPeer.call(
+          if (element !== getLocalUserId()) {
+            getLocalUserScreenSharingPeer().call(
               element,
-              localUserScreenSharingStream
+              getLocalUserScreenSharingStream()
             );
             screenSharinUserName = "You";
           }
@@ -158,46 +182,40 @@ export const VideoChat = (props) => {
   };
 
   const onRemoteUserDetails = (userName, userId) => {
-    const peerConnection = connections.filter((item) => item.UserId === userId);
+    const peerConnection = getConnections().filter(
+      (item) => item.UserId === userId
+    );
     if (peerConnection.length === 1) {
       peerConnection[0].DivElement.childNodes[0].textContent = userName;
     }
   };
 
   const remoteUserLeft = (roomId, userId) => {
-    //TODO Borrar esto cdo este todo andando
-    /** Asi refrescabamos los videos cdo alguien se iba sin video grid**/
-    // const reduxVideos = store.getState().video.rows;
-    // reduxVideos.forEach((item) => console.log(item));
-    // const filteredReduxVideos = reduxVideos.filter(
-    //   (item) => item.id !== userId
-    // );
-    // dispatch(setVideoRows(filteredReduxVideos));
-
     // divideVideosInRows(null, userId, false, null);
     divideVideosInRows(null, userId, false);
 
-    const peerConnection = connections.filter((item) => item.UserId === userId);
+    const peerConnection = getConnections().filter(
+      (item) => item.UserId === userId
+    );
     if (peerConnection.length === 1) {
       peerConnection[0].CallObject.close();
-      connections = connections.filter((item) => item.UserId !== userId);
+      const connections = getConnections().filter(
+        (item) => item.UserId !== userId
+      );
+      dispatch(setConnections(connections));
     } else {
       console.warn("Error on connections array");
     }
   };
 
-  /*TODO: Revisar antes de borrar porque es el callback del close de peerjs (objeto peer)*/
-  // const onRemoteUserClosed = (roomId, userId) => {
-  //   const peerConnection = connections.filter((item) => item.UserId === userId);
-  //   if (peerConnection.length === 1) {
-  //     const index = connections.indexOf(peerConnection[0], 0);
-  //     connections = connections.splice(index, 1);
-  //   }
-  // };
-
   const connectToOtherUsers = (roomId, userId, displayName) => {
-    if (roomId === meetingId && userId !== localUserId) {
-      localUserCallObject = localUserPeer.call(userId, localUserStream);
+    let localUserCallObject;
+
+    if (roomId === meetingId && userId !== getLocalUserId()) {
+      localUserCallObject = getLocalUserPeer().call(
+        userId,
+        getLocalUserStream()
+      );
     }
 
     if (localUserCallObject) {
@@ -211,11 +229,9 @@ export const VideoChat = (props) => {
             displayName
           ),
         (error) => {
-          console.log("Error during receiving stream", error);
+          console.error("Error during receiving stream", error);
         }
       );
-      /*TODO: Revisar antes de borrar porque es el callback del close de peerjs (objeto peer)*/
-      /*localUserCallObject.on("close", () => remoteUserLeft(roomId, userId));*/
     }
   };
 
@@ -225,17 +241,18 @@ export const VideoChat = (props) => {
     callObject,
     displayName
   ) => {
-    if (remoteConnectionIds.indexOf(userId) === -1) {
-      remoteConnectionIds.push(userId);
+    if (getRemoteConnectionIds().indexOf(userId) === -1) {
+      const newRemoteConnectionIds = [...getRemoteConnectionIds()];
+      newRemoteConnectionIds.push(userId);
+      dispatch(setRemoteConnectionIds(newRemoteConnectionIds));
       addUser(stream, userId, callObject, displayName, false);
     }
   };
 
   const onSuccessfullConnection = async () => {
     await GetUserDevices();
-
     const peer = await getPeerObject();
-    localUserPeer = peer;
+    dispatch(setLocalUserPeer(peer));
     peer.on("open", sendNotificationOfJoining);
     peer.on("call", onCallReceive);
     peer.on("error", (err) => console.error(err));
@@ -253,9 +270,8 @@ export const VideoChat = (props) => {
   const successHandler = (stream) => {
     const videoTracks = stream.getVideoTracks();
     const constraints = videoTracks[0].getConstraints();
-
-    localUserStream = stream;
-    addUser(localUserStream, localUserId, null, userDisplayName, true);
+    dispatch(setLocalUserStream(stream));
+    addUser(stream, getLocalUserId(), null, userDisplayName, true);
   };
 
   const errorHandler = (error) => {
@@ -285,15 +301,12 @@ export const VideoChat = (props) => {
   };
 
   const onCallReceive = async (call) => {
-    const stream = localUserStream;
-
-    console.log("onCallReceive:localUserStream");
-    console.log(localUserStream);
-    const peerConnection = connections.filter(
-      (item) => item.UserId === localUserId
+    const stream = getLocalUserStream();
+    const peerConnection = getConnections().filter(
+      (item) => item.UserId === getLocalUserId()
     );
     if (peerConnection.length === 1) {
-      peerConnection[0].VideoElement.srcObject = localUserStream;
+      peerConnection[0].VideoElement.srcObject = stream;
     }
 
     call.answer(stream);
@@ -301,8 +314,10 @@ export const VideoChat = (props) => {
   };
 
   const onStream = (stream, call) => {
-    if (remoteConnectionIds.indexOf(call.peer) === -1) {
-      remoteConnectionIds.push(call.peer);
+    if (getRemoteConnectionIds().indexOf(call.peer) === -1) {
+      const newRemoteConnectionIds = [...getRemoteConnectionIds()];
+      newRemoteConnectionIds.push(call.peer);
+      dispatch(setRemoteConnectionIds(newRemoteConnectionIds));
       signalRService.invokeGetRemoteUserDetails(call.peer);
       addUser(stream, call.peer, call, "", false);
     }
@@ -311,7 +326,7 @@ export const VideoChat = (props) => {
   const GetNewVideoElement = () => {
     const videoElement = document.createElement("video");
     videoElement.setAttribute("playsinline", "");
-    videoElement.setAttribute("class", "video-display");
+    videoElement.setAttribute("class", video_display);
     videoElement.autoplay = true;
     videoElement.addEventListener("contextmenu", function (event) {
       event.preventDefault();
@@ -354,14 +369,9 @@ export const VideoChat = (props) => {
     peerConnection.DivElement = divElement;
     peerConnection.userName = userName;
     peerConnection.isLocalPaticipant = isLocalPaticipant;
-    connections.push(peerConnection);
-
-    //TODO borrar esto cdo este andando todo 100 %
-    /** Esto es lo que haciamos para apendear sin rows para probar **/
-    // const reduxVideos = store.getState().video.rows;
-    // const newArrayVideo = [...reduxVideos];
-    // newArrayVideo.push(divElement);
-    // dispatch(setVideoRows(newArrayVideo));
+    let newConnections = [...getConnections()];
+    newConnections.push(peerConnection);
+    dispatch(setConnections(newConnections));
 
     // divideVideosInRows(divElement, null, isLocalPaticipant, stream);
     divideVideosInRows(divElement, null, isLocalPaticipant);
@@ -393,7 +403,7 @@ export const VideoChat = (props) => {
 
     if (newVideoDiv) {
       videoDivs.push(newVideoDiv);
-      // for (let i = 0; i < 4; i++) {
+      // for (let i = 0; i < 8; i++) {
       //   let clone = newVideoDiv.cloneNode(true);
       //   clone.id = v4();
       //   clone.childNodes[1].srcObject = stream;
@@ -405,7 +415,7 @@ export const VideoChat = (props) => {
       videoDivs = videoDivs.filter((item) => item.id !== userIdToRemove);
     }
 
-    const videoDivsCount = videoDivs.length; //Supongamos que hay 14 divs
+    const videoDivsCount = videoDivs.length;
     let rowsQuantity = 1;
     if (videoDivsCount > 2 && videoDivsCount <= 8) {
       rowsQuantity = 2;
@@ -423,45 +433,37 @@ export const VideoChat = (props) => {
 
     const videoDivsCopy = [...videoDivs];
 
-    const camerasPerRow = Math.floor(
-      videoDivsCount / rowsQuantity
-    ); /* 14 / 4 = 3 cameras per row */
-    console.log("Cameras per row:");
-    console.log(camerasPerRow); // 3
-    let remainingCamera = videoDivsCount % rowsQuantity;
-    console.log("remainingCamera:");
-    console.log(remainingCamera); // 2
-    console.log("Total divs:");
-    console.log(videoDivsCount);
+    const camerasPerRow = Math.floor(videoDivsCount / rowsQuantity);
+    let remainingCameras =
+      videoDivsCount % rowsQuantity > 0
+        ? videoDivsCount - camerasPerRow * rowsQuantity
+        : 0;
 
-    //fila 4 -> 3
-    //fila 3 -> 3
-    //fila 2 -> 3
-    //fila 1 -> 3
     for (let i = 0; i < rowsQuantity; i++) {
       rows.push({
         maxCamsCount: camerasPerRow,
       });
     }
 
-    //remainingCamera es 2 por lo tanto va a dar dos vueltas al while
-    while (remainingCamera > 0) {
+    let limitCamerasPerRow = 4;
+    let someRowsReachedLimit = rows.some(
+      (row) => row.maxCamsCount >= limitCamerasPerRow
+    );
+    if (remainingCameras > 0 && someRowsReachedLimit) {
+      limitCamerasPerRow = camerasPerRow + 2;
+    }
+
+    while (remainingCameras > 0) {
       //cada iteracion del while recorro el array de rows, si encuentro un elemento q no tiene el max cams, le meto 1
       //y hago break para salir del for y volver al while, asi hasta distribuir las remaining cameras
       for (let i = 0; i < rows.length; i++) {
-        if (rows[i].maxCamsCount < 4) {
-          rows[i].maxCamsCount = rows[i].maxCamsCount + 1;
+        if (rows[i].maxCamsCount < limitCamerasPerRow) {
+          rows[i].maxCamsCount = rows[i].maxCamsCount + 2;
           break;
         }
       }
-      remainingCamera--;
+      remainingCameras--;
     }
-
-    //al salir del while:
-    //fila 4 -> 4
-    //fila 3 -> 4
-    //fila 2 -> 3
-    //fila 1 -> 3
 
     rows.forEach((row) => {
       const divEl = document.createElement("div");
@@ -484,14 +486,14 @@ export const VideoChat = (props) => {
   const dispatch = useDispatch();
 
   const sendNotificationOfJoining = (id) => {
-    localUserId = id;
+    dispatch(setLocalUserId(id));
     signalRService.invokeJoinedRoom(meetingId, id, userDisplayName);
     createScreenSharingPeerObject(id);
   };
 
   const createScreenSharingPeerObject = (id) => {
     const localScreenPeer = getPeerObject();
-    localUserScreenSharingPeer = localScreenPeer;
+    dispatch(setLocalUserScreenSharingPeer(localScreenPeer));
     localScreenPeer.on("open", (screenSharingCallId) =>
       sendNotificationOfAddSharingModality(screenSharingCallId, id)
     );
@@ -502,7 +504,7 @@ export const VideoChat = (props) => {
     screenSharingCallId,
     userId
   ) => {
-    localUserScreenSharingId = screenSharingCallId;
+    dispatch(setLocalUserScreenSharingId(screenSharingCallId));
     signalRService.invokeAddScreenSharingModality(
       meetingId,
       userId,
@@ -532,12 +534,40 @@ export const VideoChat = (props) => {
       path: process.env.REACT_APP_PEERJS_PATH,
       host: process.env.REACT_APP_PEERJS_HOST,
       port: process.env.REACT_APP_PEERJS_PORT,
-      debug: 0,
+      config: {
+        iceServers: [
+          {
+            url: "turn:turn.anyfirewall.com:443?transport=tcp",
+            credential: "webrtc",
+            username: "webrtc",
+          },
+          {
+            url: "turn:numb.viagenie.ca",
+            credential: "muazkh",
+            username: "webrtc@live.com",
+          },
+          {
+            url: "turn:192.158.29.39:3478?transport=udp",
+            credential: "JZEOEt2V3Qb0y27GRntt2u2PAYA=",
+            username: "28224511:1379330808",
+          },
+          {
+            url: "turn:192.158.29.39:3478?transport=tcp",
+            credential: "JZEOEt2V3Qb0y27GRntt2u2PAYA=",
+            username: "28224511:1379330808",
+          },
+          {
+            url: "turn:turn.bistri.com:80",
+            credential: "homeo",
+            username: "homeo",
+          },
+        ],
+      },
     });
   };
 
   const muteByTeacher = () => {
-    localUserStream.getAudioTracks()[0].enabled = false;
+    getLocalUserStream().getAudioTracks()[0].enabled = false;
     dispatch(setMicOn(false));
     if (ccRef && ccRef.current) {
       ccRef.current.muteClosedCaption();
@@ -547,28 +577,28 @@ export const VideoChat = (props) => {
   const muteUnmute = () => {
     const reduxIsMicOn = store.getState().video.micOn;
     if (reduxIsMicOn) {
-      localUserStream.getAudioTracks()[0].enabled = false;
+      getLocalUserStream().getAudioTracks()[0].enabled = false;
       dispatch(setMicOn(false));
       if (ccRef && ccRef.current) {
         ccRef.current.muteClosedCaption();
       }
     } else {
-      localUserStream.getAudioTracks()[0].enabled = true;
+      getLocalUserStream().getAudioTracks()[0].enabled = true;
       dispatch(setMicOn(true));
       if (ccRef && ccRef.current) {
         ccRef.current.unMuteClosedCaption();
       }
     }
-    return localUserStream.getAudioTracks()[0].enabled;
+    return getLocalUserStream().getAudioTracks()[0].enabled;
   };
 
   const videoOnOff = () => {
     const isVideoEnabled = store.getState().video.videoOn;
     if (isVideoEnabled) {
-      localUserStream.getVideoTracks()[0].enabled = false;
+      getLocalUserStream().getVideoTracks()[0].enabled = false;
       dispatch(setVideoOn(false));
     } else {
-      localUserStream.getVideoTracks()[0].enabled = true;
+      getLocalUserStream().getVideoTracks()[0].enabled = true;
       dispatch(setVideoOn(true));
     }
   };
@@ -579,19 +609,23 @@ export const VideoChat = (props) => {
     }
     signalRService.stopConnection();
 
-    localUserPeer.destroy();
-    localUserScreenSharingPeer.destroy();
+    getLocalUserPeer().destroy();
+    getLocalUserScreenSharingPeer().destroy();
 
     dispatch(setVideoRows([]));
 
-    localUserStream.getAudioTracks().forEach(function (track) {
-      track.stop();
-    });
-    localUserStream.getVideoTracks().forEach(function (track) {
-      track.stop();
-    });
+    getLocalUserStream()
+      .getAudioTracks()
+      .forEach(function (track) {
+        track.stop();
+      });
+    getLocalUserStream()
+      .getVideoTracks()
+      .forEach(function (track) {
+        track.stop();
+      });
 
-    connections.forEach((peer) => {
+    getConnections().forEach((peer) => {
       const stream = peer.VideoElement.srcObject;
       const tracks = stream.getTracks();
 
@@ -602,11 +636,11 @@ export const VideoChat = (props) => {
       peer.VideoElement.srcObject = null;
     });
 
-    connections = null;
-    localUserPeer = null;
-    localUserScreenSharingPeer = null;
-    localUserStream = null;
-    localUserScreenSharingStream = null;
+    dispatch(setConnections([]));
+    dispatch(setLocalUserPeer(null));
+    dispatch(setLocalUserScreenSharingPeer(null));
+    dispatch(setLocalUserStream(null));
+    dispatch(setLocalUserScreenSharingStream(null));
 
     window.location = "/#/educapp/home";
   };
@@ -620,17 +654,20 @@ export const VideoChat = (props) => {
     try {
       const mediaDevices = navigator.mediaDevices;
       const stream = await mediaDevices.getDisplayMedia(displayMediaOptions);
-      localUserScreenSharingStream = stream;
+      // localUserScreenSharingStream = stream;
+      dispatch(setLocalUserScreenSharingStream(stream));
 
       dispatch(setScreenSharingStatus(false, true));
 
-      localUserScreenSharingStream.getVideoTracks()[0].onended = (event) => {
+      getLocalUserScreenSharingStream().getVideoTracks()[0].onended = (
+        event
+      ) => {
         sendOtherToScreenClosed();
       };
 
       signalRService.invokeScreenSharingStatus(
         meetingId,
-        localUserId,
+        getLocalUserId(),
         ScreeenSharingStatus.Started,
         userDisplayName
       );
@@ -640,7 +677,7 @@ export const VideoChat = (props) => {
   };
 
   const stopSharingScreen = () => {
-    const tracks = localUserScreenSharingStream.getTracks();
+    const tracks = getLocalUserScreenSharingStream().getTracks();
     tracks.forEach((track) => track.stop());
     sendOtherToScreenClosed();
   };
@@ -649,7 +686,7 @@ export const VideoChat = (props) => {
     dispatch(setScreenSharingStatus(false, false));
     signalRService.invokeScreenSharingStatus(
       meetingId,
-      localUserId,
+      getLocalUserId(),
       ScreeenSharingStatus.Stopped,
       userDisplayName
     );
@@ -661,7 +698,7 @@ export const VideoChat = (props) => {
         <div className="screenSharingContainer" id="screenSharing-container">
           <video className="d-none" id="screenSharingObj" autoPlay />
         </div>
-        <div className={cameras_and_cc}>
+        <div className={cameras_and_cc} id="video-grid-container">
           <VideoGridComponent
             name={userDisplayName}
             meeting="1"
