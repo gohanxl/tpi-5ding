@@ -27,6 +27,7 @@ import Switch from "react-switch";
 import {
   colorblindModeThemeValues,
   rootStyles,
+  routes,
   standardThemeValues,
 } from "../App.constants";
 
@@ -141,7 +142,10 @@ const MainApp = () => {
               aria-label="main navigation"
             >
               <div className="navbar-brand">
-                <a className="navbar-item" href="#/educapp/home">
+                <a
+                  className="navbar-item"
+                  href={`/#/${routes.dashboard(currentRole)}`}
+                >
                   <img
                     src={educAppWhiteLogo}
                     alt="Educapp logo"
