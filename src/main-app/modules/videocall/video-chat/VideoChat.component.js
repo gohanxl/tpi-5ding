@@ -318,9 +318,6 @@ export const VideoChat = (props) => {
       peerConnection[0].VideoElement.srcObject = stream;
     }
 
-    console.log("ACA DEBERIA ATENDER A LOS QUE QUEDARON ADENTRO!!!");
-    console.log(call);
-    console.log(stream);
     call.answer(stream);
     call.on("stream", (stream) => onStream(stream, call));
   };
