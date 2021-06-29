@@ -12,7 +12,7 @@ export const Attendance = (props) => {
   const [cronogramaId, setCronogramaId] = useState(classId);
 
   const user = useSelector((state) => state.user.currentUser);
-  const isTeacher = user?.metadata[rolesUrl].includes("Teacher");
+  const isTeacher = user?.metadata?.[rolesUrl].includes("Teacher");
 
   useEffect(() => {
     if (signalRService) {
