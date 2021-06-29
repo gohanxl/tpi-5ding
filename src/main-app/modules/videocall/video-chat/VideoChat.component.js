@@ -92,7 +92,12 @@ export const VideoChat = (props) => {
         }
       }, 10000);
     }
-    return () => clearInterval(intervalId.current);
+    return () => {
+      clearInterval(intervalId.current);
+      if (store.getState().video.localUserPeer) {
+        endCall();
+      }
+    };
   }, [signalRService]);
 
   const getLocalUserStream = () => {
@@ -164,11 +169,15 @@ export const VideoChat = (props) => {
       dispatch(setScreenSharingStatus(false, false));
       screenSharinUserName = "";
       document.getElementById("screenSharingObj").classList.add("d-none");
+      document
+        .getElementById("video-grid-container")
+        .classList.remove("d-none");
       stoppedSharingScreen();
     }
     if (status === ScreeenSharingStatus.Started) {
       screenSharinUserName = remoteUserName;
       document.getElementById("screenSharingObj").classList.remove("d-none");
+      document.getElementById("video-grid-container").classList.add("d-none");
     }
   };
 
@@ -641,6 +650,10 @@ export const VideoChat = (props) => {
     dispatch(setLocalUserScreenSharingPeer(null));
     dispatch(setLocalUserStream(null));
     dispatch(setLocalUserScreenSharingStream(null));
+    dispatch(setLocalUserId(null));
+    dispatch(setLocalUserScreenSharingId(null));
+    dispatch(setRemoteConnectionIds([]));
+    dispatch(setScreenSharingStatus(false, false));
 
     window.location = "/#/educapp/home";
   };

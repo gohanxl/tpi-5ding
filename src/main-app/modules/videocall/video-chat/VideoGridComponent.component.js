@@ -13,9 +13,6 @@ export const VideoGridComponent = ({
 }) => {
   const videoRows = useSelector((state) => state.video.rows);
   const ccOn = useSelector((state) => state.video.ccOn);
-  const isScreenSharingByRemote = useSelector(
-    (state) => state.video.isScreenSharingByRemote
-  );
 
   useEffect(() => {
     let root = document.documentElement;
@@ -34,8 +31,7 @@ export const VideoGridComponent = ({
 
   return (
     <div className="cameras_container" id="video-container">
-      {!isScreenSharingByRemote &&
-        videoRows &&
+      {videoRows &&
         videoRows.map(({ divElement }, index) => {
           return <CameraRow key={index} element={divElement} />;
         })}
