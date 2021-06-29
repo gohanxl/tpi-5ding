@@ -26,6 +26,7 @@ import {
 import Switch from "react-switch";
 import {
   colorblindModeThemeValues,
+  roles,
   rootStyles,
   routes,
   standardThemeValues,
@@ -91,6 +92,9 @@ const MainApp = () => {
 
   const currentRole = user ? user[rolesUrl][0].toLowerCase() : "";
 
+  const dashboardRole =
+    currentRole.toLowerCase() === roles.ADMIN ? roles.TEACHER : currentRole;
+
   const shouldHideFooter =
     window.location.hash.includes("dashboard") ||
     window.location.hash.includes("call");
@@ -144,7 +148,7 @@ const MainApp = () => {
               <div className="navbar-brand">
                 <a
                   className="navbar-item"
-                  href={`/#/${routes.dashboard(currentRole)}`}
+                  href={`/#/${routes.dashboard(dashboardRole)}`}
                 >
                   <img
                     src={educAppWhiteLogo}
