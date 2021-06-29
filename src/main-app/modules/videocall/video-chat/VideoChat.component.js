@@ -92,7 +92,12 @@ export const VideoChat = (props) => {
         }
       }, 10000);
     }
-    return () => clearInterval(intervalId.current);
+    return () => {
+      clearInterval(intervalId.current);
+      if (store.getState().video.localUserPeer) {
+        endCall();
+      }
+    };
   }, [signalRService]);
 
   const getLocalUserStream = () => {
