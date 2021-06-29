@@ -10,6 +10,7 @@ import {
   cameras_and_cc,
   close_caption,
   toolbar_and_chat,
+  screen_sharing_container,
 } from "./VideoChat.module.scss";
 import React, { useEffect, useRef, useState } from "react";
 import Peer from "peerjs";
@@ -168,7 +169,9 @@ export const VideoChat = (props) => {
     if (status === ScreeenSharingStatus.Stopped) {
       dispatch(setScreenSharingStatus(false, false));
       screenSharinUserName = "";
-      document.getElementById("screenSharingObj").classList.add("d-none");
+      document
+        .getElementById("screenSharing-container")
+        .classList.add("d-none");
       document
         .getElementById("video-grid-container")
         .classList.remove("d-none");
@@ -176,7 +179,9 @@ export const VideoChat = (props) => {
     }
     if (status === ScreeenSharingStatus.Started) {
       screenSharinUserName = remoteUserName;
-      document.getElementById("screenSharingObj").classList.remove("d-none");
+      document
+        .getElementById("screenSharing-container")
+        .classList.remove("d-none");
       document.getElementById("video-grid-container").classList.add("d-none");
     }
   };
@@ -708,8 +713,11 @@ export const VideoChat = (props) => {
   return (
     <div className={videochat_container}>
       <div className={cameras_and_screen}>
-        <div className="screenSharingContainer" id="screenSharing-container">
-          <video className="d-none" id="screenSharingObj" autoPlay />
+        <div
+          className={`${screen_sharing_container} d-none`}
+          id="screenSharing-container"
+        >
+          <video id="screenSharingObj" autoPlay />
         </div>
         <div className={cameras_and_cc} id="video-grid-container">
           <VideoGridComponent
