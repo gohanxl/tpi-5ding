@@ -169,11 +169,15 @@ export const VideoChat = (props) => {
       dispatch(setScreenSharingStatus(false, false));
       screenSharinUserName = "";
       document.getElementById("screenSharingObj").classList.add("d-none");
+      document
+        .getElementById("video-grid-container")
+        .classList.remove("d-none");
       stoppedSharingScreen();
     }
     if (status === ScreeenSharingStatus.Started) {
       screenSharinUserName = remoteUserName;
       document.getElementById("screenSharingObj").classList.remove("d-none");
+      document.getElementById("video-grid-container").classList.add("d-none");
     }
   };
 
