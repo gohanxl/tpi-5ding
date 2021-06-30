@@ -11,6 +11,7 @@ import {
   close_caption,
   toolbar_and_chat,
   screen_sharing_container,
+  hide_cameras,
 } from "./VideoChat.module.scss";
 import React, { useEffect, useRef, useState } from "react";
 import Peer from "peerjs";
@@ -174,7 +175,7 @@ export const VideoChat = (props) => {
         .classList.add("d-none");
       document
         .getElementById("video-grid-container")
-        .classList.remove("d-none");
+        .classList.remove(hide_cameras);
       stoppedSharingScreen();
     }
     if (status === ScreeenSharingStatus.Started) {
@@ -182,7 +183,9 @@ export const VideoChat = (props) => {
       document
         .getElementById("screenSharing-container")
         .classList.remove("d-none");
-      document.getElementById("video-grid-container").classList.add("d-none");
+      document
+        .getElementById("video-grid-container")
+        .classList.add(hide_cameras);
     }
   };
 
