@@ -34,8 +34,21 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
   }, [signalRService]);
 
   useEffect(() => {
+    const rejectDelay = (reason) => {
+      return new Promise(function (resolve, reject) {
+        setTimeout(reject.bind(null, reason), 1000);
+      });
+    };
+
     if (!isRecording) {
-      startSpeechToText().catch((e) => {
+      let p = Promise.reject();
+      for (let i = 0; i < 5; i++) {
+        p = p.catch((err) => startSpeechToText()).catch(rejectDelay);
+      }
+
+      p.then(() => {
+        console.log("ClosedCaption working properly.");
+      }).catch((e) => {
         console.error(e);
       });
     }
