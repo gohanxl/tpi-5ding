@@ -597,15 +597,9 @@ export const VideoChat = (props) => {
     if (reduxIsMicOn) {
       getLocalUserStream().getAudioTracks()[0].enabled = false;
       dispatch(setMicOn(false));
-      if (ccRef && ccRef.current) {
-        ccRef.current.muteClosedCaption();
-      }
     } else {
       getLocalUserStream().getAudioTracks()[0].enabled = true;
       dispatch(setMicOn(true));
-      if (ccRef && ccRef.current) {
-        ccRef.current.unMuteClosedCaption();
-      }
     }
     return getLocalUserStream().getAudioTracks()[0].enabled;
   };

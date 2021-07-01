@@ -15,7 +15,7 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
   const { name, meeting, signalRService } = props;
 
   const [closedCaptionReceive, setClosedCaptionReceive] = useState([]);
-  const [isMuted, setIsMuted] = useState(false);
+  const micOn = useSelector((state) => state.video.micOn);
   const ccOn = useSelector((state) => state.video.ccOn);
 
   const { error, isRecording, results, startSpeechToText, stopSpeechToText } =
@@ -41,7 +41,7 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
       });
     };
 
-    if (!isRecording) {
+    if (!isRecording && micOn) {
       let p = Promise.reject();
       for (let i = 0; i < 10; i++) {
         p = p.catch((err) => startSpeechToText()).catch(rejectDelay);
@@ -53,20 +53,16 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
         console.error(e);
       });
     }
-  }, [isRecording]);
+
+    if (!micOn) {
+      stopSpeechToText();
+    }
+  }, [isRecording, micOn]);
 
   if (error)
     return <p>Web Speech API no esta disponible en este navegador 🤷‍</p>;
 
   useImperativeHandle(ref, () => ({
-    async muteClosedCaption() {
-      stopSpeechToText();
-      setIsMuted(true);
-    },
-    async unMuteClosedCaption() {
-      await startSpeechToText();
-      setIsMuted(false);
-    },
     async endCloseCaption() {
       stopSpeechToText();
     },
@@ -81,7 +77,7 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
   };
 
   if (
-    !isMuted &&
+    micOn &&
     results.length &&
     signalRService &&
     signalRService.isServiceStarted
