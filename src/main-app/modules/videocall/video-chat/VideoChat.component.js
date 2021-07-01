@@ -21,6 +21,7 @@ import { ChatWindow } from "../ChatWindow/ChatWindow.component";
 import { VideoGridComponent } from "./VideoGridComponent.component";
 import { useDispatch, useSelector, useStore } from "react-redux";
 import {
+  setCcOn,
   setConnections,
   setLocalUserId,
   setLocalUserPeer,
@@ -662,6 +663,7 @@ export const VideoChat = (props) => {
     dispatch(setLocalUserScreenSharingId(null));
     dispatch(setRemoteConnectionIds([]));
     dispatch(setScreenSharingStatus(false, false));
+    dispatch(setCcOn(false));
 
     window.location = "/#/educapp/home";
   };

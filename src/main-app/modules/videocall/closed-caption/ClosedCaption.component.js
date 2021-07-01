@@ -9,13 +9,14 @@ import React, {
   useImperativeHandle,
   useState,
 } from "react";
-import { SignalHandlerService } from "../services/signal-handler";
+import { useSelector } from "react-redux";
 
 export const ClosedCaptionComponent = forwardRef((props, ref) => {
   const { name, meeting, signalRService } = props;
 
   const [closedCaptionReceive, setClosedCaptionReceive] = useState([]);
   const [isMuted, setIsMuted] = useState(false);
+  const ccOn = useSelector((state) => state.video.ccOn);
 
   const { error, isRecording, results, startSpeechToText, stopSpeechToText } =
     useSpeechToText({
@@ -42,7 +43,7 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
 
     if (!isRecording) {
       let p = Promise.reject();
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 10; i++) {
         p = p.catch((err) => startSpeechToText()).catch(rejectDelay);
       }
 
@@ -86,17 +87,21 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
     signalRService.isServiceStarted
   ) {
     const mensaje = results.pop();
+    console.log("VOY A ENVIAR ESTO: ");
+    console.log(mensaje);
     signalRService.invokeSendClosedCaption(meeting, name, mensaje);
   }
 
   return (
-    <div className={`${closedCaptionReceive.length ? close_caption : ""}`}>
-      {closedCaptionReceive &&
-        closedCaptionReceive.map(({ name, closedCaption }, index) => (
-          <p key={index}>
-            {name}: {closedCaption}
-          </p>
-        ))}
-    </div>
+    ccOn && (
+      <div className={`${closedCaptionReceive.length ? close_caption : ""}`}>
+        {closedCaptionReceive &&
+          closedCaptionReceive.map(({ name, closedCaption }, index) => (
+            <p key={index}>
+              {name}: {closedCaption}
+            </p>
+          ))}
+      </div>
+    )
   );
 });
