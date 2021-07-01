@@ -3,6 +3,13 @@
   --user_camera_max-height: 350px;
 }
 
+.hide_cameras {
+  position: absolute;
+  top: 0;
+  z-index: -1;
+  opacity: 0 !important;
+}
+
 .user_camera_container {
   video {
     width: 100%;
