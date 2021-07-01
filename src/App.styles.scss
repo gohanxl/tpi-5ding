@@ -16,6 +16,12 @@ html {
   height: 100vh;
 }
 
+button {
+  &:focus {
+    border: 1px solid white !important;
+  }
+}
+
 .educapp-nav {
   padding: 8px;
   background-color: var(--primary);

@@ -20,6 +20,7 @@ import { VideoToolbar } from "../video-toolbar/VideoToolbar";
 import { ChatWindow } from "../ChatWindow/ChatWindow.component";
 import { VideoGridComponent } from "./VideoGridComponent.component";
 import { useDispatch, useSelector, useStore } from "react-redux";
+import { useHistory } from "react-router";
 import {
   setConnections,
   setLocalUserId,
@@ -35,6 +36,8 @@ import {
   setVideoRows,
 } from "./store/video.actions";
 import { Attendance } from "../../shared-components/Attendance/components/Attendance";
+import { roles, routes } from "../../../../App.constants";
+import { rolesUrl } from "../../user/constants/user.constants";
 //import { v4 } from "uuid";
 
 export const VideoChat = (props) => {
@@ -46,6 +49,7 @@ export const VideoChat = (props) => {
   const { name, uuid, meeting } = props;
 
   const user = useSelector((state) => state.user.currentUser);
+  const history = useHistory();
   const ccRef = useRef();
   const store = useStore();
 
@@ -300,13 +304,12 @@ export const VideoChat = (props) => {
       );
     } else if (error.name === "PermissionDeniedError") {
       errorMsg(
-        "Permissions have not been granted to use your camera and " +
-          "microphone, you need to allow the page access to your devices in " +
-          "order for the demo to work.",
+        "Permissions have not been granted to use your camera and microphone" +
+          "you need to allow the page access to your devices in order for the demo to work.",
         error
       );
     }
-    errorMsg(`getUserMedia error: ${error.name}`, error);
+    errorMsg(`Ups, no encontramos la cámara`, "");
   };
 
   const errorMsg = (msg, error) => {
@@ -620,6 +623,12 @@ export const VideoChat = (props) => {
     }
   };
 
+  const currentRole = user?.metadata?.[rolesUrl][0] || "";
+  const dashboardRole =
+    currentRole.toLowerCase() === roles.ADMIN ? roles.TEACHER : currentRole;
+
+  const dashboardRoute = routes.dashboard(dashboardRole.toLowerCase());
+
   const endCall = async () => {
     if (ccRef && ccRef.current) {
       ccRef.current.endCloseCaption();
@@ -663,7 +672,7 @@ export const VideoChat = (props) => {
     dispatch(setRemoteConnectionIds([]));
     dispatch(setScreenSharingStatus(false, false));
 
-    window.location = "/#/educapp/home";
+    history.push(dashboardRoute);
   };
 
   const toggleChat = () => {

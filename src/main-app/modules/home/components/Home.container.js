@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import Dashboard from "../../dashboard/components/Dashboard.component";
+import { Dashboard } from "../../dashboard/components/Dashboard.component";
 
 import { getCounterValue } from "../store/home.selectors";
 import { addToCounter } from "../store/home.thunks";

@@ -9,6 +9,10 @@ import {
   setIsColorBlind,
 } from "../main-app/modules/user/store/user.actions";
 import { userService } from "../main-app/modules/user/api/usuario-service";
+import { studentRoutes } from "./views/student/student.routes";
+import { teacherRoutes } from "./views/teacher/teacher.routes";
+import { roleAccessibilty } from "./modules/auth/service/roles.service";
+import { rolesUrl } from "./modules/user/constants/user.constants";
 import educAppWhiteLogo from "../assets/img/logo-white.svg";
 import educAppLogo from "../assets/img/logo.svg";
 import { faBell, faUser } from "@fortawesome/free-solid-svg-icons";
@@ -22,13 +26,21 @@ import {
 import Switch from "react-switch";
 import {
   colorblindModeThemeValues,
+  roles,
   rootStyles,
+  routes,
   standardThemeValues,
 } from "../App.constants";
 
+roleAccessibilty.setRoutes({
+  student: studentRoutes,
+  teacher: teacherRoutes,
+  admin: [...studentRoutes, ...teacherRoutes],
+});
+
 const MainApp = () => {
   const dispatch = useDispatch();
-  const [hideFooter, setHideFooter] = useState(true);
+  // const [hideFooter, setHideFooter] = useState(true);
   const [switchValue, setSwitchValue] = useState(
     JSON.parse(localStorage.getItem("color-blind") || false)
   );
@@ -74,6 +86,19 @@ const MainApp = () => {
     }
   }, [dispatch, getAccessTokenSilently, isAuthenticated, user]);
 
+  const routesRoleConfig = user
+    ? roleAccessibilty.getRoutesByRoles(user[rolesUrl])
+    : {};
+
+  const currentRole = user ? user[rolesUrl][0].toLowerCase() : "";
+
+  const dashboardRole =
+    currentRole.toLowerCase() === roles.ADMIN ? roles.TEACHER : currentRole;
+
+  const shouldHideFooter =
+    window.location.hash.includes("dashboard") ||
+    window.location.hash.includes("call");
+
   useEffect(
     function changeStylesMode() {
       let root = document.documentElement;
@@ -97,15 +122,15 @@ const MainApp = () => {
     [dispatch, switchValue]
   );
 
-  useEffect(() => {
-    setHideFooter(
-      window.location.hash == "#/educapp/home" ||
-        window.location.hash == "#/educapp/teacher/call"
-    );
-  }, []);
+  // useEffect(() => {
+  //   setHideFooter(
+  //     window.location.hash == "#/educapp/home" ||
+  //       window.location.hash == "#/educapp/teacher/call"
+  //   );
+  // }, []);
 
   if (error) {
-    return <div>Oops... {error.message}</div>;
+    return <div>Ups... Falló Auth0</div>;
   }
 
   return (
@@ -121,7 +146,10 @@ const MainApp = () => {
               aria-label="main navigation"
             >
               <div className="navbar-brand">
-                <a className="navbar-item" href="#/educapp/home">
+                <a
+                  className="navbar-item"
+                  href={`/#/${routes.dashboard(dashboardRole)}`}
+                >
                   <img
                     src={educAppWhiteLogo}
                     alt="Educapp logo"
@@ -208,24 +236,33 @@ const MainApp = () => {
               <Sidebar />
             </div>
             <div
-              className={"app-container" + (!hideFooter ? "" : " hide-footer")}
+              className={`app-container ${
+                shouldHideFooter ? "hide-footer" : ""
+              }`}
             >
               <div className="app-content">
-                {isAuthenticated && <MainAppRoutes />}
+                {isAuthenticated && (
+                  <MainAppRoutes
+                    routesRoleConfig={routesRoleConfig}
+                    currentRole={currentRole}
+                  />
+                )}
                 {!isAuthenticated && loginWithRedirect()}
               </div>
-              <footer className="footer">
-                <p className="has-text-centered">
-                  <span>Powered by</span>
-                  <img
-                    src={educAppLogo}
-                    className="mx-2 mb-1"
-                    alt="Educapp logo"
-                    width="20"
-                  />
-                  <b>EducApp</b>
-                </p>
-              </footer>
+              {!shouldHideFooter && (
+                <footer className="footer">
+                  <p className="has-text-centered">
+                    <span>Powered by</span>
+                    <img
+                      src={educAppLogo}
+                      className="mx-2 mb-1"
+                      alt="Educapp logo"
+                      width="20"
+                    />
+                    <b>EducApp</b>
+                  </p>
+                </footer>
+              )}
             </div>
           </div>
         </>
