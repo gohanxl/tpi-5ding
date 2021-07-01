@@ -86,8 +86,6 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
     signalRService.isServiceStarted
   ) {
     const mensaje = results.pop();
-    console.log("VOY A MANDAR ESTO MASTER");
-    console.log(mensaje);
     signalRService.invokeSendClosedCaption(meeting, name, mensaje);
   }
 
