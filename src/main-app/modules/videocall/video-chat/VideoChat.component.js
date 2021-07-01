@@ -22,6 +22,7 @@ import { VideoGridComponent } from "./VideoGridComponent.component";
 import { useDispatch, useSelector, useStore } from "react-redux";
 import { useHistory } from "react-router";
 import {
+  setCcOn,
   setConnections,
   setLocalUserId,
   setLocalUserPeer,
@@ -599,15 +600,9 @@ export const VideoChat = (props) => {
     if (reduxIsMicOn) {
       getLocalUserStream().getAudioTracks()[0].enabled = false;
       dispatch(setMicOn(false));
-      if (ccRef && ccRef.current) {
-        ccRef.current.muteClosedCaption();
-      }
     } else {
       getLocalUserStream().getAudioTracks()[0].enabled = true;
       dispatch(setMicOn(true));
-      if (ccRef && ccRef.current) {
-        ccRef.current.unMuteClosedCaption();
-      }
     }
     return getLocalUserStream().getAudioTracks()[0].enabled;
   };
@@ -671,6 +666,7 @@ export const VideoChat = (props) => {
     dispatch(setLocalUserScreenSharingId(null));
     dispatch(setRemoteConnectionIds([]));
     dispatch(setScreenSharingStatus(false, false));
+    dispatch(setCcOn(false));
 
     history.push(dashboardRoute);
   };
