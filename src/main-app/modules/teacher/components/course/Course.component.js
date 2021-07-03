@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import "./Course.styles.scss";
+import { ActivityComponent } from "./activity/components/Activity.component";
 
 export const CourseComponent = () => {
-  const [section, setSection] = useState();
-
   const SECTIONS = {
     CONTENIDOS: "CONTENIDOS",
     ACTIVIDADES: "ACTIVIDADES",
     ENTREGAS: "ENTREGAS",
     CORRECCIONES: "CORRECCIONES",
   };
+
+  const [section, setSection] = useState(SECTIONS.CONTENIDOS);
 
   return (
     <div className="container course_container">
@@ -43,7 +44,7 @@ export const CourseComponent = () => {
       </div>
       <div>
         {section === SECTIONS.CONTENIDOS && <h1>CONTENIDOS AQUI</h1>}
-        {section === SECTIONS.ACTIVIDADES && <h1>ACTIVIDADES AQUI</h1>}
+        {section === SECTIONS.ACTIVIDADES && <ActivityComponent />}
         {section === SECTIONS.ENTREGAS && <h1>ENTREGAS AQUI</h1>}
         {section === SECTIONS.CORRECCIONES && <h1>CORRECCIONES AQUI</h1>}
       </div>

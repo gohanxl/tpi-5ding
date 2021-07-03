@@ -1,5 +1,5 @@
 import React from "react";
-import { ActivityForm } from "../../../modules/activity/components/Activity.form";
+import { ActivityForm } from "../../../modules/teacher/components/course/activity/components/Activity.form";
 import { activity_form_container } from "../../../App.main.module.scss";
 
 export const TeacherLectureViewRenderer = () => {

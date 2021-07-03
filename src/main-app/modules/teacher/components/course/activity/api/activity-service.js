@@ -7,4 +7,8 @@ export const activityService = {
     }),
   getActivityType: () =>
     axios.get(`${process.env.REACT_APP_API_URL}/Actividad/tipo`),
+  getActivityByClassId: (auth_token, classId) =>
+    axios.get(`${process.env.REACT_APP_API_URL}/Actividad/clase/${classId}`, {
+      headers: { Authorization: "Bearer " + auth_token },
+    }),
 };

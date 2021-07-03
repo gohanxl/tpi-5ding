@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { activityService } from "../api/activity-service";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import {
   fileService,
   SUBTIPO_CONSIGNAS,
   TIPO_ACTIVIDAD,
-} from "../../file/api/file-service";
+} from "../../../../../file/api/file-service";
 
 import "./Activity.styles.scss";
+import { useHistory } from "react-router";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const ActivityForm = (props) => {
   const { claseId } = props;
@@ -50,6 +53,7 @@ export const ActivityForm = (props) => {
     }
     return formIsValid;
   };
+  const history = useHistory();
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -64,19 +68,24 @@ export const ActivityForm = (props) => {
           const tipoActividad = res.data.Actividad.TipoActividad;
           let formData = new FormData();
           let file = document.querySelector("#activityFile");
-          formData.append("file", file.files[0]);
-          fileService
-            .uploadFile(
-              user.token,
-              formData,
-              actividadId,
-              TIPO_ACTIVIDAD[tipoActividad.toString()],
-              SUBTIPO_CONSIGNAS
-            )
-            .then((res) => {
-              console.log(res.data);
-            })
-            .catch((err) => console.error(err));
+          if (file && file.files && file.files[0]) {
+            formData.append("file", file.files[0]);
+            fileService
+              .uploadFile(
+                user.token,
+                formData,
+                actividadId,
+                TIPO_ACTIVIDAD[tipoActividad.toString()],
+                SUBTIPO_CONSIGNAS
+              )
+              .then((res) => {
+                console.log(res.data);
+                history.goBack();
+              })
+              .catch((err) => console.error(err));
+          } else {
+            history.goBack();
+          }
         })
         .catch((err) => console.error(err));
     } else {
@@ -136,11 +145,11 @@ export const ActivityForm = (props) => {
             />
             <span className="file-cta">
               <span className="file-icon">
-                <i className="fas fa-upload" />
+                <FontAwesomeIcon icon={faUpload} />
               </span>
               <span className="file-label">Elija un archivo…</span>
             </span>
-            <span className="file-name">Adjunte la consgina en pdf... </span>
+            <span className="file-name">Adjunte la consgina... </span>
           </label>
         </div>
 
@@ -161,10 +170,15 @@ export const ActivityForm = (props) => {
             <button className="button is-link">Crear Actividad</button>
           </div>
           <p style={{ color: "red" }} id="activity_error"></p>
-          {/*TODO add if necessary to close form*/}
-          {/*<div className="control">*/}
-          {/*  <button className="button is-link is-light">Cancel</button>*/}
-          {/*</div>*/}
+
+          <div className="control">
+            <button
+              className="button is-link is-light"
+              onClick={() => history.goBack()}
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       </form>
     </div>
