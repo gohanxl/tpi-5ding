@@ -10,6 +10,7 @@ import React, {
   useState,
 } from "react";
 import { useSelector } from "react-redux";
+import { rolesUrl } from "../../user/constants/user.constants";
 
 export const ClosedCaptionComponent = forwardRef((props, ref) => {
   const { name, meeting, signalRService } = props;
@@ -17,6 +18,8 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
   const [closedCaptionReceive, setClosedCaptionReceive] = useState([]);
   const micOn = useSelector((state) => state.video.micOn);
   const ccOn = useSelector((state) => state.video.ccOn);
+  const user = useSelector((state) => state.user.currentUser);
+  const isTeacher = user?.metadata?.[rolesUrl].includes("Teacher");
 
   const { error, isRecording, results, startSpeechToText, stopSpeechToText } =
     useSpeechToText({
@@ -41,7 +44,7 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
       });
     };
 
-    if (!isRecording && micOn) {
+    if (!isRecording && micOn && isTeacher) {
       let p = Promise.reject();
       for (let i = 0; i < 10; i++) {
         p = p.catch((err) => startSpeechToText()).catch(rejectDelay);
