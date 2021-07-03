@@ -11,12 +11,12 @@ export const TeacherCoursesListViewRenderer = () => {
         {
           name: "GEOGRAFÍA",
           image: historySvg,
-          route: "/educapp/student",
+          route: "/educapp/teacher/subject",
         },
         {
           name: "HISTORIA",
           image: geographySvg,
-          route: "/educapp/student",
+          route: "/educapp/teacher/subject",
         },
       ],
     },
@@ -26,12 +26,12 @@ export const TeacherCoursesListViewRenderer = () => {
         {
           name: "GEOGRAFÍA",
           image: historySvg,
-          route: "/educapp/student",
+          route: "/educapp/teacher/subject",
         },
         {
           name: "HISTORIA",
           image: geographySvg,
-          route: "/educapp/student",
+          route: "/educapp/teacher/subject",
         },
       ],
     },
