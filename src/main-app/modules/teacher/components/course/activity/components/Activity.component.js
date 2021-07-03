@@ -66,7 +66,7 @@ export const ActivityComponent = () => {
             actividad.Id,
             formatDate(actividad.FechaAlta),
             tipoActividad,
-            actividad.Titulo,
+            actividad.FilePath ? "📎 " + actividad.Titulo : actividad.Titulo,
             actions(actividad),
           ];
         });
