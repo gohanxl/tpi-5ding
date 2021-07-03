@@ -61,6 +61,8 @@ export const Calendar = (props) => {
         cancelBtnBsStyle="danger"
         confirmBtnCssClass="btn-confirm"
         title="Agrega tu evento"
+        cancelBtnText="Cancelar"
+        confirmBtnText="Guardar"
         onConfirm={(e) => addNewEvent(e, slotInfo)}
         onCancel={() => hideAlert()}
       />
