@@ -19,12 +19,20 @@ export const ActivityComponent = () => {
   const [data, setData] = useState([]);
 
   //TODO onClick actions
-  const actions = () => {
+  const actions = (actividad) => {
     return (
       <div key={1} className="buttons are-small">
-        <button className="button is-info is-light">
-          <FontAwesomeIcon icon={faDownload} />
-        </button>
+        {actividad.FilePath && (
+          <button className="button is-info is-light">
+            <FontAwesomeIcon icon={faDownload} />
+          </button>
+        )}
+        {!actividad.FilePath && (
+          <button className="button is-info is-light" disabled>
+            <FontAwesomeIcon icon={faDownload} />
+          </button>
+        )}
+
         <button className="button is-success is-light">
           <FontAwesomeIcon icon={faPencilAlt} />
         </button>
@@ -59,7 +67,7 @@ export const ActivityComponent = () => {
             formatDate(actividad.FechaAlta),
             tipoActividad,
             actividad.Titulo,
-            actions(),
+            actions(actividad),
           ];
         });
         console.log(data);
