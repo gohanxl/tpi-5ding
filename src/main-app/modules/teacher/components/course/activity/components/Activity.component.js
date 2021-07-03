@@ -4,6 +4,12 @@ import { activityService } from "../api/activity-service";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { TIPO_ACTIVIDAD } from "../../../../../file/api/file-service";
+import {
+  faDownload,
+  faPencilAlt,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const ActivityComponent = () => {
   const headers = ["Id", "Fecha", "Tipo Actividad", "Titulo", "Acciones"];
@@ -12,14 +18,18 @@ export const ActivityComponent = () => {
   // eslint-disable-next-line
   const [data, setData] = useState([]);
 
+  //TODO onClick actions
   const actions = () => {
     return (
       <div key={1} className="buttons are-small">
-        <button className="button is-success is-light is-rounded">
-          Editar
+        <button className="button is-info is-light">
+          <FontAwesomeIcon icon={faDownload} />
         </button>
-        <button className="button is-danger is-light is-rounded">
-          Eliminar
+        <button className="button is-success is-light">
+          <FontAwesomeIcon icon={faPencilAlt} />
+        </button>
+        <button className="button is-danger is-light">
+          <FontAwesomeIcon icon={faTrash} />
         </button>
       </div>
     );
