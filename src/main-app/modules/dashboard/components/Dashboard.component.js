@@ -5,6 +5,10 @@ import calendarSvg from "../../../../assets/img/education/043-calendar.svg";
 import messageSvg from "../../../../assets/img/education/024-virtual class.svg";
 import subjectSvg from "../../../../assets/img/education/015-list.svg";
 import classSvg from "../../../../assets/img/education/005-school bell.svg";
+import colorBlind_class from "../../../../assets/img/alarm-bell.svg";
+import colorBlind_message from "../../../../assets/img/message.svg";
+import colorBlind_calendar from "../../../../assets/img/calendar.svg";
+import colorBlind_subject from "../../../../assets/img/list.svg";
 import { useSelector } from "react-redux";
 
 export const Dashboard = ({ isTeacher }) => {
@@ -41,14 +45,14 @@ export const Dashboard = ({ isTeacher }) => {
         <div className="level">
           <div className="level-item">
             <Button
-              image={classSvg}
+              image={isColorBlind ? colorBlind_class : classSvg}
               title="ENTRAR A CLASE"
               route={`/educapp/${isTeacher ? "teacher" : "student"}/call`}
             />
           </div>
           <div className="level-item">
             <Button
-              image={calendarSvg}
+              image={isColorBlind ? colorBlind_calendar : calendarSvg}
               title="CALENDARIO"
               route="/educapp/student"
             />
@@ -57,14 +61,14 @@ export const Dashboard = ({ isTeacher }) => {
         <div className="level">
           <div className="level-item">
             <Button
-              image={subjectSvg}
+              image={isColorBlind ? colorBlind_subject : subjectSvg}
               title="MATERIAS"
               route="/educapp/student"
             />
           </div>
           <div className="level-item">
             <Button
-              image={messageSvg}
+              image={isColorBlind ? colorBlind_message : messageSvg}
               title="MENSAJES"
               route="/educapp/student"
             />
