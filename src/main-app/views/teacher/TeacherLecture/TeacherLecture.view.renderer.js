@@ -1,11 +1,11 @@
 import React from "react";
 import { ActivityForm } from "../../../modules/activity/components/Activity.form";
+import { activity_form_container } from "../../../App.main.module.scss";
 
 export const TeacherLectureViewRenderer = () => {
   return (
-    <div>
-      <h1>MESSIRVE EL PROFERSSON</h1>
+    <section className={activity_form_container}>
       <ActivityForm claseId={1} />
-    </div>
+    </section>
   );
 };

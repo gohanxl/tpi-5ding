@@ -7,18 +7,13 @@ import { CallViewContainer } from "../Call/CallView.container";
 export const teacherRoutes = [
   {
     exact: true,
-    path: "/educapp/teacher",
+    path: "/educapp/teacher/activity",
     component: TeacherLectureViewRenderer,
   },
   {
     exact: true,
     path: "/educapp/teacher/subjects",
     component: TeacherAssignatureViewRenderer,
-  },
-  {
-    exact: true,
-    path: "/educapp/teacher/messages",
-    component: TeacherMessageViewRenderer,
   },
   {
     exact: true,

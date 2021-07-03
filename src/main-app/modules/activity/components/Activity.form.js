@@ -4,8 +4,10 @@ import { activityService } from "../api/activity-service";
 import {
   fileService,
   SUBTIPO_CONSIGNAS,
-  TIPO_TAREAS,
+  TIPO_ACTIVIDAD,
 } from "../../file/api/file-service";
+
+import "./Activity.styles.scss";
 
 export const ActivityForm = (props) => {
   const { claseId } = props;
@@ -56,7 +58,10 @@ export const ActivityForm = (props) => {
       activityService
         .createActivity(user.token, reqBody)
         .then((res) => {
+          console.log(res.data);
+
           const actividadId = res.data.Actividad.Id;
+          const tipoActividad = res.data.Actividad.TipoActividad;
           let formData = new FormData();
           let file = document.querySelector("#activityFile");
           formData.append("file", file.files[0]);
@@ -65,7 +70,7 @@ export const ActivityForm = (props) => {
               user.token,
               formData,
               actividadId,
-              TIPO_TAREAS,
+              TIPO_ACTIVIDAD[tipoActividad.toString()],
               SUBTIPO_CONSIGNAS
             )
             .then((res) => {
@@ -81,7 +86,7 @@ export const ActivityForm = (props) => {
   };
 
   return (
-    <>
+    <div className="container form_container">
       <h1 className="title">Nueva Actividad</h1>
       <form onSubmit={onSubmit} method="POST">
         <div className="field">
@@ -162,6 +167,6 @@ export const ActivityForm = (props) => {
           {/*</div>*/}
         </div>
       </form>
-    </>
+    </div>
   );
 };

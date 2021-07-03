@@ -5,6 +5,13 @@ export const TIPO_TPS = "tps";
 export const TIPO_TAREAS = "tareas";
 export const TIPO_RECUPERTORIOS = "recuperatorios";
 
+export const TIPO_ACTIVIDAD = {
+  1: TIPO_EVALUACIONES,
+  2: TIPO_TPS,
+  3: TIPO_TAREAS,
+  4: TIPO_RECUPERTORIOS,
+};
+
 export const SUBTIPO_CONSIGNAS = "consignas";
 export const SUBTIPO_ENTREGAS = "entregas";
 export const SUBTIPO_CORRECCIONES = "correcciones";

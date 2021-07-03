@@ -1,3 +1,5 @@
+$mancha-1: url(../assets/img/mancha-1.svg);
+
 .spinning_svg {
   display: flex;
   position: relative;
@@ -24,4 +26,11 @@
   &:hover > a {
     color: var(--primary);
   }
+}
+
+.activity_form_container {
+  background-image: $mancha-1;
+  background-size: 40%;
+  background-repeat: no-repeat;
+  background-position: right top;
 }
