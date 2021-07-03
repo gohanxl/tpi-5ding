@@ -1,8 +1,9 @@
 import { TeacherLectureViewRenderer } from "./TeacherLecture/TeacherLecture.view.renderer";
-import { TeacherAssignatureViewRenderer } from "./TeacherAssignature/TeacherAssignature.view.renderer";
+import { TeacherCoursesListViewRenderer } from "./TeacherSubjectList/TeacherCoursesListViewRenderer";
 import { TeacherMessageViewRenderer } from "./TeacherMessages/TeacherMessageViewRenderer";
 import { TeacherDashboardViewRenderer } from "./TeacherDashboard/TeacherDashboard.view.renderer";
 import { CallViewContainer } from "../Call/CallView.container";
+import { TeacherSubjectViewRenderer } from "./TeacherSubject/TeacherSubjectViewRenderer";
 
 export const teacherRoutes = [
   {
@@ -12,8 +13,13 @@ export const teacherRoutes = [
   },
   {
     exact: true,
-    path: "/educapp/teacher/subjects",
-    component: TeacherAssignatureViewRenderer,
+    path: "/educapp/teacher/courses",
+    component: TeacherCoursesListViewRenderer,
+  },
+  {
+    exact: true,
+    path: "/educapp/teacher/subject",
+    component: TeacherSubjectViewRenderer,
   },
   {
     exact: true,

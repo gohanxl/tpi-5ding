@@ -67,7 +67,7 @@ export const Dashboard = ({ isTeacher }) => {
               <Button
                 image={subjectSvg}
                 title="MIS CLASES"
-                route="/educapp/teacher/subjects"
+                route="/educapp/teacher/courses"
               />
             )}
           </div>
