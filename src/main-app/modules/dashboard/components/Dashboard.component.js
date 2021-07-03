@@ -50,7 +50,7 @@ export const Dashboard = ({ isTeacher }) => {
             <Button
               image={calendarSvg}
               title="CALENDARIO"
-              route="/educapp/student"
+              route="/educapp/calendar"
             />
           </div>
         </div>
