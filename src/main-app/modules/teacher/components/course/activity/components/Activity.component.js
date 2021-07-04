@@ -3,13 +3,17 @@ import { TableComponent } from "../../../../../shared-components/grid/components
 import { activityService } from "../api/activity-service";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
-import { TIPO_ACTIVIDAD } from "../../../../../file/api/file-service";
+import {
+  fileService,
+  TIPO_ACTIVIDAD,
+} from "../../../../../file/api/file-service";
 import {
   faDownload,
   faPencilAlt,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import fileDownload from "js-file-download";
 
 export const ActivityComponent = () => {
   const headers = ["Id", "Fecha", "Tipo Actividad", "Titulo", "Acciones"];
@@ -54,6 +58,20 @@ export const ActivityComponent = () => {
       .catch((err) => console.error(err));
   };
 
+  const downloadFile = (id) => {
+    fileService
+      .downloadFileByActivityId(user.token, id)
+      .then((res) => {
+        if (res && res.data) {
+          let fileName = res.headers["content-disposition"]
+            .split("; ")[1]
+            .split("=")[1];
+          fileDownload(new Blob([res.data], { type: "arraybuffer" }), fileName);
+        }
+      })
+      .catch((err) => console.error(err));
+  };
+
   //TODO onClick actions
   const actions = (actividad) => {
     return (
@@ -61,6 +79,7 @@ export const ActivityComponent = () => {
         <button
           className="button is-info is-light"
           disabled={!actividad.FilePath}
+          onClick={() => downloadFile(actividad.Id)}
         >
           <FontAwesomeIcon icon={faDownload} />
         </button>

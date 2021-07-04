@@ -28,4 +28,11 @@ export const fileService = {
         },
       }
     ),
+  downloadFileByActivityId: (auth_token, activityId) =>
+    axios.get(`${process.env.REACT_APP_API_URL}/File/actividad/${activityId}`, {
+      headers: {
+        Authorization: "Bearer " + auth_token,
+      },
+      responseType: "blob",
+    }),
 };
