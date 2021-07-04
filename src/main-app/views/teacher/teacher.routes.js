@@ -1,4 +1,4 @@
-import { TeacherLectureViewRenderer } from "./TeacherLecture/TeacherLecture.view.renderer";
+import { TeacherActivityFormRenderer } from "./TeacherLecture/TeacherActivityFormRenderer";
 import { TeacherCoursesListViewRenderer } from "./TeacherSubjectList/TeacherCoursesListViewRenderer";
 import { TeacherMessageViewRenderer } from "./TeacherMessages/TeacherMessageViewRenderer";
 import { TeacherDashboardViewRenderer } from "./TeacherDashboard/TeacherDashboard.view.renderer";
@@ -9,12 +9,12 @@ export const teacherRoutes = [
   {
     exact: true,
     path: "/educapp/teacher/activity",
-    component: TeacherLectureViewRenderer,
+    component: TeacherActivityFormRenderer,
   },
   {
     exact: true,
     path: "/educapp/teacher/activity/:id",
-    component: TeacherLectureViewRenderer,
+    component: TeacherActivityFormRenderer,
   },
   {
     exact: true,

@@ -10,12 +10,12 @@ export const TeacherCoursesListViewRenderer = () => {
       subjects: [
         {
           name: "GEOGRAFÍA",
-          image: historySvg,
+          image: geographySvg,
           route: "/educapp/teacher/subject",
         },
         {
           name: "HISTORIA",
-          image: geographySvg,
+          image: historySvg,
           route: "/educapp/teacher/subject",
         },
       ],
@@ -25,12 +25,12 @@ export const TeacherCoursesListViewRenderer = () => {
       subjects: [
         {
           name: "GEOGRAFÍA",
-          image: historySvg,
+          image: geographySvg,
           route: "/educapp/teacher/subject",
         },
         {
           name: "HISTORIA",
-          image: geographySvg,
+          image: historySvg,
           route: "/educapp/teacher/subject",
         },
       ],
