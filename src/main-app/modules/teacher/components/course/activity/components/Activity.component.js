@@ -19,14 +19,12 @@ export const ActivityComponent = () => {
   const headers = ["Id", "Fecha", "Tipo Actividad", "Titulo", "Acciones"];
 
   const user = useSelector((state) => state.user.currentUser);
-  // eslint-disable-next-line
-
   const [data, setData] = useState([]);
+  const history = useHistory();
   const getActivities = () => {
     activityService
       .getActivityByClassId(user.token, 1)
       .then((res) => {
-        console.log(res.data);
         const data = res.data.Actividades.map((actividad) => {
           let tipoActividad =
             TIPO_ACTIVIDAD[actividad.TipoActividad.toString()];
@@ -42,7 +40,6 @@ export const ActivityComponent = () => {
             actions(actividad),
           ];
         });
-        console.log(data);
         setData(data);
       })
       .catch((err) => console.error(err));
@@ -51,8 +48,7 @@ export const ActivityComponent = () => {
   const deleteActivity = (id) => {
     activityService
       .deleteActivityById(user.token, id)
-      .then((res) => {
-        console.log(res.data);
+      .then(() => {
         getActivities();
       })
       .catch((err) => console.error(err));
@@ -72,7 +68,6 @@ export const ActivityComponent = () => {
       .catch((err) => console.error(err));
   };
 
-  //TODO onClick actions
   const actions = (actividad) => {
     return (
       <div key={1} className="buttons are-small">
@@ -83,7 +78,12 @@ export const ActivityComponent = () => {
         >
           <FontAwesomeIcon icon={faDownload} />
         </button>
-        <button className="button is-success is-light">
+        <button
+          className="button is-success is-light"
+          onClick={() =>
+            history.push(`/educapp/teacher/activity/${actividad.Id}`)
+          }
+        >
           <FontAwesomeIcon icon={faPencilAlt} />
         </button>
         <button
@@ -106,8 +106,6 @@ export const ActivityComponent = () => {
   useEffect(() => {
     getActivities();
   }, [user]);
-
-  const history = useHistory();
 
   return (
     <div>

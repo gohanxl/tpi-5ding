@@ -13,6 +13,11 @@ export const teacherRoutes = [
   },
   {
     exact: true,
+    path: "/educapp/teacher/activity/:id",
+    component: TeacherLectureViewRenderer,
+  },
+  {
+    exact: true,
     path: "/educapp/teacher/courses",
     component: TeacherCoursesListViewRenderer,
   },

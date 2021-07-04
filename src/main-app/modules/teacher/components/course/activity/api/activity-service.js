@@ -15,4 +15,8 @@ export const activityService = {
     axios.delete(`${process.env.REACT_APP_API_URL}/Actividad/${activityId}`, {
       headers: { Authorization: "Bearer " + auth_token },
     }),
+  getActivityById: (auth_token, activityId) =>
+    axios.get(`${process.env.REACT_APP_API_URL}/Actividad/${activityId}`, {
+      headers: { Authorization: "Bearer " + auth_token },
+    }),
 };

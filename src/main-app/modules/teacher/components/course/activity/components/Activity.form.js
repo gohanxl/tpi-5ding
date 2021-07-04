@@ -13,18 +13,31 @@ import { useHistory } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const ActivityForm = (props) => {
-  const { claseId } = props;
+  const { claseId, activityId } = props;
 
   const user = useSelector((state) => state.user.currentUser);
-
   const [activityType, setActivityType] = useState([]);
+  // eslint-disable-next-line
+  const [activity, setActivity] = useState();
+
+  const history = useHistory();
 
   useEffect(() => {
+    if (activityId) {
+      activityService
+        .getActivityById(user.token, activityId)
+        .then((res) => setActivity(res.data.Actividad))
+        .catch((err) => console.error(err));
+    }
     activityService
       .getActivityType()
-      .then((res) => setActivityType(res.data))
+      .then((res) => {
+        console.log("TIPOS");
+        console.log(res.data);
+        setActivityType(res.data);
+      })
       .catch((err) => console.error(err));
-  }, []);
+  }, [activityId]);
 
   const buildRequest = (event) => {
     let reqBody = {};
@@ -53,7 +66,6 @@ export const ActivityForm = (props) => {
     }
     return formIsValid;
   };
-  const history = useHistory();
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -62,8 +74,6 @@ export const ActivityForm = (props) => {
       activityService
         .createActivity(user.token, reqBody)
         .then((res) => {
-          console.log(res.data);
-
           const actividadId = res.data.Actividad.Id;
           const tipoActividad = res.data.Actividad.TipoActividad;
           let formData = new FormData();
@@ -96,7 +106,9 @@ export const ActivityForm = (props) => {
 
   return (
     <div className="container form_container">
-      <h1 className="title">Nueva Actividad</h1>
+      <h1 className="title">
+        {activity ? "Modificar Actividad" : "Nueva Actividad"}
+      </h1>
       <form onSubmit={onSubmit} method="POST">
         <div className="field">
           <label className="label">Tipo Actividad</label>
@@ -104,7 +116,11 @@ export const ActivityForm = (props) => {
             <select name="TipoActividad">
               {activityType &&
                 activityType.map((type) => (
-                  <option key={type.Id} value={type.Id}>
+                  <option
+                    key={type.Id}
+                    value={type.Id}
+                    selected={activity?.TipoActividad === type.Id}
+                  >
                     {type.Nombre}
                   </option>
                 ))}
@@ -120,6 +136,7 @@ export const ActivityForm = (props) => {
               type="text"
               placeholder="Ingrese el título de su actividad"
               name="Titulo"
+              value={activity?.Titulo}
             />
           </div>
         </div>
@@ -131,6 +148,7 @@ export const ActivityForm = (props) => {
               className="textarea"
               placeholder="Ingrese la consigna"
               name="Descripcion"
+              value={activity?.Descripcion}
             />
           </div>
         </div>
@@ -167,18 +185,22 @@ export const ActivityForm = (props) => {
 
         <div className="field is-grouped">
           <div className="control">
-            <button className="button is-link">Crear Actividad</button>
+            <button className="button is-link">
+              {activity ? "Modificar Actividad" : "Crear Actividad"}
+            </button>
           </div>
-          <p style={{ color: "red" }} id="activity_error"></p>
-
           <div className="control">
             <button
               className="button is-link is-light"
-              onClick={() => history.goBack()}
+              onClick={(event) => {
+                event.preventDefault();
+                history.goBack();
+              }}
             >
               Cancel
             </button>
           </div>
+          <p style={{ color: "red" }} id="activity_error"></p>
         </div>
       </form>
     </div>
