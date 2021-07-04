@@ -32,8 +32,6 @@ export const ActivityForm = (props) => {
     activityService
       .getActivityType()
       .then((res) => {
-        console.log("TIPOS");
-        console.log(res.data);
         setActivityType(res.data);
       })
       .catch((err) => console.error(err));
@@ -67,40 +65,64 @@ export const ActivityForm = (props) => {
     return formIsValid;
   };
 
-  const onSubmit = (event) => {
-    event.preventDefault();
+  const uploadFile = (res) => {
+    const actividadId = res.data.Actividad.Id;
+    const tipoActividad = res.data.Actividad.TipoActividad;
+    let formData = new FormData();
+    let file = document.querySelector("#activityFile");
+    if (file && file.files && file.files[0]) {
+      formData.append("file", file.files[0]);
+      fileService
+        .uploadFile(
+          user.token,
+          formData,
+          actividadId,
+          TIPO_ACTIVIDAD[tipoActividad.toString()],
+          SUBTIPO_CONSIGNAS
+        )
+        .then(() => {
+          history.goBack();
+        })
+        .catch((err) => console.error(err));
+    } else {
+      history.goBack();
+    }
+  };
+
+  const createActivity = (event) => {
     if (validateForm(event)) {
       const reqBody = buildRequest(event);
       activityService
         .createActivity(user.token, reqBody)
-        .then((res) => {
-          const actividadId = res.data.Actividad.Id;
-          const tipoActividad = res.data.Actividad.TipoActividad;
-          let formData = new FormData();
-          let file = document.querySelector("#activityFile");
-          if (file && file.files && file.files[0]) {
-            formData.append("file", file.files[0]);
-            fileService
-              .uploadFile(
-                user.token,
-                formData,
-                actividadId,
-                TIPO_ACTIVIDAD[tipoActividad.toString()],
-                SUBTIPO_CONSIGNAS
-              )
-              .then((res) => {
-                console.log(res.data);
-                history.goBack();
-              })
-              .catch((err) => console.error(err));
-          } else {
-            history.goBack();
-          }
-        })
+        .then(uploadFile)
         .catch((err) => console.error(err));
     } else {
       document.getElementById("activity_error").innerText =
         "Asegúrese de ingresar todos los campos requeridos.";
+    }
+  };
+
+  const updateActivity = (event) => {
+    if (validateForm(event)) {
+      const reqBody = buildRequest(event);
+      reqBody.Id = activity.Id;
+      reqBody.FilePath = activity.FilePath;
+      activityService
+        .updateActivity(user.token, reqBody)
+        .then(uploadFile)
+        .catch((err) => console.error(err));
+    } else {
+      document.getElementById("activity_error").innerText =
+        "Asegúrese de ingresar todos los campos requeridos.";
+    }
+  };
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    if (!activity) {
+      createActivity(event);
+    } else {
+      updateActivity(event);
     }
   };
 
@@ -136,7 +158,7 @@ export const ActivityForm = (props) => {
               type="text"
               placeholder="Ingrese el título de su actividad"
               name="Titulo"
-              value={activity?.Titulo}
+              defaultValue={activity?.Titulo}
             />
           </div>
         </div>
@@ -148,7 +170,7 @@ export const ActivityForm = (props) => {
               className="textarea"
               placeholder="Ingrese la consigna"
               name="Descripcion"
-              value={activity?.Descripcion}
+              defaultValue={activity?.Descripcion}
             />
           </div>
         </div>
