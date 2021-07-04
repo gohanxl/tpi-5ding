@@ -14,7 +14,7 @@ export const CourseComponent = () => {
 
   return (
     <div className="container course_container">
-      <h1 className="title is-2">Historia - 5to A</h1>
+      <h1 className="title is-2 course_subject_name">Historia - 5to A</h1>
       <div className="tabs is-medium is-right">
         <ul>
           <li
