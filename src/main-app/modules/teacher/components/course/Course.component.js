@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import "./Course.styles.scss";
 import { ActivityComponent } from "./activity/components/Activity.component";
-
+import { useHistory } from "react-router";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export const CourseComponent = () => {
   const SECTIONS = {
     CONTENIDOS: "CONTENIDOS",
@@ -9,9 +11,11 @@ export const CourseComponent = () => {
     ENTREGAS: "ENTREGAS",
     CORRECCIONES: "CORRECCIONES",
   };
+  const history = useHistory();
 
   const [section, setSection] = useState(SECTIONS.CONTENIDOS);
 
+  //TODO recibir titulo por props
   return (
     <div className="container course_container">
       <h1 className="title is-2 course_subject_name">Historia - 5to A</h1>
@@ -48,6 +52,17 @@ export const CourseComponent = () => {
         {section === SECTIONS.ACTIVIDADES && <ActivityComponent />}
         {section === SECTIONS.ENTREGAS && <h1>ENTREGAS AQUI</h1>}
         {section === SECTIONS.CORRECCIONES && <h1>CORRECCIONES AQUI</h1>}
+      </div>
+      <br />
+      <div className="level-right">
+        <button
+          className="button is-info"
+          onClick={() => {
+            history.push("/educapp/teacher/courses");
+          }}
+        >
+          <FontAwesomeIcon icon={faArrowLeft} />
+        </button>
       </div>
     </div>
   );
