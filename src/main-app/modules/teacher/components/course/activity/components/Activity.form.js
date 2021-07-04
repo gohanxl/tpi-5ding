@@ -17,7 +17,6 @@ export const ActivityForm = (props) => {
 
   const user = useSelector((state) => state.user.currentUser);
   const [activityType, setActivityType] = useState([]);
-  // eslint-disable-next-line
   const [activity, setActivity] = useState();
 
   const history = useHistory();

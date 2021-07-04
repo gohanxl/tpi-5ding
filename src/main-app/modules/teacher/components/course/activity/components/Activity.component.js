@@ -28,9 +28,16 @@ export const ActivityComponent = () => {
         const data = res.data.Actividades.map((actividad) => {
           let tipoActividad =
             TIPO_ACTIVIDAD[actividad.TipoActividad.toString()];
-          tipoActividad = tipoActividad
-            .substring(0, tipoActividad.length - 1)
-            .toUpperCase();
+
+          if (actividad.TipoActividad === 1) {
+            tipoActividad = tipoActividad
+              .substring(0, tipoActividad.length - 2)
+              .toUpperCase();
+          } else {
+            tipoActividad = tipoActividad
+              .substring(0, tipoActividad.length - 1)
+              .toUpperCase();
+          }
 
           return [
             actividad.Id,
