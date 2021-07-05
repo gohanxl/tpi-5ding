@@ -1,25 +1,40 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { activityService } from "../api/activity-service";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import {
   fileService,
   SUBTIPO_CONSIGNAS,
-  TIPO_TAREAS,
-} from "../../file/api/file-service";
+  TIPO_ACTIVIDAD,
+} from "../../../../../file/api/file-service";
+
+import "./Activity.styles.scss";
+import { useHistory } from "react-router";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const ActivityForm = (props) => {
-  const { claseId } = props;
+  const { claseId, activityId } = props;
 
   const user = useSelector((state) => state.user.currentUser);
-
   const [activityType, setActivityType] = useState([]);
+  const [activity, setActivity] = useState();
+
+  const history = useHistory();
 
   useEffect(() => {
+    if (activityId) {
+      activityService
+        .getActivityById(user.token, activityId)
+        .then((res) => setActivity(res.data.Actividad))
+        .catch((err) => console.error(err));
+    }
     activityService
       .getActivityType()
-      .then((res) => setActivityType(res.data))
+      .then((res) => {
+        setActivityType(res.data);
+      })
       .catch((err) => console.error(err));
-  }, []);
+  }, [activityId]);
 
   const buildRequest = (event) => {
     let reqBody = {};
@@ -49,30 +64,36 @@ export const ActivityForm = (props) => {
     return formIsValid;
   };
 
-  const onSubmit = (event) => {
-    event.preventDefault();
+  const uploadFile = (res) => {
+    const actividadId = res.data.Actividad.Id;
+    const tipoActividad = res.data.Actividad.TipoActividad;
+    let formData = new FormData();
+    let file = document.querySelector("#activityFile");
+    if (file && file.files && file.files[0]) {
+      formData.append("file", file.files[0]);
+      fileService
+        .uploadFile(
+          user.token,
+          formData,
+          actividadId,
+          TIPO_ACTIVIDAD[tipoActividad.toString()],
+          SUBTIPO_CONSIGNAS
+        )
+        .then(() => {
+          history.goBack();
+        })
+        .catch((err) => console.error(err));
+    } else {
+      history.goBack();
+    }
+  };
+
+  const createActivity = (event) => {
     if (validateForm(event)) {
       const reqBody = buildRequest(event);
       activityService
         .createActivity(user.token, reqBody)
-        .then((res) => {
-          const actividadId = res.data.Actividad.Id;
-          let formData = new FormData();
-          let file = document.querySelector("#activityFile");
-          formData.append("file", file.files[0]);
-          fileService
-            .uploadFile(
-              user.token,
-              formData,
-              actividadId,
-              TIPO_TAREAS,
-              SUBTIPO_CONSIGNAS
-            )
-            .then((res) => {
-              console.log(res.data);
-            })
-            .catch((err) => console.error(err));
-        })
+        .then(uploadFile)
         .catch((err) => console.error(err));
     } else {
       document.getElementById("activity_error").innerText =
@@ -80,9 +101,35 @@ export const ActivityForm = (props) => {
     }
   };
 
+  const updateActivity = (event) => {
+    if (validateForm(event)) {
+      const reqBody = buildRequest(event);
+      reqBody.Id = activity.Id;
+      reqBody.FilePath = activity.FilePath;
+      activityService
+        .updateActivity(user.token, reqBody)
+        .then(uploadFile)
+        .catch((err) => console.error(err));
+    } else {
+      document.getElementById("activity_error").innerText =
+        "Asegúrese de ingresar todos los campos requeridos.";
+    }
+  };
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    if (!activity) {
+      createActivity(event);
+    } else {
+      updateActivity(event);
+    }
+  };
+
   return (
-    <>
-      <h1 className="title">Nueva Actividad</h1>
+    <div className="container form_container">
+      <h1 className="title">
+        {activity ? "Modificar Actividad" : "Nueva Actividad"}
+      </h1>
       <form onSubmit={onSubmit} method="POST">
         <div className="field">
           <label className="label">Tipo Actividad</label>
@@ -90,7 +137,11 @@ export const ActivityForm = (props) => {
             <select name="TipoActividad">
               {activityType &&
                 activityType.map((type) => (
-                  <option key={type.Id} value={type.Id}>
+                  <option
+                    key={type.Id}
+                    value={type.Id}
+                    selected={activity?.TipoActividad === type.Id}
+                  >
                     {type.Nombre}
                   </option>
                 ))}
@@ -106,6 +157,7 @@ export const ActivityForm = (props) => {
               type="text"
               placeholder="Ingrese el título de su actividad"
               name="Titulo"
+              defaultValue={activity?.Titulo}
             />
           </div>
         </div>
@@ -117,6 +169,7 @@ export const ActivityForm = (props) => {
               className="textarea"
               placeholder="Ingrese la consigna"
               name="Descripcion"
+              defaultValue={activity?.Descripcion}
             />
           </div>
         </div>
@@ -131,11 +184,11 @@ export const ActivityForm = (props) => {
             />
             <span className="file-cta">
               <span className="file-icon">
-                <i className="fas fa-upload" />
+                <FontAwesomeIcon icon={faUpload} />
               </span>
               <span className="file-label">Elija un archivo…</span>
             </span>
-            <span className="file-name">Adjunte la consgina en pdf... </span>
+            <span className="file-name">Adjunte la consgina... </span>
           </label>
         </div>
 
@@ -153,15 +206,24 @@ export const ActivityForm = (props) => {
 
         <div className="field is-grouped">
           <div className="control">
-            <button className="button is-link">Crear Actividad</button>
+            <button className="button is-link">
+              {activity ? "Modificar Actividad" : "Crear Actividad"}
+            </button>
+          </div>
+          <div className="control">
+            <button
+              className="button is-link is-light"
+              onClick={(event) => {
+                event.preventDefault();
+                history.goBack();
+              }}
+            >
+              Cancel
+            </button>
           </div>
           <p style={{ color: "red" }} id="activity_error"></p>
-          {/*TODO add if necessary to close form*/}
-          {/*<div className="control">*/}
-          {/*  <button className="button is-link is-light">Cancel</button>*/}
-          {/*</div>*/}
         </div>
       </form>
-    </>
+    </div>
   );
 };

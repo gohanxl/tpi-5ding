@@ -12,6 +12,7 @@ import { useHistory } from "react-router";
 import { roles, routes } from "../../../../App.constants";
 import { calendarRoutes } from "../../../views/Calendar/calendar.routes";
 import { rolesUrl } from "../../user/constants/user.constants";
+import educAppLogo from "../../../../assets/img/logo.svg";
 import "./Sidebar.styles.scss";
 
 export const Sidebar = () => {
@@ -24,6 +25,18 @@ export const Sidebar = () => {
     { id: 1, name: "Lengua" },
     { id: 2, name: "Matemática" },
     { id: 3, name: "Ciencias Naturales" },
+    { id: 4, name: "Lengua" },
+    { id: 5, name: "Matemática" },
+    { id: 6, name: "Ciencias Naturales" },
+    { id: 7, name: "Lengua" },
+    { id: 8, name: "Matemática" },
+    { id: 9, name: "Ciencias Naturales" },
+    { id: 10, name: "Lengua" },
+    { id: 11, name: "Matemática" },
+    { id: 12, name: "Ciencias Naturales" },
+    { id: 13, name: "Lengua" },
+    { id: 14, name: "Matemática" },
+    { id: 15, name: "Ciencias Naturales" },
   ];
 
   const goToPage = (page) => {
@@ -78,6 +91,18 @@ export const Sidebar = () => {
             {name}
           </a>
         ))}
+        <div className="sidebar-footer">
+          <p className="has-text-centered">
+            <span>Powered by</span>
+            <img
+              src={educAppLogo}
+              className="mx-2 mb-1"
+              alt="Educapp logo"
+              width="20"
+            />
+            <b>EducApp</b>
+          </p>
+        </div>
       </Menu>
     </div>
   );
