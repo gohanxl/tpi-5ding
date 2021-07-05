@@ -30,3 +30,10 @@
   -ms-transition: color 250ms ease-in-out;
   transition: color 250ms ease-in-out;
 }
+
+.dashboard-button {
+  img {
+    height: auto;
+    width: 85%;
+  }
+}
