@@ -1,0 +1,12 @@
+@import "../../../../../ui-styling/globals/colors.scss";
+
+.course_container {
+  padding: 5%;
+}
+
+.course_subject_name {
+  color: #24778a !important;
+  -webkit-transition: color 250ms ease-in-out;
+  -ms-transition: color 250ms ease-in-out;
+  transition: color 250ms ease-in-out;
+}

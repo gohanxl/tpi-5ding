@@ -55,12 +55,21 @@ export const Dashboard = ({ isTeacher }) => {
           </div>
         </div>
         <div className="level">
-          <div className="dashboard-button level-item">
-            <Button
-              image={subjectSvg}
-              title="MATERIAS"
-              route="/educapp/student"
-            />
+          <div className="level-item">
+            {!isTeacher && (
+              <Button
+                image={subjectSvg}
+                title="MATERIAS"
+                route="/educapp/student"
+              />
+            )}
+            {isTeacher && (
+              <Button
+                image={subjectSvg}
+                title="MIS CLASES"
+                route="/educapp/teacher/courses"
+              />
+            )}
           </div>
           <div className="dashboard-button level-item">
             <Button
