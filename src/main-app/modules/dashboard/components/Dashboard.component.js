@@ -6,6 +6,7 @@ import messageSvg from "../../../../assets/img/education/024-virtual class.svg";
 import subjectSvg from "../../../../assets/img/education/015-list.svg";
 import classSvg from "../../../../assets/img/education/005-school bell.svg";
 import { useSelector } from "react-redux";
+import { routes } from "../../../../App.constants";
 
 export const Dashboard = ({ isTeacher }) => {
   const user = useSelector((state) => state.user.currentUser);
@@ -50,7 +51,7 @@ export const Dashboard = ({ isTeacher }) => {
             <Button
               image={calendarSvg}
               title="CALENDARIO"
-              route="/educapp/student"
+              route={routes.underConstruction}
             />
           </div>
         </div>
@@ -59,14 +60,14 @@ export const Dashboard = ({ isTeacher }) => {
             <Button
               image={subjectSvg}
               title="MATERIAS"
-              route="/educapp/student"
+              route={routes.underConstruction}
             />
           </div>
           <div className="level-item">
             <Button
               image={messageSvg}
               title="MENSAJES"
-              route="/educapp/student"
+              route={routes.underConstruction}
             />
           </div>
         </div>
