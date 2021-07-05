@@ -3,6 +3,7 @@
 @import "./ui-styling/globals/colors.scss";
 
 $navbar-height: 70px;
+$footer-height: 88.59px;
 
 $app-container-height: calc(100vh - #{$navbar-height});
 $app-content-height: calc(#{$app-container-height} - 168px);
@@ -44,8 +45,13 @@ button {
 }
 
 .app-content {
-  flex-basis: calc(calc(100vh - 3.25rem) - 168px);
+  flex-basis: calc(calc(100vh - 3.25rem) - #{$footer-height});
   height: fit-content;
+}
+
+.footer {
+  background-color: #f6f6f6;
+  padding: 2rem;
 }
 
 .app-container.hide-footer {
