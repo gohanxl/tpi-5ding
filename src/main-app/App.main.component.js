@@ -32,10 +32,11 @@ import {
   routes,
   standardThemeValues,
 } from "../App.constants";
+import { calendarRoutes } from "./views/Calendar/calendar.routes";
 
 roleAccessibilty.setRoutes({
-  student: studentRoutes,
-  teacher: teacherRoutes,
+  student: [...studentRoutes, ...calendarRoutes],
+  teacher: [...teacherRoutes, ...calendarRoutes],
   admin: [...studentRoutes, ...teacherRoutes],
 });
 
@@ -186,6 +187,7 @@ const MainApp = () => {
                         <span>Modo Daltónico</span>
                         <Switch
                           id="switch"
+                          aria-label="Switch modo daltónico"
                           ref={colorblindSwitch}
                           className={colorblind_switch}
                           checked={switchValue}

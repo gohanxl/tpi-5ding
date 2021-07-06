@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { close_caption } from "./ClosedCaption.module.scss";
+import { close_caption, user_name } from "./ClosedCaption.module.scss";
 
 import useSpeechToText from "react-hook-speech-to-text";
 
@@ -95,7 +95,7 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
         {closedCaptionReceive &&
           closedCaptionReceive.map(({ name, closedCaption }, index) => (
             <p key={index}>
-              {name}: {closedCaption}
+              <span className={user_name}>{name}:</span> {closedCaption}
             </p>
           ))}
       </div>

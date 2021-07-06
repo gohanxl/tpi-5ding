@@ -8,11 +8,17 @@
   transition: all 250ms linear 4s;
 }
 
+.user_name {
+  color: var(--primary);
+}
+
 .close_caption {
   position: absolute;
   top: 80%;
   background-color: #000000c2;
   padding: 10px;
-  font-size: 24px;
-  color: rgb(245, 244, 69);
+  font-size: 1.8rem;
+  //color: rgb(245, 244, 69);
+  color: #e4e4e4;
+  max-width: 80%;
 }

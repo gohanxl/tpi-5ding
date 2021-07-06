@@ -10,6 +10,7 @@ import { slide as Menu } from "react-burger-menu";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { roles, routes } from "../../../../App.constants";
+import { calendarRoutes } from "../../../views/Calendar/calendar.routes";
 import { rolesUrl } from "../../user/constants/user.constants";
 import educAppLogo from "../../../../assets/img/logo.svg";
 import "./Sidebar.styles.scss";
@@ -21,21 +22,16 @@ export const Sidebar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const subjects = [
-    { id: 1, name: "Lengua" },
-    { id: 2, name: "Matemática" },
-    { id: 3, name: "Ciencias Naturales" },
-    { id: 4, name: "Lengua" },
-    { id: 5, name: "Matemática" },
-    { id: 6, name: "Ciencias Naturales" },
+    { id: 1, name: "Bilogía" },
+    { id: 2, name: "Geografía" },
+    { id: 3, name: "Filosofia" },
+    { id: 4, name: "Física" },
+    { id: 5, name: "Historia" },
+    { id: 6, name: "Inglés" },
     { id: 7, name: "Lengua" },
     { id: 8, name: "Matemática" },
-    { id: 9, name: "Ciencias Naturales" },
-    { id: 10, name: "Lengua" },
-    { id: 11, name: "Matemática" },
-    { id: 12, name: "Ciencias Naturales" },
-    { id: 13, name: "Lengua" },
-    { id: 14, name: "Matemática" },
-    { id: 15, name: "Ciencias Naturales" },
+    { id: 9, name: "Música" },
+    { id: 10, name: "Química" },
   ];
 
   const goToPage = (page) => {
@@ -55,7 +51,7 @@ export const Sidebar = () => {
         <a
           id="home"
           className="menu-item"
-          href="#dashboard"
+          href="/#/educapp/dashboard"
           onClick={() => goToPage(dashboardRoute)}
         >
           <FontAwesomeIcon icon={faHome} className="mr-3" />
@@ -64,8 +60,8 @@ export const Sidebar = () => {
         <a
           id="home"
           className="menu-item"
-          href="#calendario"
-          onClick={() => goToPage(dashboardRoute)}
+          href="/#/educapp/calendar"
+          onClick={() => goToPage(calendarRoutes)}
         >
           <FontAwesomeIcon icon={faCalendarAlt} className="mr-3" />
           Calendario
@@ -73,7 +69,7 @@ export const Sidebar = () => {
         <a
           id="home"
           className="menu-item"
-          href="#mensajes"
+          href="/#/"
           onClick={() => goToPage(dashboardRoute)}
         >
           <FontAwesomeIcon icon={faEnvelope} className="mr-3" />
@@ -84,7 +80,7 @@ export const Sidebar = () => {
           <a
             key={id}
             className="menu-item assignature"
-            href={"#materia-" + id}
+            href={"/#/educapp/materia-" + id}
             onClick={() => goToPage("/educapp/student/assignature/" + id)}
           >
             {name}

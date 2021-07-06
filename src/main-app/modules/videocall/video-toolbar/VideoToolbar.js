@@ -61,6 +61,7 @@ export const VideoToolbar = (props) => {
   return (
     <div className={toolbar}>
       <button
+        aria-label="Botón de video"
         className={`button ${colorblind_button} ${
           videoOn ? toolbar_buttons : is_danger
         }`}
@@ -70,6 +71,7 @@ export const VideoToolbar = (props) => {
         <FontAwesomeIcon icon={videoOn ? faVideo : faVideoSlash} />
       </button>
       <button
+        aria-label="Botón de muteo"
         className={`button ${colorblind_button} ${
           micOn ? toolbar_buttons : is_danger
         }`}
@@ -80,16 +82,18 @@ export const VideoToolbar = (props) => {
       </button>
 
       <button
+        aria-label="Botón de subtítulos"
         className={`button ${colorblind_button} ${
           ccOn ? toolbar_buttons : is_danger
         }`}
-        id="videoOnButton"
+        id="ccOnOffButton"
         onClick={() => dispatch(setCcOn(!ccOn))}
       >
         <FontAwesomeIcon icon={faClosedCaptioning} />
       </button>
 
       <button
+        aria-label="Botón cortar llamada"
         className={`button ${colorblind_button} ${is_danger}`}
         id="endCallButton"
         onClick={endCall}
@@ -98,6 +102,7 @@ export const VideoToolbar = (props) => {
       </button>
 
       <button
+        aria-label="Botón de lista de participantes"
         className={`button ${toolbar_buttons} ${colorblind_button}`}
         onClick={toggleParticipantModal}
       >
@@ -105,6 +110,7 @@ export const VideoToolbar = (props) => {
       </button>
       {!isScreenSharingByMe && (
         <button
+          aria-label="Botón de compartir pantalla"
           className={`button ${toolbar_buttons} ${colorblind_button}`}
           id="start_screen_share_button"
           onClick={startShareScreen}
@@ -114,6 +120,7 @@ export const VideoToolbar = (props) => {
       )}
       {isScreenSharingByMe && (
         <button
+          aria-label="Botón detener compartir pantalla"
           className={`button ${toolbar_buttons} ${colorblind_button} ${is_danger}`}
           id="stop_screen_share_button"
           onClick={stopSharingScreen}
