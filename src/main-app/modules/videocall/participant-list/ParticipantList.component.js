@@ -59,7 +59,7 @@ export const ParticipantListComponent = (props) => {
     <div className={isOpened ? "modal is-active" : "modal"}>
       <div className="modal-card">
         <header className="modal-card-head">
-          <p className="modal-card-title">Participantes</p>
+          <h2 className="modal-card-title">Participantes</h2>
           <button
             className="delete"
             aria-label="close"
