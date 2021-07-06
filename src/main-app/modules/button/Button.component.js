@@ -9,7 +9,7 @@ const Button = (props) => {
       <div className="button-background">
         <img src={props.image} alt={props.title} className="button-image" />
       </div>
-      <h4 className="title is-6 button-text">{props.title}</h4>
+      <h3 className="title is-6 button-text">{props.title}</h3>
     </a>
   );
 };

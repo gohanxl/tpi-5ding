@@ -186,6 +186,7 @@ const MainApp = () => {
                         <span>Modo Daltónico</span>
                         <Switch
                           id="switch"
+                          aria-label="Switch modo daltónico"
                           ref={colorblindSwitch}
                           className={colorblind_switch}
                           checked={switchValue}

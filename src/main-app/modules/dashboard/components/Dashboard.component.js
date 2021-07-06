@@ -26,12 +26,12 @@ export const Dashboard = ({ isTeacher }) => {
   return (
     <section id="dashboard" className="dashboard-container">
       <div className="title-container">
-        <h2 className="title is-3 dashboard-greeting">
+        <h1 className="title is-3 dashboard-greeting">
           <strong>¡Hola de nuevo!</strong>
-        </h2>
-        <h1 className="title is-2 dashboard-name">
-          <strong>{user && user.dbUser ? user.dbUser.Nombre : ""}</strong>
         </h1>
+        <h2 className="title is-2 dashboard-name">
+          <strong>{user && user.dbUser ? user.dbUser.Nombre : ""}</strong>
+        </h2>
       </div>
       <br />
       <br />
