@@ -78,7 +78,7 @@ export const Calendar = (props) => {
     setAlert(
       <SweetAlert
         showCancel
-        showCloseButton
+        closeOnClickOutside={false}
         confirmBtnCssClass="btn-confirm"
         cancelBtnText="Eliminar"
         confirmBtnText="Cerrar"
@@ -101,7 +101,7 @@ export const Calendar = (props) => {
         getAndSetEvents();
       }, 2000)
     );
-    successAlert("El evento se elimino correctamente");
+    successAlert("El evento se eliminó correctamente");
   };
 
   const successAlert = (message) => {
@@ -139,6 +139,7 @@ export const Calendar = (props) => {
               onKeyDown={renderProps.onEnterKeyDownConfirm}
               onChange={(e) => (title = e.target.value)}
               placeholder={"Titulo"}
+              required={true}
             />
             <br />
             <textarea
@@ -146,7 +147,7 @@ export const Calendar = (props) => {
               className="form-control"
               onKeyDown={renderProps.onEnterKeyDownConfirm}
               onChange={(e) => (description = e.target.value)}
-              placeholder={"Descripcion"}
+              placeholder={"Descripción"}
             />
             <hr />
           </form>
@@ -171,7 +172,7 @@ export const Calendar = (props) => {
       })
       .catch((e) => console.error(e));
 
-    successAlert("El evento se guardo correctamente");
+    successAlert("El evento se guardó correctamente");
   };
 
   const hideAlert = () => {
@@ -181,6 +182,7 @@ export const Calendar = (props) => {
   return (
     <div className="container h-100">
       <div className="row h-100 justify-content-center align-items-center">
+        <h2>Calendario</h2>
         <div className="col-12 calendar">
           {alert}
           <BigCalendar

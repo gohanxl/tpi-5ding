@@ -12,9 +12,9 @@ $time-selection-color: white !default;
 $time-selection-bg-color: rgba(0, 0, 0, 0.5) !default;
 $date-selection-bg-color: rgba(0, 0, 0, 0.1) !default;
 
-$event-bg: #1eaac3 !default;
-$event-border: darken(#1eaac3, 10%) !default;
-$event-outline: #1eaac3 !default;
+$event-bg: #24778a !default;
+$event-border: darken(#24778a, 10%) !default;
+$event-outline: #24778a !default;
 $event-color: #fff !default;
 $event-border-radius: 5px !default;
 $event-padding: 2px 5px !default;
@@ -37,10 +37,19 @@ $today-highlight-bg: #eaf6ff !default;
 }
 
 .btn-confirm {
-  border-color: var(--darker-primary);
-  background-color: var(--primary);
+  border-color: var(--darker-primary) !important;
+  background-color: var(--dark-primary) !important;
 }
 
 .btn-confirm:hover {
-  background-color: var(--dark-primary);
+  border-color: var(--dark-primary) !important;
+  background-color: var(--darker-primary) !important;
+}
+
+h2 {
+  color: var(--dark-primary);
+  font-size: 3em;
+  -webkit-transition: color 250ms ease-in-out;
+  -ms-transition: color 250ms ease-in-out;
+  transition: color 250ms ease-in-out;
 }
