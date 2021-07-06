@@ -10,6 +10,7 @@ import { slide as Menu } from "react-burger-menu";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { roles, routes } from "../../../../App.constants";
+import { calendarRoutes } from "../../../views/Calendar/calendar.routes";
 import { rolesUrl } from "../../user/constants/user.constants";
 import educAppLogo from "../../../../assets/img/logo.svg";
 import "./Sidebar.styles.scss";
@@ -64,8 +65,8 @@ export const Sidebar = () => {
         <a
           id="home"
           className="menu-item"
-          href="#calendario"
-          onClick={() => goToPage(dashboardRoute)}
+          href="/#/educapp/calendar"
+          onClick={() => goToPage(calendarRoutes)}
         >
           <FontAwesomeIcon icon={faCalendarAlt} className="mr-3" />
           Calendario
