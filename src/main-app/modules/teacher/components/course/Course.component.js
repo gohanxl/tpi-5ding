@@ -4,7 +4,7 @@ import { ActivityComponent } from "./activity/components/Activity.component";
 import { useHistory } from "react-router";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-export const CourseComponent = () => {
+export const CourseComponent = (props) => {
   const SECTIONS = {
     CONTENIDOS: "CONTENIDOS",
     ACTIVIDADES: "ACTIVIDADES",
@@ -15,10 +15,11 @@ export const CourseComponent = () => {
 
   const [section, setSection] = useState(SECTIONS.CONTENIDOS);
 
-  //TODO recibir titulo por props
   return (
     <div className="container course_container">
-      <h1 className="title is-2 course_subject_name">Historia - 5to A</h1>
+      <h1 className="title is-2 course_subject_name">
+        {props.course.replace("_", " ") + " - " + props.title}
+      </h1>
       <div className="tabs is-medium is-right">
         <ul>
           <li
