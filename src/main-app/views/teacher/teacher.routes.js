@@ -28,6 +28,11 @@ export const teacherRoutes = [
   },
   {
     exact: true,
+    path: "/educapp/teacher/subject/:title/:course",
+    component: TeacherSubjectViewRenderer,
+  },
+  {
+    exact: true,
     path: "/educapp/teacher/messages",
     component: TeacherMessageViewRenderer,
   },
