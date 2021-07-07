@@ -4,10 +4,17 @@ import {
   under_construction_text,
 } from "./UnderConstruction.module.scss";
 
+import development from "../../../assets/img/development.svg";
+
 export const UnderConstruction = () => {
   return (
     <div className={under_construction}>
-      <div>SVG</div>
+      <img
+        src={development}
+        alt="En construcción"
+        width="800px"
+        height="auto"
+      />
       <h2 className={under_construction_text}>
         ¡Estamos en pleno desarrollo, muchas gracias por el apoyo!
       </h2>
