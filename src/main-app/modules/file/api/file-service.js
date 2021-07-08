@@ -35,4 +35,11 @@ export const fileService = {
       },
       responseType: "blob",
     }),
+  downloadStatsByClassId: (auth_token, classId) =>
+    axios.get(`${process.env.REACT_APP_API_URL}/File/stats/${classId}`, {
+      headers: {
+        Authorization: "Bearer " + auth_token,
+      },
+      responseType: "blob",
+    }),
 };

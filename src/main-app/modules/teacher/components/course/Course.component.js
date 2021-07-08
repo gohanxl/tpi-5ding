@@ -6,6 +6,8 @@ import { faArrowLeft, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector } from "react-redux";
 import { rolesUrl } from "../../../user/constants/user.constants";
+import { fileService } from "../../../file/api/file-service";
+import fileDownload from "js-file-download";
 
 export const CourseComponent = (props) => {
   const SECTIONS = {
@@ -22,8 +24,22 @@ export const CourseComponent = (props) => {
 
   const downloadStats = (event) => {
     event.preventDefault();
-    //TODO remove this console log and integrate lucho's endpoint
-    console.log("DOWNLOAD STATS HERE");
+    fileService
+      .downloadStatsByClassId(user.token, 1)
+      .then((res) => {
+        if (res && res.data) {
+          let fileName = res.headers["content-disposition"]
+            .split("; ")[1]
+            .split("=")[1];
+          fileDownload(new Blob([res.data], { type: "arraybuffer" }), fileName);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        alert(
+          `Luchito implementate este endpoint: ${process.env.REACT_APP_API_URL}/File/stats/{classId}`
+        );
+      });
   };
 
   return (
