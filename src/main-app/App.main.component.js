@@ -9,16 +9,11 @@ import {
   setIsColorBlind,
 } from "../main-app/modules/user/store/user.actions";
 import { userService } from "../main-app/modules/user/api/usuario-service";
-import { studentRoutes } from "./views/student/student.routes";
-import { teacherRoutes } from "./views/teacher/teacher.routes";
-import { roleAccessibilty } from "./modules/auth/service/roles.service";
-import { rolesUrl } from "./modules/user/constants/user.constants";
 import educAppWhiteLogo from "../assets/img/logo-white.svg";
 import educAppLogo from "../assets/img/logo.svg";
 import { faBell, faUser } from "@fortawesome/free-solid-svg-icons";
 import { Loader } from "./modules/ui-styling/components/Loader/Loader.component";
 import {
-  main_app,
   spinning_svg,
   colorblind_wrapper,
   colorblind_switch,
@@ -27,24 +22,15 @@ import {
 import Switch from "react-switch";
 import {
   colorblindModeThemeValues,
-  roles,
   rootStyles,
-  routes,
   standardThemeValues,
 } from "../App.constants";
-import { calendarRoutes } from "./views/Calendar/calendar.routes";
-
-roleAccessibilty.setRoutes({
-  student: [...studentRoutes, ...calendarRoutes],
-  teacher: [...teacherRoutes, ...calendarRoutes],
-  admin: [...studentRoutes, ...teacherRoutes],
-});
 
 const MainApp = () => {
   const dispatch = useDispatch();
-  // const [hideFooter, setHideFooter] = useState(true);
+  const [hideFooter, setHideFooter] = useState(true);
   const [switchValue, setSwitchValue] = useState(
-    JSON.parse(localStorage.getItem("color-blind") || false)
+    Boolean(localStorage.getItem("color-blind"))
   );
 
   const colorblindSwitch = useRef(null);
@@ -88,19 +74,6 @@ const MainApp = () => {
     }
   }, [dispatch, getAccessTokenSilently, isAuthenticated, user]);
 
-  const routesRoleConfig = user
-    ? roleAccessibilty.getRoutesByRoles(user[rolesUrl])
-    : {};
-
-  const currentRole = user ? user[rolesUrl][0].toLowerCase() : "";
-
-  const dashboardRole =
-    currentRole.toLowerCase() === roles.ADMIN ? roles.TEACHER : currentRole;
-
-  const shouldHideFooter =
-    window.location.hash.includes("dashboard") ||
-    window.location.hash.includes("call");
-
   useEffect(
     function changeStylesMode() {
       let root = document.documentElement;
@@ -111,32 +84,32 @@ const MainApp = () => {
             colorblindModeThemeValues[rootStyles[index]]
           );
         });
-        localStorage.setItem("color-blind", JSON.stringify(true));
+        localStorage.setItem("color-blind", "true");
         dispatch(setIsColorBlind(true));
       } else {
         rootStyles.forEach((rootStyle, index) => {
           root.style.setProperty(rootStyle, standardThemeValues[index]);
         });
-        localStorage.setItem("color-blind", JSON.stringify(false));
+        localStorage.setItem("color-blind", "false");
         dispatch(setIsColorBlind(false));
       }
     },
     [dispatch, switchValue]
   );
 
-  // useEffect(() => {
-  //   setHideFooter(
-  //     window.location.hash == "#/educapp/home" ||
-  //       window.location.hash == "#/educapp/teacher/call"
-  //   );
-  // }, []);
+  useEffect(() => {
+    setHideFooter(
+      window.location.hash == "#/educapp/home" ||
+        window.location.hash == "#/educapp/teacher/call"
+    );
+  }, []);
 
   if (error) {
-    return <div>Ups... Falló Auth0</div>;
+    return <div>Oops... {error.message}</div>;
   }
 
   return (
-    <div className={`${main_app} ${isLoading ? spinning_svg : ""}`}>
+    <div className={isLoading ? spinning_svg : ""}>
       {isLoading ? (
         <Loader />
       ) : (
@@ -148,10 +121,7 @@ const MainApp = () => {
               aria-label="main navigation"
             >
               <div className="navbar-brand">
-                <a
-                  className="navbar-item"
-                  href={`/#${routes.dashboard(dashboardRole)}`}
-                >
+                <a className="navbar-item" href="#/educapp/home">
                   <img
                     src={educAppWhiteLogo}
                     alt="Educapp logo"
@@ -187,7 +157,6 @@ const MainApp = () => {
                         <span>Modo Daltónico</span>
                         <Switch
                           id="switch"
-                          aria-label="Switch modo daltónico"
                           ref={colorblindSwitch}
                           className={colorblind_switch}
                           checked={switchValue}
@@ -239,33 +208,24 @@ const MainApp = () => {
               <Sidebar />
             </div>
             <div
-              className={`app-container ${
-                shouldHideFooter ? "hide-footer" : ""
-              }`}
+              className={"app-container" + (!hideFooter ? "" : " hide-footer")}
             >
               <div className="app-content">
-                {isAuthenticated && (
-                  <MainAppRoutes
-                    routesRoleConfig={routesRoleConfig}
-                    currentRole={currentRole}
-                  />
-                )}
+                {isAuthenticated && <MainAppRoutes />}
                 {!isAuthenticated && loginWithRedirect()}
               </div>
-              {!shouldHideFooter && (
-                <footer className="footer">
-                  <p className="has-text-centered">
-                    <span>Powered by</span>
-                    <img
-                      src={educAppLogo}
-                      className="mx-2 mb-1"
-                      alt="Educapp logo"
-                      width="20"
-                    />
-                    <b>EducApp</b>
-                  </p>
-                </footer>
-              )}
+              <footer className="footer">
+                <p className="has-text-centered">
+                  <span>Powered by</span>
+                  <img
+                    src={educAppLogo}
+                    className="mx-2 mb-1"
+                    alt="Educapp logo"
+                    width="20"
+                  />
+                  <b>EducApp</b>
+                </p>
+              </footer>
             </div>
           </div>
         </>

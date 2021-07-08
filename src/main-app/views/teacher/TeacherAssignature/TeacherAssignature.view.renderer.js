@@ -3,20 +3,20 @@ import { CourseSubjectComponent } from "../../../modules/teacher/components/Cour
 import historySvg from "../../../../assets/img/education/007-history.svg";
 import geographySvg from "../../../../assets/img/education/008-geography.svg";
 
-export const TeacherCoursesListViewRenderer = () => {
+export const TeacherAssignatureViewRenderer = () => {
   const thisDataMustComeFromServer = [
     {
       course: "5to A",
       subjects: [
         {
           name: "GEOGRAFÍA",
-          image: geographySvg,
-          route: "/educapp/teacher/subject/Geografía/5to_A",
+          image: historySvg,
+          route: "/educapp/student",
         },
         {
           name: "HISTORIA",
-          image: historySvg,
-          route: "/educapp/teacher/subject/Historia/5to_A",
+          image: geographySvg,
+          route: "/educapp/student",
         },
       ],
     },
@@ -25,13 +25,13 @@ export const TeacherCoursesListViewRenderer = () => {
       subjects: [
         {
           name: "GEOGRAFÍA",
-          image: geographySvg,
-          route: "/educapp/teacher/subject/Geografía/6to_B",
+          image: historySvg,
+          route: "/educapp/student",
         },
         {
           name: "HISTORIA",
-          image: historySvg,
-          route: "/educapp/teacher/subject/Historia/6to_B",
+          image: geographySvg,
+          route: "/educapp/student",
         },
       ],
     },
