@@ -1,35 +1,23 @@
-import { TeacherActivityFormRenderer } from "./TeacherLecture/TeacherActivityFormRenderer";
-import { TeacherCoursesListViewRenderer } from "./TeacherSubjectList/TeacherCoursesListViewRenderer";
+import { TeacherLectureViewRenderer } from "./TeacherLecture/TeacherLecture.view.renderer";
+import { TeacherAssignatureViewRenderer } from "./TeacherAssignature/TeacherAssignature.view.renderer";
 import { TeacherMessageViewRenderer } from "./TeacherMessages/TeacherMessageViewRenderer";
-import { TeacherDashboardViewRenderer } from "./TeacherDashboard/TeacherDashboard.view.renderer";
 import { CallViewContainer } from "../Call/CallView.container";
-import { TeacherSubjectViewRenderer } from "./TeacherSubject/TeacherSubjectViewRenderer";
 
 export const teacherRoutes = [
   {
     exact: true,
-    path: "/educapp/teacher/activity",
-    component: TeacherActivityFormRenderer,
+    path: "/educapp/teacher",
+    component: TeacherLectureViewRenderer,
   },
   {
     exact: true,
-    path: "/educapp/teacher/activity/:id",
-    component: TeacherActivityFormRenderer,
+    path: "/educapp/teacher/subjects",
+    component: TeacherAssignatureViewRenderer,
   },
   {
     exact: true,
-    path: "/educapp/teacher/courses",
-    component: TeacherCoursesListViewRenderer,
-  },
-  {
-    exact: true,
-    path: "/educapp/teacher/subject",
-    component: TeacherSubjectViewRenderer,
-  },
-  {
-    exact: true,
-    path: "/educapp/teacher/subject/:title/:course",
-    component: TeacherSubjectViewRenderer,
+    path: "/educapp/teacher/messages",
+    component: TeacherMessageViewRenderer,
   },
   {
     exact: true,
@@ -40,10 +28,5 @@ export const teacherRoutes = [
     exact: true,
     path: "/educapp/teacher/call",
     component: CallViewContainer,
-  },
-  {
-    exact: true,
-    path: "/educapp/teacher/dashboard",
-    component: TeacherDashboardViewRenderer,
   },
 ];

@@ -19,7 +19,7 @@ export const AttendanceModal = (props) => {
     <div className={isOpened ? "modal is-active" : "modal"}>
       <div className="modal-card">
         <header className="modal-card-head">
-          <h2 className="modal-card-title">Asistencia</h2>
+          <p className="modal-card-title">Asistencia</p>
           <button
             className="delete"
             aria-label="close"

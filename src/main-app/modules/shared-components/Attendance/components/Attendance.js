@@ -4,7 +4,6 @@ import { AttendanceModal } from "./Attendance.modal";
 import { useSelector } from "react-redux";
 import { attendanceService } from "../api/attendance-service";
 import "./Attendance.styles.scss";
-import { rolesUrl } from "../../../user/constants/user.constants";
 
 export const Attendance = (props) => {
   const { classId, meetingId, signalRService } = props;
@@ -12,7 +11,6 @@ export const Attendance = (props) => {
   const [cronogramaId, setCronogramaId] = useState(classId);
 
   const user = useSelector((state) => state.user.currentUser);
-  const isTeacher = user?.metadata?.[rolesUrl].includes("Teacher");
 
   useEffect(() => {
     if (signalRService) {
@@ -22,7 +20,7 @@ export const Attendance = (props) => {
   }, [signalRService]);
 
   const askForAttendance = (cronoId) => {
-    if (!isTeacher) {
+    if (!isTeacher()) {
       setCronogramaId(cronoId);
       setModalOpened(true);
       setTimeout(() => {
@@ -57,9 +55,15 @@ export const Attendance = (props) => {
     setModalOpened((prevOpened) => !prevOpened);
   };
 
+  const isTeacher = () => {
+    return user && user.metadata
+      ? user.metadata["https://5ding/roles"].includes("Teacher")
+      : false;
+  };
+
   return (
     <div>
-      {isTeacher && (
+      {isTeacher() && (
         <button className="button attendance_button" onClick={checkAttendance}>
           Tomar Lista
         </button>

@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { close_caption, user_name } from "./ClosedCaption.module.scss";
+import { close_caption } from "./ClosedCaption.module.scss";
 
 import useSpeechToText from "react-hook-speech-to-text";
 
@@ -9,17 +9,13 @@ import React, {
   useImperativeHandle,
   useState,
 } from "react";
-import { useSelector } from "react-redux";
-import { rolesUrl } from "../../user/constants/user.constants";
+import { SignalHandlerService } from "../services/signal-handler";
 
 export const ClosedCaptionComponent = forwardRef((props, ref) => {
   const { name, meeting, signalRService } = props;
 
   const [closedCaptionReceive, setClosedCaptionReceive] = useState([]);
-  const micOn = useSelector((state) => state.video.micOn);
-  const ccOn = useSelector((state) => state.video.ccOn);
-  const user = useSelector((state) => state.user.currentUser);
-  const isTeacher = user?.metadata?.[rolesUrl].includes("Teacher");
+  const [isMuted, setIsMuted] = useState(false);
 
   const { error, isRecording, results, startSpeechToText, stopSpeechToText } =
     useSpeechToText({
@@ -38,34 +34,25 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
   }, [signalRService]);
 
   useEffect(() => {
-    const rejectDelay = (reason) => {
-      return new Promise(function (resolve, reject) {
-        setTimeout(reject.bind(null, reason), 1000);
-      });
-    };
-
-    if (!isRecording && micOn && isTeacher) {
-      let p = Promise.reject();
-      for (let i = 0; i < 10; i++) {
-        p = p.catch((err) => startSpeechToText()).catch(rejectDelay);
-      }
-
-      p.then(() => {
-        console.log("ClosedCaption working properly.");
-      }).catch((e) => {
+    if (!isRecording) {
+      startSpeechToText().catch((e) => {
         console.error(e);
       });
     }
-
-    if (!micOn) {
-      stopSpeechToText();
-    }
-  }, [isRecording, micOn]);
+  }, [isRecording]);
 
   if (error)
     return <p>Web Speech API no esta disponible en este navegador 🤷‍</p>;
 
   useImperativeHandle(ref, () => ({
+    async muteClosedCaption() {
+      stopSpeechToText();
+      setIsMuted(true);
+    },
+    async unMuteClosedCaption() {
+      await startSpeechToText();
+      setIsMuted(false);
+    },
     async endCloseCaption() {
       stopSpeechToText();
     },
@@ -80,7 +67,7 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
   };
 
   if (
-    micOn &&
+    !isMuted &&
     results.length &&
     signalRService &&
     signalRService.isServiceStarted
@@ -90,15 +77,13 @@ export const ClosedCaptionComponent = forwardRef((props, ref) => {
   }
 
   return (
-    ccOn && (
-      <div className={`${closedCaptionReceive.length ? close_caption : ""}`}>
-        {closedCaptionReceive &&
-          closedCaptionReceive.map(({ name, closedCaption }, index) => (
-            <p key={index}>
-              <span className={user_name}>{name}:</span> {closedCaption}
-            </p>
-          ))}
-      </div>
-    )
+    <div className={`${closedCaptionReceive.length ? close_caption : ""}`}>
+      {closedCaptionReceive &&
+        closedCaptionReceive.map(({ name, closedCaption }, index) => (
+          <p key={index}>
+            {name}: {closedCaption}
+          </p>
+        ))}
+    </div>
   );
 });

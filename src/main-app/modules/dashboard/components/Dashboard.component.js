@@ -1,14 +1,13 @@
 import React, { useEffect } from "react";
 import "./Dashboard.styles.scss";
 import Button from "../../button/Button.component";
-import classSvg from "../../../../assets/img/alarm-bell.svg";
-import messageSvg from "../../../../assets/img/message.svg";
-import calendarSvg from "../../../../assets/img/calendar.svg";
-import subjectSvg from "../../../../assets/img/list.svg";
+import calendarSvg from "../../../../assets/img/education/043-calendar.svg";
+import messageSvg from "../../../../assets/img/education/024-virtual class.svg";
+import subjectSvg from "../../../../assets/img/education/015-list.svg";
+import classSvg from "../../../../assets/img/education/005-school bell.svg";
 import { useSelector } from "react-redux";
-import { routes } from "../../../../App.constants";
 
-export const Dashboard = ({ isTeacher }) => {
+const Dashboard = () => {
   const user = useSelector((state) => state.user.currentUser);
   const isColorBlind = useSelector((state) => state.user.isColorBlind);
 
@@ -27,12 +26,12 @@ export const Dashboard = ({ isTeacher }) => {
   return (
     <section id="dashboard" className="dashboard-container">
       <div className="title-container">
-        <h1 className="title is-3 dashboard-greeting">
+        <h2 className="title is-3 dashboard-greeting">
           <strong>¡Hola de nuevo!</strong>
-        </h1>
-        <h2 className="title is-2 dashboard-name">
-          <strong>{user && user.dbUser ? user.dbUser.Nombre : ""}</strong>
         </h2>
+        <h1 className="title is-2 dashboard-name">
+          <strong>{user && user.dbUser ? user.dbUser.Nombre : ""}</strong>
+        </h1>
       </div>
       <br />
       <br />
@@ -40,43 +39,34 @@ export const Dashboard = ({ isTeacher }) => {
       <br />
       <div className="link-container">
         <div className="level">
-          <div className="dashboard-button level-item">
+          <div className="level-item">
             <Button
               image={classSvg}
               title="ENTRAR A CLASE"
-              route={`/educapp/${isTeacher ? "teacher" : "student"}/call`}
+              route="/educapp/teacher/call"
             />
           </div>
-          <div className="dashboard-button level-item">
+          <div className="level-item">
             <Button
               image={calendarSvg}
               title="CALENDARIO"
-              route="/educapp/calendar"
+              route="/educapp/student"
             />
           </div>
         </div>
         <div className="level">
           <div className="level-item">
-            {!isTeacher && (
-              <Button
-                image={subjectSvg}
-                title="MATERIAS"
-                route={routes.underConstruction}
-              />
-            )}
-            {isTeacher && (
-              <Button
-                image={subjectSvg}
-                title="MIS CLASES"
-                route="/educapp/teacher/courses"
-              />
-            )}
+            <Button
+              image={subjectSvg}
+              title="MATERIAS"
+              route="/educapp/student"
+            />
           </div>
-          <div className="dashboard-button level-item">
+          <div className="level-item">
             <Button
               image={messageSvg}
               title="MENSAJES"
-              route={routes.underConstruction}
+              route="/educapp/student"
             />
           </div>
         </div>
@@ -84,3 +74,5 @@ export const Dashboard = ({ isTeacher }) => {
     </section>
   );
 };
+
+export default Dashboard;

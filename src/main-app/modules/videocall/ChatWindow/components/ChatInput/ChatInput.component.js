@@ -14,7 +14,6 @@ export const ChatInput = ({ submit }) => {
       <div className="field has-addons">
         <div className={`control ${chat_input__wrapper}`}>
           <input
-            aria-label="Area de texto para chat"
             className={`input is-normal ${chat_input__input}`}
             type="text"
             id="message"
@@ -23,10 +22,7 @@ export const ChatInput = ({ submit }) => {
         </div>
 
         <div className="control">
-          <button
-            aria-label="Botón enviar chat"
-            className={`button ${chat_button}`}
-          >
+          <button className={`button ${chat_button}`}>
             <FontAwesomeIcon icon={faPaperPlane} />
           </button>
         </div>

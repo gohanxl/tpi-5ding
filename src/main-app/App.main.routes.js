@@ -1,25 +1,23 @@
-import React from "react";
+import React, { lazy } from "react";
 import { Route, Switch, Redirect } from "react-router";
-import { roles, routes } from "../App.constants";
-import { UnderConstruction } from "./views/under-construction/UnderConstruction.component";
 
-export const MainAppRoutes = ({ routesRoleConfig, currentRole }) => {
-  const isAdmin = currentRole === roles.ADMIN;
-  const dashboardRoute = routes.dashboard(
-    isAdmin ? roles.TEACHER : currentRole
-  );
+import { studentRoutes } from "./views/student/student.routes";
+import { teacherRoutes } from "./views/teacher/teacher.routes";
+
+const HomeContainer = lazy(() =>
+  import("./modules/home/components/Home.container")
+);
+
+export const MainAppRoutes = () => {
+  const routes = [...studentRoutes, ...teacherRoutes];
   return (
     <Switch>
-      {routesRoleConfig.map((routeProps) => (
+      <Redirect exact from="/" to="/home" />
+      {routes.map((routeProps) => (
         <Route key={routeProps.path} {...routeProps} />
       ))}
-      <Route
-        key="under-construction"
-        path={routes.underConstruction}
-        exact
-        component={UnderConstruction}
-      />
-      <Redirect exact from="*" to={dashboardRoute} />
+      <Route key="pepe" path="/educapp/home" component={HomeContainer} />
+      {/* <Route component={NotFound} /> */}
     </Switch>
   );
 };

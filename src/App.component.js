@@ -5,8 +5,8 @@ import "./App.styles.scss";
 export const App = () => {
   return (
     <div>
-      <div className="app-wrapper">
-        <div className="app">
+      <div className="App">
+        <div>
           <Routes />
         </div>
       </div>
