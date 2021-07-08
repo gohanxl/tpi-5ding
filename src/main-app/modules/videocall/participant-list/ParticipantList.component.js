@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBan, faMicrophoneSlash } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
+import { rolesUrl } from "../../user/constants/user.constants";
 
 export const ParticipantListComponent = (props) => {
   const { signalRService, toggle, meetingId } = props;
@@ -52,17 +53,13 @@ export const ParticipantListComponent = (props) => {
     signalRService.invokeRemoveParticipant(meetingId, uid);
   };
 
-  const isTeacher = () => {
-    return user && user.metadata
-      ? user.metadata["https://5ding/roles"].includes("Teacher")
-      : false;
-  };
+  const isTeacher = user?.metadata?.[rolesUrl].includes("Teacher");
 
   return (
     <div className={isOpened ? "modal is-active" : "modal"}>
       <div className="modal-card">
         <header className="modal-card-head">
-          <p className="modal-card-title">Participantes</p>
+          <h2 className="modal-card-title">Participantes</h2>
           <button
             className="delete"
             aria-label="close"
@@ -70,7 +67,7 @@ export const ParticipantListComponent = (props) => {
           ></button>
         </header>
         <section className="modal-card-body">
-          {isTeacher() && (
+          {isTeacher && (
             <button
               className="button is-danger is-fullwidth"
               id="mutear_todos_btn"
@@ -84,7 +81,7 @@ export const ParticipantListComponent = (props) => {
             <p className="col-6">
               <strong>Nombre</strong>
             </p>
-            {isTeacher() && (
+            {isTeacher && (
               <>
                 <p className="col-2">
                   <strong>Status</strong>
@@ -101,12 +98,12 @@ export const ParticipantListComponent = (props) => {
                 <li key={user.uid}>
                   <div className="row">
                     <p className="col-6">{user.displayName}</p>
-                    {isTeacher() && (myUid ? user.uid !== myUid : true) && (
+                    {isTeacher && (myUid ? user.uid !== myUid : true) && (
                       <div className="col-2">
                         <p>{user?.isPresent ? "Presente" : "Ausente"}</p>
                       </div>
                     )}
-                    {isTeacher() && (myUid ? user.uid !== myUid : true) && (
+                    {isTeacher && (myUid ? user.uid !== myUid : true) && (
                       <div className="col-1 level">
                         <div className="level-left">
                           <button

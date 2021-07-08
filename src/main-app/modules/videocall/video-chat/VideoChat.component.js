@@ -10,6 +10,8 @@ import {
   cameras_and_cc,
   close_caption,
   toolbar_and_chat,
+  screen_sharing_container,
+  hide_cameras,
 } from "./VideoChat.module.scss";
 import React, { useEffect, useRef, useState } from "react";
 import Peer from "peerjs";
@@ -18,7 +20,9 @@ import { VideoToolbar } from "../video-toolbar/VideoToolbar";
 import { ChatWindow } from "../ChatWindow/ChatWindow.component";
 import { VideoGridComponent } from "./VideoGridComponent.component";
 import { useDispatch, useSelector, useStore } from "react-redux";
+import { useHistory } from "react-router";
 import {
+  setCcOn,
   setConnections,
   setLocalUserId,
   setLocalUserPeer,
@@ -33,6 +37,8 @@ import {
   setVideoRows,
 } from "./store/video.actions";
 import { Attendance } from "../../shared-components/Attendance/components/Attendance";
+import { roles, routes } from "../../../../App.constants";
+import { rolesUrl } from "../../user/constants/user.constants";
 //import { v4 } from "uuid";
 
 export const VideoChat = (props) => {
@@ -44,6 +50,7 @@ export const VideoChat = (props) => {
   const { name, uuid, meeting } = props;
 
   const user = useSelector((state) => state.user.currentUser);
+  const history = useHistory();
   const ccRef = useRef();
   const store = useStore();
 
@@ -92,7 +99,12 @@ export const VideoChat = (props) => {
         }
       }, 10000);
     }
-    return () => clearInterval(intervalId.current);
+    return () => {
+      clearInterval(intervalId.current);
+      if (store.getState().video.localUserPeer) {
+        endCall();
+      }
+    };
   }, [signalRService]);
 
   const getLocalUserStream = () => {
@@ -163,12 +175,22 @@ export const VideoChat = (props) => {
     if (status === ScreeenSharingStatus.Stopped) {
       dispatch(setScreenSharingStatus(false, false));
       screenSharinUserName = "";
-      document.getElementById("screenSharingObj").classList.add("d-none");
+      document
+        .getElementById("screenSharing-container")
+        .classList.add("d-none");
+      document
+        .getElementById("video-grid-container")
+        .classList.remove(hide_cameras);
       stoppedSharingScreen();
     }
     if (status === ScreeenSharingStatus.Started) {
       screenSharinUserName = remoteUserName;
-      document.getElementById("screenSharingObj").classList.remove("d-none");
+      document
+        .getElementById("screenSharing-container")
+        .classList.remove("d-none");
+      document
+        .getElementById("video-grid-container")
+        .classList.add(hide_cameras);
     }
   };
 
@@ -283,13 +305,12 @@ export const VideoChat = (props) => {
       );
     } else if (error.name === "PermissionDeniedError") {
       errorMsg(
-        "Permissions have not been granted to use your camera and " +
-          "microphone, you need to allow the page access to your devices in " +
-          "order for the demo to work.",
+        "Permissions have not been granted to use your camera and microphone" +
+          "you need to allow the page access to your devices in order for the demo to work.",
         error
       );
     }
-    errorMsg(`getUserMedia error: ${error.name}`, error);
+    errorMsg(`Ups, no encontramos la cámara`, "");
   };
 
   const errorMsg = (msg, error) => {
@@ -579,15 +600,9 @@ export const VideoChat = (props) => {
     if (reduxIsMicOn) {
       getLocalUserStream().getAudioTracks()[0].enabled = false;
       dispatch(setMicOn(false));
-      if (ccRef && ccRef.current) {
-        ccRef.current.muteClosedCaption();
-      }
     } else {
       getLocalUserStream().getAudioTracks()[0].enabled = true;
       dispatch(setMicOn(true));
-      if (ccRef && ccRef.current) {
-        ccRef.current.unMuteClosedCaption();
-      }
     }
     return getLocalUserStream().getAudioTracks()[0].enabled;
   };
@@ -602,6 +617,12 @@ export const VideoChat = (props) => {
       dispatch(setVideoOn(true));
     }
   };
+
+  const currentRole = user?.metadata?.[rolesUrl][0] || "";
+  const dashboardRole =
+    currentRole.toLowerCase() === roles.ADMIN ? roles.TEACHER : currentRole;
+
+  const dashboardRoute = routes.dashboard(dashboardRole.toLowerCase());
 
   const endCall = async () => {
     if (ccRef && ccRef.current) {
@@ -641,8 +662,13 @@ export const VideoChat = (props) => {
     dispatch(setLocalUserScreenSharingPeer(null));
     dispatch(setLocalUserStream(null));
     dispatch(setLocalUserScreenSharingStream(null));
+    dispatch(setLocalUserId(null));
+    dispatch(setLocalUserScreenSharingId(null));
+    dispatch(setRemoteConnectionIds([]));
+    dispatch(setScreenSharingStatus(false, false));
+    dispatch(setCcOn(false));
 
-    window.location = "/#/educapp/home";
+    history.push(dashboardRoute);
   };
 
   const toggleChat = () => {
@@ -695,8 +721,11 @@ export const VideoChat = (props) => {
   return (
     <div className={videochat_container}>
       <div className={cameras_and_screen}>
-        <div className="screenSharingContainer" id="screenSharing-container">
-          <video className="d-none" id="screenSharingObj" autoPlay />
+        <div
+          className={`${screen_sharing_container} d-none`}
+          id="screenSharing-container"
+        >
+          <video id="screenSharingObj" autoPlay />
         </div>
         <div className={cameras_and_cc} id="video-grid-container">
           <VideoGridComponent

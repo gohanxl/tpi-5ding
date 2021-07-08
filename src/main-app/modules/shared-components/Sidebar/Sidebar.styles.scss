@@ -45,7 +45,7 @@
 
 .bm-menu {
   background: #353535;
-  padding: 2.5em 0px;
+  padding: 2.5em 0px 0px 0px;
   font-size: 1.15em;
 
   &::-webkit-scrollbar {
@@ -66,6 +66,15 @@
   &::-webkit-scrollbar-thumb:active {
     background: rgba(255, 255, 255, 0.4);
   }
+}
+
+.sidebar-footer {
+  position: sticky;
+  bottom: 0;
+  font-size: 14px;
+  padding: 5px;
+  border-top: solid 1px #ffffff1a;
+  background-color: #353535;
 }
 
 .bm-morph-shape {

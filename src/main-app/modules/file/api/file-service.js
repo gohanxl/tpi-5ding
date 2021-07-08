@@ -5,6 +5,13 @@ export const TIPO_TPS = "tps";
 export const TIPO_TAREAS = "tareas";
 export const TIPO_RECUPERTORIOS = "recuperatorios";
 
+export const TIPO_ACTIVIDAD = {
+  1: TIPO_EVALUACIONES,
+  2: TIPO_TPS,
+  3: TIPO_TAREAS,
+  4: TIPO_RECUPERTORIOS,
+};
+
 export const SUBTIPO_CONSIGNAS = "consignas";
 export const SUBTIPO_ENTREGAS = "entregas";
 export const SUBTIPO_CORRECCIONES = "correcciones";
@@ -21,4 +28,11 @@ export const fileService = {
         },
       }
     ),
+  downloadFileByActivityId: (auth_token, activityId) =>
+    axios.get(`${process.env.REACT_APP_API_URL}/File/actividad/${activityId}`, {
+      headers: {
+        Authorization: "Bearer " + auth_token,
+      },
+      responseType: "blob",
+    }),
 };

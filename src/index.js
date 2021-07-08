@@ -1,6 +1,7 @@
 import React from "react";
 import "./index.css";
 import { render } from "react-dom";
+import { Helmet } from "react-helmet";
 import { Provider } from "react-redux";
 import { createBrowserHistory } from "history";
 import { configureAppStore } from "./App.store";
@@ -16,7 +17,7 @@ const browserHistory = createBrowserHistory();
 
 const onRedirectCallback = (appState) => {
   browserHistory.push(
-    appState && appState.returnTo ? appState.returnTo : window.location.pathname
+    appState && appState.returnTo ? appState.returnTo : "/#/educapp"
   );
 };
 
@@ -31,6 +32,7 @@ const renderApp = () =>
     <Auth0Provider {...providerConfig}>
       <Provider store={store}>
         <HashRouter history={browserHistory}>
+          <Helmet htmlAttributes={{ lang: "es-AR" }} />
           <App />
         </HashRouter>
       </Provider>

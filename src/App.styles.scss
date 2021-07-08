@@ -3,6 +3,7 @@
 @import "./ui-styling/globals/colors.scss";
 
 $navbar-height: 70px;
+$footer-height: 88.59px;
 
 $app-container-height: calc(100vh - #{$navbar-height});
 $app-content-height: calc(#{$app-container-height} - 168px);
@@ -16,6 +17,12 @@ html {
   height: 100vh;
 }
 
+button {
+  &:focus {
+    border: 1px solid white !important;
+  }
+}
+
 .educapp-nav {
   padding: 8px;
   background-color: var(--primary);
@@ -23,6 +30,10 @@ html {
   -webkit-transition: background-color 250ms ease-in-out;
   -ms-transition: background-color 250ms ease-in-out;
   transition: background-color 250ms ease-in-out;
+}
+
+.app-wrapper {
+  width: 100%;
 }
 
 .app-container {
@@ -34,8 +45,13 @@ html {
 }
 
 .app-content {
-  flex-basis: calc(calc(100vh - 3.25rem) - 168px);
+  flex-basis: calc(calc(100vh - 3.25rem) - #{$footer-height});
   height: fit-content;
+}
+
+.footer {
+  background-color: #f6f6f6;
+  padding: 2rem;
 }
 
 .app-container.hide-footer {
@@ -46,4 +62,13 @@ html {
   .footer {
     display: none;
   }
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  align-items: center;
 }
