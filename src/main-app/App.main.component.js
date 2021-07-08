@@ -18,6 +18,7 @@ import educAppLogo from "../assets/img/logo.svg";
 import { faBell, faUser } from "@fortawesome/free-solid-svg-icons";
 import { Loader } from "./modules/ui-styling/components/Loader/Loader.component";
 import {
+  main_app,
   spinning_svg,
   colorblind_wrapper,
   colorblind_switch,
@@ -135,7 +136,7 @@ const MainApp = () => {
   }
 
   return (
-    <div className={isLoading ? spinning_svg : ""}>
+    <div className={`${main_app} ${isLoading ? spinning_svg : ""}`}>
       {isLoading ? (
         <Loader />
       ) : (
@@ -149,7 +150,7 @@ const MainApp = () => {
               <div className="navbar-brand">
                 <a
                   className="navbar-item"
-                  href={`/#/${routes.dashboard(dashboardRole)}`}
+                  href={`/#${routes.dashboard(dashboardRole)}`}
                 >
                   <img
                     src={educAppWhiteLogo}

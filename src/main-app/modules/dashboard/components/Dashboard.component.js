@@ -6,6 +6,7 @@ import messageSvg from "../../../../assets/img/message.svg";
 import calendarSvg from "../../../../assets/img/calendar.svg";
 import subjectSvg from "../../../../assets/img/list.svg";
 import { useSelector } from "react-redux";
+import { routes } from "../../../../App.constants";
 
 export const Dashboard = ({ isTeacher }) => {
   const user = useSelector((state) => state.user.currentUser);
@@ -60,7 +61,7 @@ export const Dashboard = ({ isTeacher }) => {
               <Button
                 image={subjectSvg}
                 title="MATERIAS"
-                route="/educapp/student"
+                route={routes.underConstruction}
               />
             )}
             {isTeacher && (
@@ -75,7 +76,7 @@ export const Dashboard = ({ isTeacher }) => {
             <Button
               image={messageSvg}
               title="MENSAJES"
-              route="/educapp/student"
+              route={routes.underConstruction}
             />
           </div>
         </div>
