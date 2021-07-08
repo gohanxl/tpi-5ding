@@ -18,54 +18,34 @@ export const StudentAssignatureListViewRenderer = () => {
       </h2>
       <div className="level">
         <div className="level-item">
-          <Button
-            image={literatureSvg}
-            title="LENGUA"
-            route="/educapp/student"
-          />
+          <Button image={literatureSvg} title="LENGUA" />
         </div>
         <div className="level-item">
           <Button
             image={geographySvg}
             title="GEOGRAFÍA"
-            route="/educapp/student"
+            route="/educapp/student/Geografía/5to_A"
           />
         </div>
         <div className="level-item">
-          <Button
-            image={historySvg}
-            title="HISTORIA"
-            route="/educapp/student"
-          />
+          <Button image={historySvg} title="HISTORIA" />
         </div>
         <div className="level-item">
-          <Button image={musicSvg} title="MÚSICA" route="/educapp/student" />
+          <Button image={musicSvg} title="MÚSICA" />
         </div>
       </div>
       <div className="level">
         <div className="level-item">
-          <Button image={artSvg} title="ARTE" route="/educapp/student" />
+          <Button image={artSvg} title="ARTE" />
         </div>
         <div className="level-item">
-          <Button
-            image={chemistrySvg}
-            title="QUÍMICA"
-            route="/educapp/student"
-          />
+          <Button image={chemistrySvg} title="QUÍMICA" />
         </div>
         <div className="level-item">
-          <Button
-            image={phEducSvg}
-            title="ED. FÍSICA"
-            route="/educapp/student"
-          />
+          <Button image={phEducSvg} title="ED. FÍSICA" />
         </div>
         <div className="level-item">
-          <Button
-            image={mathSvg}
-            title="MATEMÁTICAS"
-            route="/educapp/student"
-          />
+          <Button image={mathSvg} title="MATEMÁTICAS" />
         </div>
       </div>
       <br />

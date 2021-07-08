@@ -4,6 +4,7 @@ import { ActivityComponent } from "./activity/components/Activity.component";
 import { useHistory } from "react-router";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 export const CourseComponent = (props) => {
   const SECTIONS = {
     CONTENIDOS: "CONTENIDOS",
