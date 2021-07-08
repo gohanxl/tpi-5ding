@@ -10,3 +10,8 @@
   -ms-transition: color 250ms ease-in-out;
   transition: color 250ms ease-in-out;
 }
+
+.inactiveLink {
+  pointer-events: none;
+  cursor: default;
+}
