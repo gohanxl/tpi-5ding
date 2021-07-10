@@ -3,6 +3,7 @@ import { StudentAssignatureViewRenderer } from "./StudentAssigature/StudentAssig
 import { StudentDashboardViewRenderer } from "./StudentDashboard/StudentDashboard.view.renderer";
 import { StudentAssignatureListViewRenderer } from "./StudentAssigature/StudentAssignatureList.view.renderer";
 import { CallViewContainer } from "../Call/CallView.container";
+import { TeacherSubjectViewRenderer } from "../teacher/TeacherSubject/TeacherSubjectViewRenderer";
 
 export const studentRoutes = [
   {
@@ -22,12 +23,17 @@ export const studentRoutes = [
   },
   {
     exact: true,
-    path: "/educapp/student/assignatureList",
+    path: "/educapp/student/courses",
     component: StudentAssignatureListViewRenderer,
   },
   {
     exact: true,
     path: "/educapp/student/call",
     component: CallViewContainer,
+  },
+  {
+    exact: true,
+    path: "/educapp/student/:title/:course",
+    component: TeacherSubjectViewRenderer,
   },
 ];

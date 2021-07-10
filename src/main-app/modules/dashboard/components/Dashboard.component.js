@@ -61,7 +61,7 @@ export const Dashboard = ({ isTeacher }) => {
               <Button
                 image={subjectSvg}
                 title="MATERIAS"
-                route={routes.underConstruction}
+                route="/educapp/student/courses"
               />
             )}
             {isTeacher && (

@@ -14,11 +14,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import fileDownload from "js-file-download";
+import { rolesUrl } from "../../../../../user/constants/user.constants";
 
 export const ActivityComponent = () => {
   const headers = ["Id", "Fecha", "Tipo Actividad", "Titulo", "Acciones"];
 
   const user = useSelector((state) => state.user.currentUser);
+  const isTeacher = user?.metadata?.[rolesUrl].includes("Teacher");
   const [data, setData] = useState([]);
   const history = useHistory();
   const getActivities = () => {
@@ -85,46 +87,50 @@ export const ActivityComponent = () => {
         >
           <FontAwesomeIcon icon={faDownload} />
         </button>
-        <button
-          className="button is-success is-light"
-          onClick={() =>
-            history.push(`/educapp/teacher/activity/${actividad.Id}`)
-          }
-        >
-          <FontAwesomeIcon icon={faPencilAlt} />
-        </button>
-        <button
-          className="button is-danger is-light"
-          onClick={() => deleteActivity(actividad.Id)}
-        >
-          <FontAwesomeIcon icon={faTrash} />
-        </button>
+        {isTeacher && (
+          <>
+            <button
+              className="button is-success is-light"
+              onClick={() =>
+                history.push(`/educapp/teacher/activity/${actividad.Id}`)
+              }
+            >
+              <FontAwesomeIcon icon={faPencilAlt} />
+            </button>
+            <button
+              className="button is-danger is-light"
+              onClick={() => deleteActivity(actividad.Id)}
+            >
+              <FontAwesomeIcon icon={faTrash} />
+            </button>
+          </>
+        )}
       </div>
     );
   };
-
   const formatDate = (dateToFormat) => {
     const splitDate = dateToFormat.split("T");
     const date = splitDate[0];
     const hours = splitDate[1].split(".")[0];
     return date + " " + hours;
   };
-
   useEffect(() => {
     getActivities();
   }, [user]);
 
   return (
     <div>
-      <button
-        className="button is-success"
-        onClick={() => {
-          history.push("/educapp/teacher/activity");
-        }}
-      >
-        + Nueva Actividad
-      </button>
-      <br />
+      {isTeacher && (
+        <button
+          className="button is-success"
+          onClick={() => {
+            history.push("/educapp/teacher/activity");
+          }}
+        >
+          + Nueva Actividad
+        </button>
+      )}
+
       <br />
       <TableComponent headers={headers} data={data} />
     </div>
