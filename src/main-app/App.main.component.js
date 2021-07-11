@@ -37,7 +37,7 @@ import { calendarRoutes } from "./views/Calendar/calendar.routes";
 roleAccessibilty.setRoutes({
   student: [...studentRoutes, ...calendarRoutes],
   teacher: [...teacherRoutes, ...calendarRoutes],
-  admin: [...studentRoutes, ...teacherRoutes],
+  admin: [...studentRoutes, ...teacherRoutes, ...calendarRoutes],
 });
 
 const MainApp = () => {

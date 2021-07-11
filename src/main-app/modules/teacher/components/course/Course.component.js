@@ -34,12 +34,7 @@ export const CourseComponent = (props) => {
           fileDownload(new Blob([res.data], { type: "arraybuffer" }), fileName);
         }
       })
-      .catch((err) => {
-        console.error(err);
-        alert(
-          `Luchito implementate este endpoint: ${process.env.REACT_APP_API_URL}/File/stats/{classId}`
-        );
-      });
+      .catch((err) => console.error(err));
   };
 
   return (
