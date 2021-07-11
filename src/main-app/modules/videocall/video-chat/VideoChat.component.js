@@ -508,7 +508,12 @@ export const VideoChat = (props) => {
 
   const sendNotificationOfJoining = (id) => {
     dispatch(setLocalUserId(id));
-    signalRService.invokeJoinedRoom(meetingId, id, userDisplayName);
+    signalRService.invokeJoinedRoom(
+      meetingId,
+      id,
+      userDisplayName,
+      user.dbUser.Id
+    );
     createScreenSharingPeerObject(id);
   };
 

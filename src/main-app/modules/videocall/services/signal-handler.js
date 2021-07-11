@@ -121,9 +121,9 @@ export class SignalHandlerService {
     });
   };
 
-  invokeJoinedRoom = (roomId, userId, displayName) => {
+  invokeJoinedRoom = (roomId, userId, displayName, dbUserId) => {
     return this.hubConnection
-      .invoke("JoinedRoom", roomId, userId, displayName)
+      .invoke("JoinedRoom", roomId, userId, displayName, dbUserId)
       .then(() => {
         console.log("Joined Room broadcasted successfully!");
       })

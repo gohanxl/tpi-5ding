@@ -28,9 +28,9 @@ export const fileService = {
         },
       }
     ),
-  downloadFileByActivityId: (auth_token, userEmail, activityId) =>
+  downloadFileByActivityId: (auth_token, userId, activityId) =>
     axios.get(
-      `${process.env.REACT_APP_API_URL}/File/actividad/${userEmail}/${activityId}`,
+      `${process.env.REACT_APP_API_URL}/File/actividad/${userId}/${activityId}`,
       {
         headers: {
           Authorization: "Bearer " + auth_token,

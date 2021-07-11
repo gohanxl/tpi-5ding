@@ -65,7 +65,7 @@ export const ActivityComponent = () => {
 
   const downloadFile = (id) => {
     fileService
-      .downloadFileByActivityId(user.token, user.email, id)
+      .downloadFileByActivityId(user.token, user.dbUser.Id, id)
       .then((res) => {
         if (res && res.data) {
           let fileName = res.headers["content-disposition"]
