@@ -13,8 +13,8 @@ import { studentRoutes } from "./views/student/student.routes";
 import { teacherRoutes } from "./views/teacher/teacher.routes";
 import { roleAccessibilty } from "./modules/auth/service/roles.service";
 import { rolesUrl } from "./modules/user/constants/user.constants";
-import educAppWhiteLogo from "../assets/img/logo-white.svg";
 import educAppLogo from "../assets/img/logo.svg";
+import unlamLogo from "../assets/img/logo-400.png";
 import { faBell, faUser } from "@fortawesome/free-solid-svg-icons";
 import { Loader } from "./modules/ui-styling/components/Loader/Loader.component";
 import {
@@ -23,6 +23,7 @@ import {
   colorblind_wrapper,
   colorblind_switch,
   educapp_nav__items,
+  institute_logo,
 } from "./App.main.module.scss";
 import Switch from "react-switch";
 import {
@@ -153,11 +154,11 @@ const MainApp = () => {
                   href={`/#${routes.dashboard(dashboardRole)}`}
                 >
                   <img
-                    src={educAppWhiteLogo}
+                    src={unlamLogo}
                     alt="Educapp logo"
-                    width="30"
-                    height="30"
+                    className={institute_logo}
                   />
+                  <p className="ml-2 p-0">UNLaM</p>
                 </a>
               </div>
 

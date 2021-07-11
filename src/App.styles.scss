@@ -2,7 +2,7 @@
 @import "~bulma/bulma";
 @import "./ui-styling/globals/colors.scss";
 
-$navbar-height: 70px;
+$navbar-height: 72px;
 $footer-height: 88.59px;
 
 $app-container-height: calc(100vh - #{$navbar-height});
@@ -30,6 +30,15 @@ button {
   -webkit-transition: background-color 250ms ease-in-out;
   -ms-transition: background-color 250ms ease-in-out;
   transition: background-color 250ms ease-in-out;
+
+  .navbar-brand {
+    .navbar-item {
+      color: white;
+    }
+    .navbar-item:hover {
+      opacity: 0.6;
+    }
+  }
 }
 
 .app-wrapper {
