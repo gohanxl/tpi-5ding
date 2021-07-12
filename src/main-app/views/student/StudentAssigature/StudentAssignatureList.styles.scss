@@ -1,6 +1,12 @@
+.assingature-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 100%;
+}
+
 .assignature-title {
-  padding-left: 6%;
-  padding-top: 0.75em;
+  padding: 10px 0 0 6%;
   color: var(--darker-primary) !important;
   -webkit-transition: color 250ms ease-in-out;
   -ms-transition: color 250ms ease-in-out;
