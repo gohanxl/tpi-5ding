@@ -18,8 +18,9 @@ html {
 }
 
 button {
-  &:focus {
-    border: 1px solid white !important;
+  &:focus,
+  &:focus-visible {
+    outline: 1px solid white;
   }
 }
 
