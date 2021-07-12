@@ -12,7 +12,7 @@ import "./StudentAssignatureList.styles.scss";
 
 export const StudentAssignatureListViewRenderer = () => {
   return (
-    <section className="container assingature-list">
+    <section className="container assignature-list">
       <h2 className="title is-2 assignature-title">
         <strong>Materias</strong>
       </h2>
