@@ -76,8 +76,6 @@ export const StudentAssignatureListViewRenderer = () => {
           />
         </div>
       </div>
-      <br />
-      <br />
     </section>
   );
 };
