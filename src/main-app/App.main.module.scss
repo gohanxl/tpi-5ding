@@ -29,6 +29,7 @@ $mancha-1: url(../assets/img/mancha-1.svg);
 
   &:hover > a {
     color: var(--primary);
+    border-radius: 5px 5px 0 0;
   }
 }
 
@@ -46,4 +47,14 @@ $mancha-1: url(../assets/img/mancha-1.svg);
   padding: 2px;
   background-color: #fff;
   max-height: unset !important;
+}
+
+.educapp_dropdow_nav {
+  border: unset;
+  border-radius: 5px 0 5px 5px;
+  font-size: 16px;
+}
+
+.user_name {
+  font-size: 18px;
 }

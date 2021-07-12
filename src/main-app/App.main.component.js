@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Sidebar } from "./modules/shared-components/Sidebar/Sidebar.component";
 import { MainAppRoutes } from "./App.main.routes";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setCurrentUser,
   setIsColorBlind,
@@ -15,7 +15,7 @@ import { roleAccessibilty } from "./modules/auth/service/roles.service";
 import { rolesUrl } from "./modules/user/constants/user.constants";
 import educAppLogo from "../assets/img/logo.svg";
 import unlamLogo from "../assets/img/logo-400.png";
-import { faBell, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { Loader } from "./modules/ui-styling/components/Loader/Loader.component";
 import {
   main_app,
@@ -24,6 +24,8 @@ import {
   colorblind_switch,
   educapp_nav__items,
   institute_logo,
+  educapp_dropdow_nav,
+  user_name,
 } from "./App.main.module.scss";
 import Switch from "react-switch";
 import {
@@ -49,6 +51,7 @@ const MainApp = () => {
   );
 
   const colorblindSwitch = useRef(null);
+  const currentUser = useSelector((state) => state.user.currentUser);
 
   const {
     user,
@@ -61,6 +64,7 @@ const MainApp = () => {
   } = useAuth0();
 
   useEffect(() => {
+    console.log("print user", user);
     if (isAuthenticated) {
       getAccessTokenSilently()
         .then((token) => {
@@ -163,29 +167,43 @@ const MainApp = () => {
               </div>
 
               {isAuthenticated ? (
-                <div className="navbar-end">
+                <div className="navbar-end align-items-center">
                   <div
-                    className={`navbar-item has-dropdown is-hoverable ${educapp_nav__items}`}
+                    className={`navbar-item h-100 has-dropdown is-hoverable ${educapp_nav__items}`}
                   >
                     <a className="navbar-link is-arrowless">
                       <FontAwesomeIcon size="lg" icon={faBell} />
                     </a>
-                    <div className="navbar-dropdown is-right">
+                    <div
+                      className={`${educapp_dropdow_nav} navbar-dropdown is-right`}
+                    >
                       <a className="navbar-item">Ir a clases</a>
                       <a className="navbar-item">Examen de lengua</a>
                       <a className="navbar-item">Entregar tarea de Historia</a>
                     </div>
                   </div>
+                  <p
+                    className={`p-0 ml-4 mr-1 text-white cursor-default ${user_name}`}
+                  >
+                    {currentUser && currentUser.dbUser
+                      ? `${currentUser.dbUser.Nombre} ${currentUser.dbUser.Apellido}`
+                      : ""}
+                  </p>
                   <div
-                    className={`navbar-item has-dropdown is-hoverable ${educapp_nav__items}`}
+                    className={`navbar-item h-100 has-dropdown is-hoverable ${educapp_nav__items}`}
                   >
                     <a className="navbar-link is-arrowless">
-                      <FontAwesomeIcon size="lg" icon={faUser} />
+                      <img
+                        src={user.picture}
+                        alt="Imágen de usuario"
+                        className={institute_logo}
+                      />
                     </a>
-                    <div className="navbar-dropdown is-right">
-                      <a className="navbar-item">Mi perfil</a>
+                    <div
+                      className={`${educapp_dropdow_nav} navbar-dropdown is-right`}
+                    >
                       <a className={`navbar-item ${colorblind_wrapper}`}>
-                        <span>Modo Daltónico</span>
+                        <span>Modo daltónico</span>
                         <Switch
                           id="switch"
                           aria-label="Switch modo daltónico"
@@ -207,9 +225,8 @@ const MainApp = () => {
                           onColor="#00b4b2"
                         />
                       </a>
-                      <hr className="dropdown-divider"></hr>
                       <a
-                        className="navbar-item"
+                        className="navbar-item text-danger"
                         onClick={() =>
                           logout({ returnTo: window.location.origin })
                         }
