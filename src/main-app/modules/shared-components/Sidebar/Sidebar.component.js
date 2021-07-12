@@ -22,7 +22,7 @@ export const Sidebar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const subjects = [
-    { id: 1, name: "Bilogía" },
+    { id: 1, name: "Biología" },
     { id: 2, name: "Geografía" },
     { id: 3, name: "Filosofia" },
     { id: 4, name: "Física" },

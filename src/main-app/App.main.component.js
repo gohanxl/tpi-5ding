@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Sidebar } from "./modules/shared-components/Sidebar/Sidebar.component";
 import { MainAppRoutes } from "./App.main.routes";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setCurrentUser,
   setIsColorBlind,
@@ -13,9 +13,9 @@ import { studentRoutes } from "./views/student/student.routes";
 import { teacherRoutes } from "./views/teacher/teacher.routes";
 import { roleAccessibilty } from "./modules/auth/service/roles.service";
 import { rolesUrl } from "./modules/user/constants/user.constants";
-import educAppWhiteLogo from "../assets/img/logo-white.svg";
 import educAppLogo from "../assets/img/logo.svg";
-import { faBell, faUser } from "@fortawesome/free-solid-svg-icons";
+import unlamLogo from "../assets/img/logo-400.png";
+import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { Loader } from "./modules/ui-styling/components/Loader/Loader.component";
 import {
   main_app,
@@ -23,6 +23,10 @@ import {
   colorblind_wrapper,
   colorblind_switch,
   educapp_nav__items,
+  institute_logo,
+  educapp_dropdow_nav,
+  user_name,
+  user_image,
 } from "./App.main.module.scss";
 import Switch from "react-switch";
 import {
@@ -48,6 +52,7 @@ const MainApp = () => {
   );
 
   const colorblindSwitch = useRef(null);
+  const currentUser = useSelector((state) => state.user.currentUser);
 
   const {
     user,
@@ -60,6 +65,7 @@ const MainApp = () => {
   } = useAuth0();
 
   useEffect(() => {
+    console.log("print user", user);
     if (isAuthenticated) {
       getAccessTokenSilently()
         .then((token) => {
@@ -153,38 +159,54 @@ const MainApp = () => {
                   href={`/#${routes.dashboard(dashboardRole)}`}
                 >
                   <img
-                    src={educAppWhiteLogo}
+                    src={unlamLogo}
                     alt="Educapp logo"
-                    width="30"
-                    height="30"
+                    className={institute_logo}
                   />
+                  <p className="ml-2 p-0">UNLaM</p>
                 </a>
               </div>
 
               {isAuthenticated ? (
-                <div className="navbar-end">
+                <div className="navbar-end align-items-center">
                   <div
-                    className={`navbar-item has-dropdown is-hoverable ${educapp_nav__items}`}
+                    className={`navbar-item h-100 has-dropdown is-hoverable ${educapp_nav__items}`}
                   >
                     <a className="navbar-link is-arrowless">
                       <FontAwesomeIcon size="lg" icon={faBell} />
                     </a>
-                    <div className="navbar-dropdown is-right">
+                    <div
+                      className={`${educapp_dropdow_nav} educapp_notifications navbar-dropdown is-right`}
+                    >
                       <a className="navbar-item">Ir a clases</a>
                       <a className="navbar-item">Examen de lengua</a>
                       <a className="navbar-item">Entregar tarea de Historia</a>
                     </div>
                   </div>
+                  <p
+                    className={`p-0 ml-4 mr-1 text-white cursor-default ${user_name}`}
+                  >
+                    {currentUser && currentUser.dbUser
+                      ? `${currentUser.dbUser.Nombre} ${currentUser.dbUser.Apellido}`
+                      : ""}
+                  </p>
                   <div
-                    className={`navbar-item has-dropdown is-hoverable ${educapp_nav__items}`}
+                    className={`navbar-item h-100 has-dropdown is-hoverable ${educapp_nav__items}`}
                   >
                     <a className="navbar-link is-arrowless">
-                      <FontAwesomeIcon size="lg" icon={faUser} />
+                      <img
+                        src={user.picture}
+                        alt="Imágen de usuario"
+                        className={user_image}
+                      />
                     </a>
-                    <div className="navbar-dropdown is-right">
-                      <a className="navbar-item">Mi perfil</a>
-                      <a className={`navbar-item ${colorblind_wrapper}`}>
-                        <span>Modo Daltónico</span>
+                    <div
+                      className={`${educapp_dropdow_nav} navbar-dropdown is-right`}
+                    >
+                      <div
+                        className={`d-flex flex-row justify-content-between navbar-item ${colorblind_wrapper}`}
+                      >
+                        <p>Modo daltónico</p>
                         <Switch
                           id="switch"
                           aria-label="Switch modo daltónico"
@@ -205,10 +227,9 @@ const MainApp = () => {
                           }}
                           onColor="#00b4b2"
                         />
-                      </a>
-                      <hr className="dropdown-divider"></hr>
+                      </div>
                       <a
-                        className="navbar-item"
+                        className="navbar-item text-danger"
                         onClick={() =>
                           logout({ returnTo: window.location.origin })
                         }
