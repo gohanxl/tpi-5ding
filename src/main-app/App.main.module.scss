@@ -19,7 +19,7 @@ $mancha-1: url(../assets/img/mancha-1.svg);
 }
 
 .colorblind_switch {
-  margin-left: 5px;
+  margin-left: 30px;
 }
 
 .educapp_nav__items {
@@ -40,9 +40,10 @@ $mancha-1: url(../assets/img/mancha-1.svg);
   background-position: right top;
 }
 
-.institute_logo {
-  width: 30px;
-  height: 30px;
+.institute_logo,
+.user_image {
+  width: 35px;
+  height: 35px;
   border-radius: 100px;
   padding: 2px;
   background-color: #fff;
@@ -57,4 +58,8 @@ $mancha-1: url(../assets/img/mancha-1.svg);
 
 .user_name {
   font-size: 18px;
+}
+
+.notification_icon {
+  filter: invert(1);
 }

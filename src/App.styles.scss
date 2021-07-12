@@ -2,7 +2,7 @@
 @import "~bulma/bulma";
 @import "./ui-styling/globals/colors.scss";
 
-$navbar-height: 72px;
+$navbar-height: 77px;
 $footer-height: 88.59px;
 
 $app-container-height: calc(100vh - #{$navbar-height});
@@ -37,6 +37,12 @@ button {
     }
     .navbar-item:hover {
       opacity: 0.6;
+    }
+  }
+
+  .educapp_notifications {
+    .navbar-item {
+      padding: 20px !important;
     }
   }
 }

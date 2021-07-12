@@ -26,6 +26,7 @@ import {
   institute_logo,
   educapp_dropdow_nav,
   user_name,
+  user_image,
 } from "./App.main.module.scss";
 import Switch from "react-switch";
 import {
@@ -175,7 +176,7 @@ const MainApp = () => {
                       <FontAwesomeIcon size="lg" icon={faBell} />
                     </a>
                     <div
-                      className={`${educapp_dropdow_nav} navbar-dropdown is-right`}
+                      className={`${educapp_dropdow_nav} educapp_notifications navbar-dropdown is-right`}
                     >
                       <a className="navbar-item">Ir a clases</a>
                       <a className="navbar-item">Examen de lengua</a>
@@ -196,14 +197,16 @@ const MainApp = () => {
                       <img
                         src={user.picture}
                         alt="Imágen de usuario"
-                        className={institute_logo}
+                        className={user_image}
                       />
                     </a>
                     <div
                       className={`${educapp_dropdow_nav} navbar-dropdown is-right`}
                     >
-                      <a className={`navbar-item ${colorblind_wrapper}`}>
-                        <span>Modo daltónico</span>
+                      <div
+                        className={`d-flex flex-row justify-content-between navbar-item ${colorblind_wrapper}`}
+                      >
+                        <p>Modo daltónico</p>
                         <Switch
                           id="switch"
                           aria-label="Switch modo daltónico"
@@ -224,7 +227,7 @@ const MainApp = () => {
                           }}
                           onColor="#00b4b2"
                         />
-                      </a>
+                      </div>
                       <a
                         className="navbar-item text-danger"
                         onClick={() =>
