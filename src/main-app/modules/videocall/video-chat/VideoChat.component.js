@@ -67,7 +67,7 @@ export const VideoChat = (props) => {
 
   const avContraints = {
     audio: true,
-    video: { width: { exact: 640 }, height: { exact: 480 } },
+    video: { width: 320, height: 240 },
   };
 
   useEffect(() => {
@@ -563,15 +563,30 @@ export const VideoChat = (props) => {
       debug: 3,
       config: {
         iceServers: [
-          { url: "stun.l.google.com:19302" },
-          { url: "stun1.l.google.com:19302" },
-          { url: "stun2.l.google.com:19302" },
-          { url: "stun3.l.google.com:19302" },
-          { url: "stun4.l.google.com:19302" },
           {
-            url: "turn:numb.viagenie.ca",
-            credential: "latinoamerica2032",
-            username: "lucianomartincorso@gmail.com",
+            url: "stun:global.stun.twilio.com:3478?transport=udp",
+            urls: "stun:global.stun.twilio.com:3478?transport=udp",
+          },
+          {
+            url: "turn:global.turn.twilio.com:3478?transport=udp",
+            username:
+              "de3f9f482c04b4a060498fe5595e3a1b73c3fc4ae4194ae7ae70df7cd3eb2853",
+            urls: "turn:global.turn.twilio.com:3478?transport=udp",
+            credential: "5UlSFpLXGwla/YfsaX4ajlOHUBpGZUZd9i1nw00QH20=",
+          },
+          {
+            url: "turn:global.turn.twilio.com:3478?transport=tcp",
+            username:
+              "de3f9f482c04b4a060498fe5595e3a1b73c3fc4ae4194ae7ae70df7cd3eb2853",
+            urls: "turn:global.turn.twilio.com:3478?transport=tcp",
+            credential: "5UlSFpLXGwla/YfsaX4ajlOHUBpGZUZd9i1nw00QH20=",
+          },
+          {
+            url: "turn:global.turn.twilio.com:443?transport=tcp",
+            username:
+              "de3f9f482c04b4a060498fe5595e3a1b73c3fc4ae4194ae7ae70df7cd3eb2853",
+            urls: "turn:global.turn.twilio.com:443?transport=tcp",
+            credential: "5UlSFpLXGwla/YfsaX4ajlOHUBpGZUZd9i1nw00QH20=",
           },
         ],
       },
