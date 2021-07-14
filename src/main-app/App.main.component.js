@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect, useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Sidebar } from "./modules/shared-components/Sidebar/Sidebar.component";
@@ -203,7 +204,7 @@ const MainApp = () => {
                     <div
                       className={`${educapp_dropdow_nav} navbar-dropdown is-right`}
                     >
-                      <div
+                      {/* <div
                         className={`d-flex flex-row justify-content-between navbar-item ${colorblind_wrapper}`}
                       >
                         <p>Modo daltónico</p>
@@ -227,7 +228,7 @@ const MainApp = () => {
                           }}
                           onColor="#00b4b2"
                         />
-                      </div>
+                      </div> */}
                       <a
                         className="navbar-item text-danger"
                         onClick={() =>
