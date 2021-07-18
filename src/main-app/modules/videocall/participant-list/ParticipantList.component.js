@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBan, faMicrophoneSlash } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import { rolesUrl } from "../../user/constants/user.constants";
+import "./ParticipantList.styles.scss";
+import educAppLogo from "../../../../assets/img/logo.svg";
 
 export const ParticipantListComponent = (props) => {
   const { signalRService, toggle, meetingId } = props;
@@ -58,81 +60,86 @@ export const ParticipantListComponent = (props) => {
   return (
     <div className={isOpened ? "modal is-active" : "modal"}>
       <div className="modal-card">
-        <header className="modal-card-head">
+        <div className="modal-card-head">
           <h2 className="modal-card-title">Participantes</h2>
           <button
             className="delete"
             aria-label="close"
             onClick={toggleChild}
           ></button>
-        </header>
+        </div>
         <section className="modal-card-body">
           {isTeacher && (
             <button
-              className="button is-danger is-fullwidth"
+              className="btn btn-danger w-100 mb-3 mute-all"
               id="mutear_todos_btn"
               onClick={muteAllParticipants}
             >
               Mutear a Todos
             </button>
           )}
-          <br />
-          <div className="row">
-            <p className="col-6">
-              <strong>Nombre</strong>
-            </p>
-            {isTeacher && (
-              <>
-                <p className="col-2">
-                  <strong>Status</strong>
-                </p>
-                <p className="col-1">
-                  <strong>Acciones</strong>
-                </p>
-              </>
-            )}
-          </div>
-          <ul>
-            {localConnections &&
-              localConnections.map((user) => (
-                <li key={user.uid}>
-                  <div className="row">
-                    <p className="col-6">{user.displayName}</p>
+          <table className="table plist-table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>{isTeacher ? "Estado" : ""}</th>
+                <th>{isTeacher ? "Acciones" : ""}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {localConnections &&
+                localConnections.map((user) => (
+                  <tr key={user.uid}>
+                    <th>{user.displayName}</th>
+
                     {isTeacher && (myUid ? user.uid !== myUid : true) && (
-                      <div className="col-2">
-                        <p>{user?.isPresent ? "Presente" : "Ausente"}</p>
-                      </div>
+                      <th>{user?.isPresent ? "Presente" : "Ausente"}</th>
                     )}
+
+                    {!(isTeacher && (myUid ? user.uid !== myUid : true)) && (
+                      <th></th>
+                    )}
+
                     {isTeacher && (myUid ? user.uid !== myUid : true) && (
-                      <div className="col-1 level">
-                        <div className="level-left">
-                          <button
-                            className="button is-danger level-item"
-                            id={`mutear_${user.displayName}`}
-                            title="Mutear Alumno"
-                            onClick={(event) => muteParticipant(user.uid)}
-                          >
-                            <FontAwesomeIcon icon={faMicrophoneSlash} />
-                          </button>
-                        </div>
-                        <div className="level-right">
-                          <button
-                            className="button is-danger level-item"
-                            id={`expulsar_${user.uid}`}
-                            title="Expulsar Alumno"
-                            onClick={(event) => expelParticipant(user.uid)}
-                          >
-                            <FontAwesomeIcon icon={faBan} />
-                          </button>
-                        </div>
-                      </div>
+                      <th>
+                        <button
+                          className="btn btn-danger mr-2"
+                          id={`mutear_${user.displayName}`}
+                          title="Mutear Alumno"
+                          onClick={(event) => muteParticipant(user.uid)}
+                        >
+                          <FontAwesomeIcon icon={faMicrophoneSlash} />
+                        </button>
+                        <button
+                          className="btn btn-danger"
+                          id={`expulsar_${user.uid}`}
+                          title="Expulsar Alumno"
+                          onClick={(event) => expelParticipant(user.uid)}
+                        >
+                          <FontAwesomeIcon icon={faBan} />
+                        </button>
+                      </th>
                     )}
-                  </div>
-                </li>
-              ))}
-          </ul>
+                    {!(isTeacher && (myUid ? user.uid !== myUid : true)) && (
+                      <th></th>
+                    )}
+                  </tr>
+                ))}
+            </tbody>
+          </table>
         </section>
-        <footer className="modal-card-foot"></footer>
+        <div className="modal-card-foot justify-content-center">
+          <p className="has-text-centered">
+            <span>Powered by</span>
+            <img
+              src={educAppLogo}
+              className="mx-2 mb-1"
+              alt="Educapp logo"
+              width="20"
+            />
+            <b>EducApp</b>
+          </p>
+        </div>
       </div>
     </div>
   );
