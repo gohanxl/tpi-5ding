@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  support_text,
   under_construction,
   under_construction_text,
 } from "./UnderConstruction.module.scss";
@@ -12,11 +13,14 @@ export const UnderConstruction = () => {
       <img
         src={development}
         alt="En construcción"
-        width="800px"
+        width="550px"
         height="auto"
       />
-      <h2 className={under_construction_text}>
-        ¡Estamos en pleno desarrollo, muchas gracias por el apoyo!
+      <h3 className={`title is-3 ${under_construction_text}`}>
+        Estamos en pleno desarrollo
+      </h3>
+      <h2 className={`title is-2 ${support_text}`}>
+        ¡Muchas gracias por el apoyo!
       </h2>
     </div>
   );
