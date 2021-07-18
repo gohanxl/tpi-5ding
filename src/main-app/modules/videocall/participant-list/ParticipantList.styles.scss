@@ -1,0 +1,18 @@
+.plist-table {
+  tr {
+    height: 55px;
+  }
+
+  th {
+    vertical-align: middle;
+  }
+}
+
+.plist-table button,
+.mute-all {
+  color: white;
+  background-color: #f14668;
+  width: auto;
+  margin: unset;
+  border-color: unset !important;
+}
