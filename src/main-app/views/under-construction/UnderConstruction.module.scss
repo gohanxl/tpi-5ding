@@ -5,11 +5,19 @@
   justify-content: center;
   flex-direction: column;
   text-align: center;
+  height: 100%;
   margin: 0 auto;
+  padding: 30px 0;
+}
+
+.under_construction_text,
+.support_text {
+  width: 50%;
+  font-weight: bold;
+  color: var(--darker-primary) !important;
+  transition: color 250ms ease-in-out;
 }
 
 .under_construction_text {
-  width: 80%;
-  font-weight: bold;
-  color: black;
+  margin-top: 40px;
 }
