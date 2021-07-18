@@ -560,21 +560,35 @@ export const VideoChat = (props) => {
       path: process.env.REACT_APP_PEERJS_PATH,
       host: process.env.REACT_APP_PEERJS_HOST,
       port: process.env.REACT_APP_PEERJS_PORT,
-      // debug: 3,
-      // config: {
-      //   iceServers: [
-      //     { url: "stun.l.google.com:19302" },
-      //     { url: "stun1.l.google.com:19302" },
-      //     { url: "stun2.l.google.com:19302" },
-      //     { url: "stun3.l.google.com:19302" },
-      //     { url: "stun4.l.google.com:19302" },
-      //     {
-      //       url: "turn:numb.viagenie.ca",
-      //       credential: "latinoamerica2032",
-      //       username: "lucianomartincorso@gmail.com",
-      //     },
-      //   ],
-      // },
+      config: {
+        iceServers: [
+          {
+            url: "stun:global.stun.twilio.com:3478?transport=udp",
+            urls: "stun:global.stun.twilio.com:3478?transport=udp",
+          },
+          {
+            url: "turn:global.turn.twilio.com:3478?transport=udp",
+            username:
+              "3e0b88ad8b5de0d6a3766e542040a118871f016aad66f43b4ccadf99e60f058d",
+            urls: "turn:global.turn.twilio.com:3478?transport=udp",
+            credential: "zMnfjXygOC3U7zqBRApeDuzpP0Jedgf6iw1Xo2mxiks=",
+          },
+          {
+            url: "turn:global.turn.twilio.com:3478?transport=tcp",
+            username:
+              "3e0b88ad8b5de0d6a3766e542040a118871f016aad66f43b4ccadf99e60f058d",
+            urls: "turn:global.turn.twilio.com:3478?transport=tcp",
+            credential: "zMnfjXygOC3U7zqBRApeDuzpP0Jedgf6iw1Xo2mxiks=",
+          },
+          {
+            url: "turn:global.turn.twilio.com:443?transport=tcp",
+            username:
+              "3e0b88ad8b5de0d6a3766e542040a118871f016aad66f43b4ccadf99e60f058d",
+            urls: "turn:global.turn.twilio.com:443?transport=tcp",
+            credential: "zMnfjXygOC3U7zqBRApeDuzpP0Jedgf6iw1Xo2mxiks=",
+          },
+        ],
+      },
     });
   };
 
