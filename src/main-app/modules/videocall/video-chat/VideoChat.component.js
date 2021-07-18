@@ -76,6 +76,7 @@ export const VideoChat = (props) => {
       const isConnected = await signalRServ.asyncConnection();
       setSignalRService(signalRServ);
     }
+
     if (user && user.dbUser) {
       initSignalR();
     }
@@ -560,21 +561,36 @@ export const VideoChat = (props) => {
       path: process.env.REACT_APP_PEERJS_PATH,
       host: process.env.REACT_APP_PEERJS_HOST,
       port: process.env.REACT_APP_PEERJS_PORT,
-      // debug: 3,
-      // config: {
-      //   iceServers: [
-      //     { url: "stun.l.google.com:19302" },
-      //     { url: "stun1.l.google.com:19302" },
-      //     { url: "stun2.l.google.com:19302" },
-      //     { url: "stun3.l.google.com:19302" },
-      //     { url: "stun4.l.google.com:19302" },
-      //     {
-      //       url: "turn:numb.viagenie.ca",
-      //       credential: "latinoamerica2032",
-      //       username: "lucianomartincorso@gmail.com",
-      //     },
-      //   ],
-      // },
+      debug: 3,
+      config: {
+        iceServers: [
+          {
+            url: "stun:global.stun.twilio.com:3478?transport=udp",
+            urls: "stun:global.stun.twilio.com:3478?transport=udp",
+          },
+          {
+            url: "turn:global.turn.twilio.com:3478?transport=udp",
+            username:
+              "de3f9f482c04b4a060498fe5595e3a1b73c3fc4ae4194ae7ae70df7cd3eb2853",
+            urls: "turn:global.turn.twilio.com:3478?transport=udp",
+            credential: "5UlSFpLXGwla/YfsaX4ajlOHUBpGZUZd9i1nw00QH20=",
+          },
+          {
+            url: "turn:global.turn.twilio.com:3478?transport=tcp",
+            username:
+              "de3f9f482c04b4a060498fe5595e3a1b73c3fc4ae4194ae7ae70df7cd3eb2853",
+            urls: "turn:global.turn.twilio.com:3478?transport=tcp",
+            credential: "5UlSFpLXGwla/YfsaX4ajlOHUBpGZUZd9i1nw00QH20=",
+          },
+          {
+            url: "turn:global.turn.twilio.com:443?transport=tcp",
+            username:
+              "de3f9f482c04b4a060498fe5595e3a1b73c3fc4ae4194ae7ae70df7cd3eb2853",
+            urls: "turn:global.turn.twilio.com:443?transport=tcp",
+            credential: "5UlSFpLXGwla/YfsaX4ajlOHUBpGZUZd9i1nw00QH20=",
+          },
+        ],
+      },
     });
   };
 
