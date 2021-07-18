@@ -560,21 +560,21 @@ export const VideoChat = (props) => {
       path: process.env.REACT_APP_PEERJS_PATH,
       host: process.env.REACT_APP_PEERJS_HOST,
       port: process.env.REACT_APP_PEERJS_PORT,
-      debug: 3,
-      config: {
-        iceServers: [
-          { url: "stun.l.google.com:19302" },
-          { url: "stun1.l.google.com:19302" },
-          { url: "stun2.l.google.com:19302" },
-          { url: "stun3.l.google.com:19302" },
-          { url: "stun4.l.google.com:19302" },
-          {
-            url: "turn:numb.viagenie.ca",
-            credential: "latinoamerica2032",
-            username: "lucianomartincorso@gmail.com",
-          },
-        ],
-      },
+      // debug: 3,
+      // config: {
+      //   iceServers: [
+      //     { url: "stun.l.google.com:19302" },
+      //     { url: "stun1.l.google.com:19302" },
+      //     { url: "stun2.l.google.com:19302" },
+      //     { url: "stun3.l.google.com:19302" },
+      //     { url: "stun4.l.google.com:19302" },
+      //     {
+      //       url: "turn:numb.viagenie.ca",
+      //       credential: "latinoamerica2032",
+      //       username: "lucianomartincorso@gmail.com",
+      //     },
+      //   ],
+      // },
     });
   };
 
