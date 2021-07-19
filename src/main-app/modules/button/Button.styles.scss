@@ -1,5 +1,16 @@
 @import "../../../ui-styling/globals/colors.scss";
 
+.round-button {
+  display: block;
+  height: 100%;
+  background: none;
+  border: none;
+  &:focus,
+  &:focus-visible {
+    outline: var(--primary) solid 2px;
+  }
+}
+
 .button-image {
   height: 100px;
   width: 100px;

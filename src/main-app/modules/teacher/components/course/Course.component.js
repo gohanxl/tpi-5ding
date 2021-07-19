@@ -41,7 +41,9 @@ export const CourseComponent = (props) => {
     <div className="container course_container">
       <div className="level">
         <h1 className="title is-2 course_subject_name level-left">
-          {props.course.replace("_", " ") + " - " + props.title}
+          {props.course.replace("_", " ") +
+            " - " +
+            props.title.replace("_", " ")}
         </h1>
         {isTeacher && (
           <button
